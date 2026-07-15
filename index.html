@@ -29,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* Full-Screen Site Wrapper */
+        /* Full-Screen Site Wrapper (Replaces the phone frame) */
         .site-wrapper {
             width: 100%;
             min-height: 100vh;
@@ -175,4 +175,312 @@
             inset: 0;
             opacity: 0;
             transform: scale(0.95);
-            transition: opacity var(--transition-speed) ease,
+            transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        /* Slide Artwork Frame */
+        .character-img {
+            max-width: 90%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 35px var(--theme-glow));
+            transition: filter var(--transition-speed) ease;
+        }
+
+        /* Bottom Details & Text Block */
+        .brand-announcement {
+            width: 100%;
+            margin-top: 30px;
+            z-index: 3;
+        }
+
+        /* Dynamically Colored Accent Pill */
+        .mega-evolution-banner {
+            display: inline-block;
+            background: var(--accent-banner);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 5px 16px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            transition: background var(--transition-speed) ease;
+        }
+
+        /* Set Expansion Title style */
+        .pitch-black-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-shadow: 0 0 20px var(--theme-glow);
+            margin-bottom: 5px;
+            transition: text-shadow var(--transition-speed) ease;
+        }
+
+        @media (max-width: 600px) {
+            .pitch-black-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Card name text styling */
+        .card-name {
+            font-family: 'Montserrat', sans-serif;
+            font-style: italic;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #f1ecf6;
+            margin-bottom: 30px;
+        }
+
+        /* Card Preview Peeking from Bottom */
+        .card-sneak-peek {
+            width: 260px;
+            height: 65px;
+            background: linear-gradient(180deg, #dfc2f9 0%, #3a224d 100%);
+            border-radius: 12px 12px 0 0;
+            border-top: 3px solid #f9f2ff;
+            border-left: 3px solid #f9f2ff;
+            border-right: 3px solid #f9f2ff;
+            padding: 10px 16px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: background var(--transition-speed) ease;
+        }
+
+        .card-peek-title {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-peek-hp {
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        /* Navigation Control Bar */
+        footer {
+            background-color: #0b0b0d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 10%;
+            border-top: 1px solid #1a1a1a;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            opacity: 0.6;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .nav-btn:hover {
+            opacity: 1;
+        }
+        
+        .nav-btn:active {
+            transform: scale(0.9);
+        }
+
+        .nav-arrow {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+
+        .nav-arrow.left {
+            border-right: 14px solid #ffffff;
+        }
+
+        .nav-arrow.right {
+            border-left: 14px solid #ffffff;
+        }
+
+        .nav-center-action {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #fff;
+            border-radius: 6px;
+        }
+
+        .tab-indicator {
+            background-color: #222;
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper" id="siteWrapper">
+        
+        <header>
+            <div class="logo-container">
+                <div class="logo-main">Pokémon</div>
+                <div class="logo-sub">TCG</div>
+            </div>
+            <button class="menu-btn">Menu <span></span></button>
+        </header>
+
+        <div class="hero-section">
+            
+            <div class="reduce-motion" id="reduceMotionBtn">
+                <span>Reduce motion</span>
+                <div class="reduce-motion-circle"></div>
+            </div>
+
+            <div class="slider-wrapper">
+                <div class="slide active" data-index="0">
+                    <img src="darkrai.png" alt="Mega Darkrai ex" class="character-img">
+                </div>
+                
+                <div class="slide" data-index="1">
+                    <img src="excadrill.png" alt="Mega Excadrill ex" class="character-img">
+                </div>
+            </div>
+
+            <div class="brand-announcement">
+                <div class="mega-evolution-banner" id="promoBanner">Mega Evolution</div>
+                <h1 class="pitch-black-title" id="expansionTitle">Abyssal Shadow</h1>
+                <div class="card-name" id="pokemonName">Mega Darkrai ex</div>
+            </div>
+
+            <div class="card-sneak-peek" id="cardPeek">
+                <div class="card-peek-title" id="peekName">Mega Darkrai ex</div>
+                <div class="card-peek-hp" id="peekHp">HP 340 [D]</div>
+            </div>
+
+        </div>
+
+        <footer>
+            <button class="nav-btn" id="prevBtn"><div class="nav-arrow left"></div></button>
+            <button class="nav-btn" id="nextBtn"><div class="nav-arrow right"></div></button>
+            <div class="nav-center-action"></div>
+            <div class="tab-indicator">26</div>
+        </footer>
+
+    </div>
+
+    <script>
+        const slidesData = [
+            {
+                bgColor: "#05020a",
+                themeGlow: "rgba(163, 16, 217, 0.7)",
+                accentBanner: "linear-gradient(90deg, #1d9d0e, #aaff00)",
+                expansionTitle: "Abyssal Shadow",
+                pokemonName: "Mega Darkrai ex",
+                peekHp: "HP 340 ☾",
+                peekCardBg: "linear-gradient(180deg, #2b113a 0%, #0d0415 100%)"
+            },
+            {
+                bgColor: "#140502",
+                themeGlow: "rgba(255, 85, 0, 0.7)",
+                accentBanner: "linear-gradient(90deg, #e65c00, #f9d423)",
+                expansionTitle: "Tectonic Drill",
+                pokemonName: "Mega Excadrill ex",
+                peekHp: "HP 380 ʘ",
+                peekCardBg: "linear-gradient(180deg, #441a05 0%, #150600 100%)"
+            }
+        ];
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const siteWrapper = document.getElementById('siteWrapper');
+        const promoBanner = document.getElementById('promoBanner');
+        const expansionTitle = document.getElementById('expansionTitle');
+        const pokemonName = document.getElementById('pokemonName');
+        const peekName = document.getElementById('peekName');
+        const peekHp = document.getElementById('peekHp');
+        const cardPeek = document.getElementById('cardPeek');
+        
+        let autoPlayInterval;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            const data = slidesData[index];
+
+            // Apply variables globally to the wrapper
+            siteWrapper.style.setProperty('--bg-color', data.bgColor);
+            siteWrapper.style.setProperty('--theme-glow', data.themeGlow);
+            siteWrapper.style.setProperty('--accent-banner', data.accentBanner);
+            
+            // Switch Text content
+            expansionTitle.textContent = data.expansionTitle;
+            pokemonName.textContent = data.pokemonName;
+            peekName.textContent = data.pokemonName;
+            peekHp.textContent = data.peekHp;
+            cardPeek.style.background = data.peekCardBg;
+
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let target = (currentSlide + 1) % slides.length;
+            updateSlide(target);
+        }
+
+        function prevSlide() {
+            let target = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlide(target);
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            nextSlide();
+            resetTimer();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            prevSlide();
+            resetTimer();
+        });
+
+        function startTimer() {
+            autoPlayInterval = setInterval(nextSlide, 4000);
+        }
+
+        function resetTimer() {
+            clearInterval(autoPlayInterval);
+            startTimer();
+        }
+
+        startTimer();
+    </script>
+</body>
+</html>
