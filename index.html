@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon TCG: Mega Evolution Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Montserrat:ital,wght@0,700;1,700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Reset & Dynamic Variables */
+        :root {
+            --bg-color: #05020a;
+            --text-color: #ffffff;
+            --theme-glow: rgba(197, 75, 253, 0.6);
+            --accent-banner: linear-gradient(90deg, #1d9d0e, #aaff00);
+            --transition-speed: 0.6s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* Full-Screen Site Wrapper */
+        .site-wrapper {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        /* Navigation Header */
+        header {
+            background-color: #000000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 5%;
+            border-bottom: 2px solid #1a1a1a;
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-main {
+            background: #ffcc00;
+            color: #003a70;
+            font-weight: 900;
+            font-size: 0.9rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1.5px solid #003a70;
+            text-transform: uppercase;
+        }
+
+        .logo-sub {
+            background: #e60012;
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: bold;
+            padding: 2px 5px;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .menu-btn span {
+            display: inline-block;
+            width: 18px;
+            height: 2px;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .menu-btn span::before, .menu-btn span::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 2px;
+            background-color: #fff;
+            left: 0;
+        }
+        .menu-btn span::before { top: -6px; }
+        .menu-btn span::after { top: 6px; }
+
+        /* Main Hero Section */
+        .hero-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 20px 0 20px;
+            text-align: center;
+            overflow: hidden;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+        }
+
+        /* Diagonal lines overlay */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 2px, transparent 2px, transparent 10px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* "Reduce Motion" UI Box */
+        .reduce-motion {
+            position: absolute;
+            top: 20px;
+            right: 5%;
+            background-color: rgba(0, 0, 0, 0.85);
+            border: 1px solid #333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ddd;
+            z-index: 5;
+            cursor: pointer;
+        }
+
+        .reduce-motion-circle {
+            width: 10px;
+            height: 10px;
+            border: 1.5px solid #aaa;
+            border-radius: 50%;
+        }
+
+        /* Carousel Slides Container */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 380px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity var(--transition-speed) ease,
