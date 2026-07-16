@@ -13,7 +13,7 @@
             --text-color: #ffffff;
             --theme-glow: rgba(197, 75, 253, 0.6);
             --accent-banner: linear-gradient(90deg, #1d9d0e, #aaff00);
-            --transition-speed: 0.6s;
+            --transition-speed: 0.8s;
         }
 
         * {
@@ -186,77 +186,66 @@
         .menu-btn span::before { top: -6px; }
         .menu-btn span::after { top: 6px; }
 
-        /* Main Hero Section */
+        /* Main Hero Layout */
         .hero-section {
             flex: 1;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            padding: 40px 20px;
+            padding: 0 0 60px 0; /* Base container padding */
             text-align: center;
             overflow: hidden;
-            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0px, rgba(255, 255, 255, 0.015) 2px, transparent 2px, transparent 10px);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Expanded Carousel Frame with Wide Scaling */
+        /* Cinematic Background Container - Stays at the top of the stack flow */
         .slider-wrapper {
             position: relative;
             width: 100%;
-            max-width: 1200px; /* Increased dramatically from 600px to allow massive horizontal expansion */
-            height: 480px; /* Tallened slightly to accommodate widescreen proportions */
-            margin-top: 10px;
+            height: 400px; /* Atmospheric height allocation */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            z-index: 1;
+            overflow: hidden;
+            
+            /* Powerful bottom fade-out to blend seamlessly into the background color below */
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 75%, transparent 100%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 75%, transparent 100%);
         }
 
         .slide {
             position: absolute;
             inset: 0;
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(1.05);
             transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            pointer-events: none;
         }
 
         .slide.active {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
+            opacity: 0.65; /* Slightly higher opacity since text isn't overlapping directly */
+            transform: scale(1.15);
         }
 
-        /* Expansive Image Sizing */
+        /* Full-bleed background cover */
         .character-img {
-            width: auto;
+            width: 100%;
             height: 100%;
-            max-width: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 0 45px var(--theme-glow));
+            object-fit: cover;
+            filter: drop-shadow(0 0 100px var(--theme-glow)) saturate(1.15);
             transition: filter var(--transition-speed) ease;
         }
 
-        /* Bottom Brand Details */
+        /* Title & Text Section - Positioned below the cinematic slider wrapper */
         .brand-announcement {
             width: 100%;
-            margin-top: 15px;
+            position: relative;
             z-index: 3;
+            margin-top: -30px; /* Pulled up slightly to integrate nicely with the background fade */
+            padding: 0 20px;
         }
 
         .mega-evolution-banner {
@@ -275,49 +264,50 @@
 
         .pitch-black-title {
             font-family: 'Cinzel Decorative', serif;
-            font-size: 2.8rem;
+            font-size: 3.5rem;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: -0.5px;
             color: #fff;
-            text-shadow: 0 0 20px var(--theme-glow);
-            margin-bottom: 5px;
+            text-shadow: 0 0 30px var(--theme-glow);
+            margin-bottom: 8px;
             transition: text-shadow var(--transition-speed) ease;
         }
 
         @media (max-width: 600px) {
             .pitch-black-title {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             .slider-wrapper {
-                height: 340px;
+                height: 280px;
             }
         }
 
         .card-name {
             font-family: 'Montserrat', sans-serif;
             font-style: italic;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             color: #f1ecf6;
-            margin-bottom: 30px;
         }
 
-        /* Category Section (Below Slides) */
+        /* Interactive Showcase Cards Section */
         .card-display-section {
             width: 100%;
             max-width: 480px;
-            margin: 40px auto 20px auto;
+            margin: 40px auto 0 auto;
             text-align: center;
-            z-index: 3;
+            position: relative;
+            z-index: 4;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 20px;
         }
 
         .card-category-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: #ffdc00;
@@ -360,9 +350,9 @@
             transform: scale(0.95);
         }
 
-        /* Showcase Card */
+        /* Card Scale */
         .showcase-card {
-            width: 200px;
+            width: 140px;
             border-radius: 10px;
             box-shadow: 0 6px 20px rgba(255, 220, 0, 0.15);
             transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.25s ease;
@@ -401,28 +391,34 @@
 
         <div class="hero-section">
 
+            <!-- Cinematic Background Slider at the Top of layout -->
             <div class="slider-wrapper">
+                <!-- Slide 1: Chandelure -->
                 <div class="slide active" data-index="0">
                     <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-3-2x.jpg" alt="Mega Chandelure ex" class="character-img">
                 </div>
                 
+                <!-- Slide 2: Darkrai -->
                 <div class="slide" data-index="1">
                     <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-2-2x.jpg" alt="Mega Darkrai ex" class="character-img">
                 </div>
 
+                <!-- Slide 3: Excadrill -->
                 <div class="slide" data-index="2">
                     <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-4-2x.jpg" alt="Mega Excadrill ex" class="character-img">
                 </div>
             </div>
 
+            <!-- Foreground Brand Title Blocks Positioned BELOW the backgrounds -->
             <div class="brand-announcement">
                 <div class="mega-evolution-banner" id="promoBanner">Mega Evolution</div>
                 <h1 class="pitch-black-title" id="expansionTitle">Pitch Black</h1>
                 <div class="card-name" id="pokemonName">Mega Chandelure ex</div>
             </div>
 
+            <!-- Card Category Navigation Section -->
             <div class="card-display-section">
-                <div class="card-category-title" id="categoryTitle">Mega Zeraora </div>
+                <div class="card-category-title" id="categoryTitle">Mega Zeraora ex Category</div>
                 
                 <div class="card-navigation-container">
                     <button class="nav-arrow" id="prevCatBtn" aria-label="Previous Card">&lt;</button>
@@ -438,7 +434,7 @@
     </div>
 
     <script>
-        // Hero Slider Setup
+        // Hero Background Slider Setup
         const slidesData = [
             {
                 bgColor: "#0d0614",
@@ -496,7 +492,7 @@
         }
 
         function startTimer() {
-            autoPlayInterval = setInterval(nextSlide, 4000);
+            autoPlayInterval = setInterval(nextSlide, 4500);
         }
 
         startTimer();
