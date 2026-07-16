@@ -9,7 +9,7 @@
     <style>
         /* Base Reset & Dynamic Variables */
         :root {
-            --bg-color: #05020a;
+            --bg-color: #0d0614;
             --text-color: #ffffff;
             --theme-glow: rgba(197, 75, 253, 0.6);
             --accent-banner: linear-gradient(90deg, #1d9d0e, #aaff00);
@@ -29,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* Full-Screen Site Wrapper (Replaces the phone frame) */
+        /* Full-Screen Site Wrapper */
         .site-wrapper {
             width: 100%;
             min-height: 100vh;
@@ -76,6 +76,84 @@
             border-radius: 2px;
         }
 
+        /* Header Controls */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .cart-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.85;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .cart-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .cart-icon {
+            position: relative;
+            width: 18px;
+            height: 12px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-radius: 0 0 3px 3px;
+            margin-top: 2px;
+            margin-left: 2px;
+        }
+
+        .cart-icon::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: -4px;
+            width: 6px;
+            height: 2px;
+            background-color: #fff;
+            box-shadow: 2px 2px 0 #fff;
+        }
+
+        .cart-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 1px;
+            width: 3px;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 10px 0 0 #fff; 
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -3px;
+            right: -5px;
+            background-color: #e60012;
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: bold;
+            min-width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1px;
+            border: 1px solid #000;
+        }
+
         .menu-btn {
             background: none;
             border: none;
@@ -116,13 +194,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 40px 20px 0 20px;
+            padding: 40px 20px;
             text-align: center;
             overflow: hidden;
             background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
         }
 
-        /* Diagonal lines overlay */
         .hero-section::before {
             content: '';
             position: absolute;
@@ -132,42 +209,19 @@
             z-index: 1;
         }
 
-        /* "Reduce Motion" UI Box */
-        .reduce-motion {
-            position: absolute;
-            top: 20px;
-            right: 5%;
-            background-color: rgba(0, 0, 0, 0.85);
-            border: 1px solid #333;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ddd;
-            z-index: 5;
-            cursor: pointer;
-        }
-
-        .reduce-motion-circle {
-            width: 10px;
-            height: 10px;
-            border: 1.5px solid #aaa;
-            border-radius: 50%;
-        }
-
-        /* Carousel Slides Container */
+        /* Expanded Carousel Frame with Wide Scaling */
         .slider-wrapper {
             position: relative;
             width: 100%;
-            max-width: 600px;
-            height: 380px;
-            margin-top: 20px;
+            max-width: 1200px; /* Increased dramatically from 600px to allow massive horizontal expansion */
+            height: 480px; /* Tallened slightly to accommodate widescreen proportions */
+            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 2;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         }
 
         .slide {
@@ -188,23 +242,23 @@
             pointer-events: auto;
         }
 
-        /* Slide Artwork Frame */
+        /* Expansive Image Sizing */
         .character-img {
-            max-width: 90%;
-            max-height: 100%;
+            width: auto;
+            height: 100%;
+            max-width: 100%;
             object-fit: contain;
-            filter: drop-shadow(0 0 35px var(--theme-glow));
+            filter: drop-shadow(0 0 45px var(--theme-glow));
             transition: filter var(--transition-speed) ease;
         }
 
-        /* Bottom Details & Text Block */
+        /* Bottom Brand Details */
         .brand-announcement {
             width: 100%;
-            margin-top: 30px;
+            margin-top: 15px;
             z-index: 3;
         }
 
-        /* Dynamically Colored Accent Pill */
         .mega-evolution-banner {
             display: inline-block;
             background: var(--accent-banner);
@@ -219,7 +273,6 @@
             transition: background var(--transition-speed) ease;
         }
 
-        /* Set Expansion Title style */
         .pitch-black-title {
             font-family: 'Cinzel Decorative', serif;
             font-size: 2.8rem;
@@ -236,9 +289,11 @@
             .pitch-black-title {
                 font-size: 2rem;
             }
+            .slider-wrapper {
+                height: 340px;
+            }
         }
 
-        /* Card name text styling */
         .card-name {
             font-family: 'Montserrat', sans-serif;
             font-style: italic;
@@ -249,94 +304,79 @@
             margin-bottom: 30px;
         }
 
-        /* Card Preview Peeking from Bottom */
-        .card-sneak-peek {
-            width: 260px;
-            height: 65px;
-            background: linear-gradient(180deg, #dfc2f9 0%, #3a224d 100%);
-            border-radius: 12px 12px 0 0;
-            border-top: 3px solid #f9f2ff;
-            border-left: 3px solid #f9f2ff;
-            border-right: 3px solid #f9f2ff;
-            padding: 10px 16px;
-            margin: 0 auto;
+        /* Category Section (Below Slides) */
+        .card-display-section {
+            width: 100%;
+            max-width: 480px;
+            margin: 40px auto 20px auto;
+            text-align: center;
+            z-index: 3;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: background var(--transition-speed) ease;
-        }
-
-        .card-peek-title {
-            font-size: 0.65rem;
-            font-weight: bold;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .card-peek-hp {
-            font-size: 0.65rem;
-            font-weight: 900;
-            color: #fff;
-        }
-
-        /* Navigation Control Bar */
-        footer {
-            background-color: #0b0b0d;
-            display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding: 16px 10%;
-            border-top: 1px solid #1a1a1a;
-            z-index: 10;
         }
 
-        .nav-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            opacity: 0.6;
-            transition: opacity 0.2s, transform 0.1s;
+        .card-category-title {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffdc00;
+            margin-bottom: 18px;
+            font-weight: 800;
         }
 
-        .nav-btn:hover {
-            opacity: 1;
-        }
-        
-        .nav-btn:active {
-            transform: scale(0.9);
+        .card-navigation-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
         }
 
         .nav-arrow {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-        }
-
-        .nav-arrow.left {
-            border-right: 14px solid #ffffff;
-        }
-
-        .nav-arrow.right {
-            border-left: 14px solid #ffffff;
-        }
-
-        .nav-center-action {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #fff;
-            border-radius: 6px;
-        }
-
-        .tab-indicator {
-            background-color: #222;
-            color: #fff;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, #2b113a 0%, #0d0415 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 1.2rem;
             font-weight: bold;
+            width: 36px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            user-select: none;
+        }
+
+        .nav-arrow:hover {
+            transform: scale(1.08);
+            border-color: rgba(186, 85, 211, 0.6);
+            box-shadow: 0 0 10px rgba(186, 85, 211, 0.3);
+        }
+
+        .nav-arrow:active {
+            transform: scale(0.95);
+        }
+
+        /* Showcase Card */
+        .showcase-card {
+            width: 200px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(255, 220, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.25s ease;
+            opacity: 1;
+        }
+
+        .showcase-card.fade-out {
+            opacity: 0.2;
+            transform: scale(0.95);
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 220, 0, 0.3);
         }
     </style>
 </head>
@@ -349,79 +389,85 @@
                 <div class="logo-main">Pokémon</div>
                 <div class="logo-sub">TCG</div>
             </div>
-            <button class="menu-btn">Menu <span></span></button>
+            
+            <div class="header-controls">
+                <button class="cart-btn" title="View Cart">
+                    <div class="cart-icon"></div>
+                    <div class="cart-badge">0</div>
+                </button>
+                <button class="menu-btn">Menu <span></span></button>
+            </div>
         </header>
 
         <div class="hero-section">
-            
-            <div class="reduce-motion" id="reduceMotionBtn">
-                <span>Reduce motion</span>
-                <div class="reduce-motion-circle"></div>
-            </div>
 
             <div class="slider-wrapper">
                 <div class="slide active" data-index="0">
-                    <img src="darkrai.png" alt="Mega Darkrai ex" class="character-img">
+                    <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-3-2x.jpg" alt="Mega Chandelure ex" class="character-img">
                 </div>
                 
                 <div class="slide" data-index="1">
-                    <img src="excadrill.png" alt="Mega Excadrill ex" class="character-img">
+                    <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-2-2x.jpg" alt="Mega Darkrai ex" class="character-img">
+                </div>
+
+                <div class="slide" data-index="2">
+                    <img src="https://d1i787aglh9bmb.cloudfront.net/assets/img/home/featured-switcher/me05/booster-art-4-2x.jpg" alt="Mega Excadrill ex" class="character-img">
                 </div>
             </div>
 
             <div class="brand-announcement">
                 <div class="mega-evolution-banner" id="promoBanner">Mega Evolution</div>
-                <h1 class="pitch-black-title" id="expansionTitle">Abyssal Shadow</h1>
-                <div class="card-name" id="pokemonName">Mega Darkrai ex</div>
+                <h1 class="pitch-black-title" id="expansionTitle">Pitch Black</h1>
+                <div class="card-name" id="pokemonName">Mega Chandelure ex</div>
             </div>
 
-            <div class="card-sneak-peek" id="cardPeek">
-                <div class="card-peek-title" id="peekName">Mega Darkrai ex</div>
-                <div class="card-peek-hp" id="peekHp">HP 340 [D]</div>
+            <div class="card-display-section">
+                <div class="card-category-title" id="categoryTitle">Mega Zeraora </div>
+                
+                <div class="card-navigation-container">
+                    <button class="nav-arrow" id="prevCatBtn" aria-label="Previous Card">&lt;</button>
+                    
+                    <img src="https://dz3we2x72f7ol.cloudfront.net/expansions/pitch-black/en-us/KD5B_EN_27-2x.png" id="categoryCard" alt="Category Showcase Card" class="showcase-card">
+                    
+                    <button class="nav-arrow" id="nextCatBtn" aria-label="Next Card">&gt;</button>
+                </div>
             </div>
 
         </div>
 
-        <footer>
-            <button class="nav-btn" id="prevBtn"><div class="nav-arrow left"></div></button>
-            <button class="nav-btn" id="nextBtn"><div class="nav-arrow right"></div></button>
-            <div class="nav-center-action"></div>
-            <div class="tab-indicator">26</div>
-        </footer>
-
     </div>
 
     <script>
+        // Hero Slider Setup
         const slidesData = [
             {
-                bgColor: "#05020a",
-                themeGlow: "rgba(163, 16, 217, 0.7)",
-                accentBanner: "linear-gradient(90deg, #1d9d0e, #aaff00)",
-                expansionTitle: "Abyssal Shadow",
-                pokemonName: "Mega Darkrai ex",
-                peekHp: "HP 340 ☾",
-                peekCardBg: "linear-gradient(180deg, #2b113a 0%, #0d0415 100%)"
+                bgColor: "#0d0614",
+                themeGlow: "rgba(186, 85, 211, 0.7)",
+                accentBanner: "linear-gradient(90deg, #bb44f0, #ff007f)",
+                expansionTitle: "Pitch Black",
+                pokemonName: "Mega Chandelure ex"
+            },
+            {
+                bgColor: "#051308",
+                themeGlow: "rgba(0, 230, 115, 0.7)",
+                accentBanner: "linear-gradient(90deg, #009933, #33cc66)",
+                expansionTitle: "Pitch Black",
+                pokemonName: "Mega Darkrai ex"
             },
             {
                 bgColor: "#140502",
                 themeGlow: "rgba(255, 85, 0, 0.7)",
                 accentBanner: "linear-gradient(90deg, #e65c00, #f9d423)",
-                expansionTitle: "Tectonic Drill",
-                pokemonName: "Mega Excadrill ex",
-                peekHp: "HP 380 ʘ",
-                peekCardBg: "linear-gradient(180deg, #441a05 0%, #150600 100%)"
+                expansionTitle: "Pitch Black",
+                pokemonName: "Mega Excadrill ex"
             }
         ];
 
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         const siteWrapper = document.getElementById('siteWrapper');
-        const promoBanner = document.getElementById('promoBanner');
         const expansionTitle = document.getElementById('expansionTitle');
         const pokemonName = document.getElementById('pokemonName');
-        const peekName = document.getElementById('peekName');
-        const peekHp = document.getElementById('peekHp');
-        const cardPeek = document.getElementById('cardPeek');
         
         let autoPlayInterval;
 
@@ -435,18 +481,11 @@
             });
 
             const data = slidesData[index];
-
-            // Apply variables globally to the wrapper
             siteWrapper.style.setProperty('--bg-color', data.bgColor);
             siteWrapper.style.setProperty('--theme-glow', data.themeGlow);
             siteWrapper.style.setProperty('--accent-banner', data.accentBanner);
-            
-            // Switch Text content
             expansionTitle.textContent = data.expansionTitle;
             pokemonName.textContent = data.pokemonName;
-            peekName.textContent = data.pokemonName;
-            peekHp.textContent = data.peekHp;
-            cardPeek.style.background = data.peekCardBg;
 
             currentSlide = index;
         }
@@ -456,31 +495,50 @@
             updateSlide(target);
         }
 
-        function prevSlide() {
-            let target = (currentSlide - 1 + slides.length) % slides.length;
-            updateSlide(target);
-        }
-
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            nextSlide();
-            resetTimer();
-        });
-
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            prevSlide();
-            resetTimer();
-        });
-
         function startTimer() {
             autoPlayInterval = setInterval(nextSlide, 4000);
         }
 
-        function resetTimer() {
-            clearInterval(autoPlayInterval);
-            startTimer();
+        startTimer();
+
+        // --- Category Slider Logic ---
+        const categoryCards = [
+            {
+                image: "https://dz3we2x72f7ol.cloudfront.net/expansions/pitch-black/en-us/KD5B_EN_27-2x.png",
+                title: "Mega Zeraora ex Category"
+            },
+            {
+                image: "https://dz3we2x72f7ol.cloudfront.net/expansions/pitch-black/en-us/KD5B_EN_65-2x.png",
+                title: "Mega Evolution Category"
+            }
+        ];
+
+        let currentCatIndex = 0;
+        const categoryCard = document.getElementById('categoryCard');
+        const categoryTitle = document.getElementById('categoryTitle');
+        const prevCatBtn = document.getElementById('prevCatBtn');
+        const nextCatBtn = document.getElementById('nextCatBtn');
+
+        function updateCategoryCard(newIndex) {
+            categoryCard.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentCatIndex = newIndex;
+                categoryCard.src = categoryCards[currentCatIndex].image;
+                categoryTitle.textContent = categoryCards[currentCatIndex].title;
+                categoryCard.classList.remove('fade-out');
+            }, 200);
         }
 
-        startTimer();
+        prevCatBtn.addEventListener('click', () => {
+            let index = (currentCatIndex - 1 + categoryCards.length) % categoryCards.length;
+            updateCategoryCard(index);
+        });
+
+        nextCatBtn.addEventListener('click', () => {
+            let index = (currentCatIndex + 1) % categoryCards.length;
+            updateCategoryCard(index);
+        });
     </script>
 </body>
 </html>
