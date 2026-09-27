@@ -678,6 +678,15 @@
       transform: none !important;
       box-shadow: none !important;
     }
+    .dc-btn-continue.success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4);
+    }
+    .dc-btn-continue.success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.5);
+    }
 
     /* ========= WITHDRAWAL REVIEW MODAL ========= */
     .withdrawal-confirm-overlay {
@@ -712,24 +721,14 @@
 
     .wc-details-list {
       display: grid;
-      grid-template-columns: 92px 1fr;
-      row-gap: 16px; column-gap: 12px;
+      grid-template-columns: 110px 1fr;
+      row-gap: 14px; column-gap: 12px;
       margin-bottom: 22px;
       font-size: 14px;
     }
     .wc-label { color: #94a3b8; font-weight: 500; font-size: 13px; padding-top: 2px; letter-spacing: .2px; }
     .wc-value { color: #0f172a; font-weight: 600; font-size: 14px; word-break: break-word; line-height: 1.5; }
-    .wc-value-highlight { display: flex; align-items: flex-start; gap: 8px; }
-    .wc-crypto-icon {
-      width: 22px; height: 22px;
-      background: linear-gradient(135deg, #f7931a, #ffb84d);
-      color: #fff; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
-      flex-shrink: 0; margin-top: 1px;
-      box-shadow: 0 2px 6px rgba(247, 147, 26, .35);
-    }
-    .wc-sub-text { color: #94a3b8; font-weight: 400; font-size: 12px; }
+    .wc-value-total { color: #059669; font-weight: 700; font-size: 15px; }
 
     .wc-warning-list {
       list-style: none; padding: 14px 16px;
@@ -744,55 +743,20 @@
     .wc-warning-list li:last-child { margin-bottom: 0; }
     .wc-warning-list li::before { content: '•'; position: absolute; left: 4px; top: 0; color: #d97706; font-weight: 700; }
 
-    .wc-loading-container {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center;
-      margin: 4px 0 24px 0; text-align: center;
-      padding: 18px 12px;
-      background: #f8fafc;
-      border-radius: 14px;
-      border: 1px solid #f1f5f9;
-    }
-    .wc-spinner { position: relative; width: 44px; height: 44px; margin-bottom: 16px; }
-    .wc-spinner div {
-      position: absolute;
-      width: 8px; height: 8px;
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      border-radius: 50%;
-      top: 50%; left: 50%;
-      margin: -4px 0 0 -4px;
-      animation: wcSpinnerFade 1.2s linear infinite;
-    }
-    .wc-spinner div:nth-child(1)  { transform: rotate(0deg)   translate(0, -16px); animation-delay: 0s; }
-    .wc-spinner div:nth-child(2)  { transform: rotate(30deg)  translate(0, -16px); animation-delay: -1.1s; }
-    .wc-spinner div:nth-child(3)  { transform: rotate(60deg)  translate(0, -16px); animation-delay: -1.0s; }
-    .wc-spinner div:nth-child(4)  { transform: rotate(90deg)  translate(0, -16px); animation-delay: -0.9s; }
-    .wc-spinner div:nth-child(5)  { transform: rotate(120deg) translate(0, -16px); animation-delay: -0.8s; }
-    .wc-spinner div:nth-child(6)  { transform: rotate(150deg) translate(0, -16px); animation-delay: -0.7s; }
-    .wc-spinner div:nth-child(7)  { transform: rotate(180deg) translate(0, -16px); animation-delay: -0.6s; }
-    .wc-spinner div:nth-child(8)  { transform: rotate(210deg) translate(0, -16px); animation-delay: -0.5s; }
-    .wc-spinner div:nth-child(9)  { transform: rotate(240deg) translate(0, -16px); animation-delay: -0.4s; }
-    .wc-spinner div:nth-child(10) { transform: rotate(270deg) translate(0, -16px); animation-delay: -0.3s; }
-    .wc-spinner div:nth-child(11) { transform: rotate(300deg) translate(0, -16px); animation-delay: -0.2s; }
-    .wc-spinner div:nth-child(12) { transform: rotate(330deg) translate(0, -16px); animation-delay: -0.1s; }
-    @keyframes wcSpinnerFade { 0% { opacity: 1; } 100% { opacity: 0.12; } }
-
-    .wc-loading-text { font-size: 13px; color: #64748b; line-height: 1.55; max-width: 300px; margin: 0; }
-
     .wc-btn-continue {
       width: 100%;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: linear-gradient(135deg, #10b981, #059669);
       color: #fff; border: none;
       padding: 14px; border-radius: 12px;
       font-size: 15px; font-weight: 600;
       cursor: pointer; letter-spacing: .3px;
       transition: transform .15s, box-shadow .2s, background .2s;
-      box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.4);
+      box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4);
     }
     .wc-btn-continue:hover {
-      background: linear-gradient(135deg, #1e293b, #334155);
+      background: linear-gradient(135deg, #059669, #047857);
       transform: translateY(-1px);
-      box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.5);
+      box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.5);
     }
     .wc-btn-continue:active { transform: scale(0.985); }
 
@@ -896,7 +860,7 @@
       .withdrawal-confirm-card,
       .deposit-confirm-card { padding: 22px 18px 18px; border-radius: 16px; }
       .wc-details-list,
-      .dc-details-list { grid-template-columns: 84px 1fr; row-gap: 14px; }
+      .dc-details-list { grid-template-columns: 100px 1fr; row-gap: 12px; }
       .wc-header h2,
       .dc-header h2 { font-size: 17px; }
       .mining-modal-content { border-radius: 24px; }
@@ -1591,31 +1555,12 @@
         <h2>Withdrawal</h2>
       </div>
 
-      <div class="wc-details-list">
-        <div class="wc-label">Amount</div>
-        <div class="wc-value wc-value-highlight">
-          <span class="wc-crypto-icon">₿</span>
-          <span>Receive <span id="wcAmountBtc">0.000000</span> BTC <span class="wc-sub-text">(Network fee 0.0005 BTC)</span></span>
-        </div>
-        <div class="wc-label">Address</div>
-        <div class="wc-value" id="wcAddress">361kqgcUxP2rbGqAVfzPjA4xB3kNsVxSa</div>
-      </div>
+      <div class="wc-details-list" id="wcDetailsList"></div>
 
       <ul class="wc-warning-list">
-        <li>Ensure that the address is correct and on the same network.</li>
-        <li>Transactions cannot be cancelled.</li>
+        <li>Ensure that the details provided are correct and on the same network.</li>
+        <li>Transactions cannot be cancelled once submitted.</li>
       </ul>
-
-      <div class="wc-loading-container">
-        <div class="wc-spinner">
-          <div></div><div></div><div></div><div></div>
-          <div></div><div></div><div></div><div></div>
-          <div></div><div></div><div></div><div></div>
-        </div>
-        <p class="wc-loading-text">
-          Waiting for confirmation. Please don't close the page till you receive a notification.
-        </p>
-      </div>
 
       <button class="wc-btn-continue" onclick="proceedToAwaitingApproval()">Continue</button>
     </div>
@@ -2068,8 +2013,8 @@
             }
 
             // ── Fire notification + unlock Done ──
-            triggerDepositNotification(amount.toFixed(2));
-
+            
+triggerDepositNotification(amount.toFixed(2));
             // Also show toast if payment portal is still open
             showPaymentToast(`✅ Deposit of $${amount.toFixed(2)} approved and credited!`);
           }
@@ -2517,8 +2462,6 @@
     /* =========================================================
        DEPOSIT CONFIRMATION MODAL (deposits only)
     ========================================================= */
-    const depositConfirmOverlay = document.getElementById('depositConfirmOverlay');
-
     function openDepositConfirm(details) {
       if (details) {
         const amountEl   = document.getElementById('dcAmount');
@@ -2539,22 +2482,41 @@
       depositConfirmOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
-      // Lock the Done button — only the approval listener unlocks it
+      // Reset modal state: Show spinner, lock & grey out Done button
+      const loadingContainer = document.querySelector('.dc-loading-container');
       const doneBtn = document.querySelector('.dc-btn-continue');
-      if (doneBtn) doneBtn.disabled = true;
+      
+      if (loadingContainer) loadingContainer.classList.remove('hidden');
+      if (doneBtn) {
+        doneBtn.disabled = true;
+        doneBtn.classList.remove('success');
+      }
     }
 
-    function closeDepositConfirm() {
+   function closeDepositConfirm() {
       depositConfirmOverlay.classList.remove('active');
       document.body.style.overflow = '';
       document.getElementById('depositNotificationBar')?.classList.remove('show');
+      
       const doneBtn = document.querySelector('.dc-btn-continue');
-      if (doneBtn) doneBtn.disabled = false; // reset for next open
+      const loadingContainer = document.querySelector('.dc-loading-container');
+      
+      // 👇 Capture success state BEFORE we wipe it
+      const wasSuccessful = doneBtn?.classList.contains('success');
+      
+      // Reset modal state for next use
+      if (loadingContainer) loadingContainer.classList.remove('hidden');
+      if (doneBtn) {
+        doneBtn.disabled = true;
+        doneBtn.classList.remove('success');
+      }
+      
+      // 👇 Redirect to the main account page after a successful confirmation
+      if (wasSuccessful) {
+        showPageView('accountPageView');
+        if (typeof loadAccountData === 'function') loadAccountData();
+      }
     }
-
-    depositConfirmOverlay?.addEventListener('click', function(e) {
-      if (e.target === this) closeDepositConfirm();
-    });
 
     /* ---------- Copy helpers ---------- */
     function dcCopyField(fieldId, btn) {
@@ -2591,18 +2553,25 @@
       const bar  = document.getElementById('depositNotificationBar');
       const text = document.getElementById('depositNotificationText');
       const doneBtn = document.querySelector('.dc-btn-continue');
+      const loadingContainer = document.querySelector('.dc-loading-container');
+      
       if (!bar) return;
 
       if (text) text.textContent = `You have deposited ($${amount})!`;
 
       bar.classList.add('show');
 
+      // 👇 NEW: Hide the spinner and turn the Done button green
+      if (loadingContainer) loadingContainer.classList.add('hidden');
+      if (doneBtn) {
+        doneBtn.disabled = false;
+        doneBtn.classList.add('success');
+      }
+
       setTimeout(() => {
         bar.classList.remove('show');
-        if (doneBtn) doneBtn.disabled = false;
       }, 3000);
     }
-
     /* =========================================================
        WITHDRAWAL REVIEW + AWAITING APPROVAL (withdrawals only)
     ========================================================= */
@@ -2610,11 +2579,47 @@
     const awaitingApprovalOverlay = document.getElementById('awaitingApprovalOverlay');
 
     function openWithdrawalConfirm(details) {
-      if (details) {
-        const amountBtcEl = document.getElementById('wcAmountBtc');
-        const addressEl = document.getElementById('wcAddress');
-        if (amountBtcEl && details.amountBtc) amountBtcEl.textContent = details.amountBtc;
-        if (addressEl && details.address) addressEl.textContent = details.address;
+      const list = document.getElementById('wcDetailsList');
+      if (list && details) {
+        const pd = details.payoutDetails || {};
+        const rows = [];
+        rows.push('<div class="wc-label">Amount</div>');
+        rows.push(`<div class="wc-value">$${Number(details.amount || 0).toFixed(2)}</div>`);
+        rows.push('<div class="wc-label">Method</div>');
+        rows.push(`<div class="wc-value">${details.methodLabel || '—'}</div>`);
+
+        if (details.method === 'MTN' || details.method === 'ORANGE') {
+          rows.push('<div class="wc-label">Account Name</div>');
+          rows.push(`<div class="wc-value">${pd.name || '—'}</div>`);
+          rows.push(`<div class="wc-label">${details.method === 'MTN' ? 'MoMo Number' : 'Orange Number'}</div>`);
+          rows.push(`<div class="wc-value">${pd.phone || '—'}</div>`);
+        } else if (details.method === 'BTC') {
+          rows.push('<div class="wc-label">Network</div>');
+          rows.push('<div class="wc-value">Bitcoin (BTC)</div>');
+          rows.push('<div class="wc-label">BTC Address</div>');
+          rows.push(`<div class="wc-value">${pd.address || '—'}</div>`);
+        } else if (details.method === 'USDT') {
+          rows.push('<div class="wc-label">Network</div>');
+          rows.push('<div class="wc-value">TRON (TRC20)</div>');
+          rows.push('<div class="wc-label">USDT Address</div>');
+          rows.push(`<div class="wc-value">${pd.address || '—'}</div>`);
+        } else if (details.method === 'BANK') {
+          rows.push('<div class="wc-label">Account Name</div>');
+          rows.push(`<div class="wc-value">${pd.accountName || '—'}</div>`);
+          rows.push('<div class="wc-label">Bank Name</div>');
+          rows.push(`<div class="wc-value">${pd.bankName || '—'}</div>`);
+          rows.push('<div class="wc-label">Account / IBAN</div>');
+          rows.push(`<div class="wc-value">${pd.accountNumber || '—'}</div>`);
+          rows.push('<div class="wc-label">SWIFT / BIC</div>');
+          rows.push(`<div class="wc-value">${pd.swift || '—'}</div>`);
+        }
+
+        rows.push('<div class="wc-label">Processing Fee (2%)</div>');
+        rows.push(`<div class="wc-value">$${Number(details.fee || 0).toFixed(2)}</div>`);
+        rows.push('<div class="wc-label">You Receive</div>');
+        rows.push(`<div class="wc-value wc-value-total">$${Number(details.netAmount || 0).toFixed(2)}</div>`);
+
+        list.innerHTML = rows.join('');
       }
       withdrawalConfirmOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -3032,8 +3037,21 @@
           `Withdrawal of $${amount} requested. $${netAmount.toFixed(2)} will be sent after approval.`
         );
 
-        const paymentDetails = getPaymentDetailsForMethod(method.toLowerCase(), amount);
-        openWithdrawalConfirm(paymentDetails);
+        const withdrawalMethodLabels = {
+          MTN: 'MTN Mobile Money',
+          ORANGE: 'Orange Money',
+          BTC: 'Bitcoin (BTC)',
+          USDT: 'USDT (TRC20)',
+          BANK: 'Bank Transfer'
+        };
+        openWithdrawalConfirm({
+          amount: amount,
+          fee: fee,
+          netAmount: netAmount,
+          method: method,
+          methodLabel: withdrawalMethodLabels[method] || method,
+          payoutDetails: payoutDetails
+        });
       } catch (err) {
         console.error("Withdrawal error:", err);
         showPaymentToast("Withdrawal request failed: " + err.message, true);
