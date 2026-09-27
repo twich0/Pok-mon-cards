@@ -85,28 +85,7 @@
     .nav-links a:hover { color: var(--gold-accent); }
 
     /* Language selector inside drawer */
-    .nav-lang-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .nav-lang-row i { color: var(--gold-accent); font-size: 18px; }
-    .nav-lang-row select {
-      flex: 1;
-      background: rgba(255,255,255,.08);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,.18);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      outline: none;
-    }
-    .nav-lang-row select option { color: #111; }
-
+   
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999;
       opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
@@ -1048,13 +1027,7 @@
           <li id="navInvestmentPlansLi" class="hidden"><a href="#" onclick="showPageView('investmentPlansSection'); closeMenu();" data-i18n="nav.plans">Investment Plans</a></li>
           <li><a href="#" id="sideAuthBtn" data-i18n="nav.login">Sign Up / Login</a></li>
           <li><a href="https://wa.me/237689222354" target="_blank" rel="noopener noreferrer" data-i18n="nav.contact">Contact Us</a></li>
-          <li class="nav-lang-row">
-            <i class="fa-solid fa-globe"></i>
-            <select id="navLangSelect" onchange="changeLanguage(this.value)">
-              <option value="en">English</option>
-              <option value="fr">Français</option>
-            </select>
-          </li>
+         
         </ul>
       </div>
 
@@ -2092,9 +2065,8 @@
       try { localStorage.setItem('bf_lang', lang); } catch (_) {}
 
       // Sync all language selects
-      document.querySelectorAll('#navLangSelect, #dbLangSelect').forEach(sel => {
-        sel.value = lang;
-      });
+      const dbLang = document.getElementById('dbLangSelect');
+      if (dbLang) dbLang.value = lang;
 
       // Swap all data-i18n elements
       document.querySelectorAll('[data-i18n]').forEach(el => {
