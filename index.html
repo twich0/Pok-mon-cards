@@ -84,6 +84,29 @@
     .nav-links a { color: #ffffff; text-decoration: none; font-size: 18px; font-weight: 600; display: block; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
     .nav-links a:hover { color: var(--gold-accent); }
 
+    /* Language selector inside drawer */
+    .nav-lang-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav-lang-row i { color: var(--gold-accent); font-size: 18px; }
+    .nav-lang-row select {
+      flex: 1;
+      background: rgba(255,255,255,.08);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .nav-lang-row select option { color: #111; }
+
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999;
       opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
@@ -322,7 +345,26 @@
     .db-view-btn { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); padding: 4px 10px; border-radius: 6px; font-size: .75rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: .5px; transition: all .2s; white-space: nowrap; }
     .db-view-btn:hover { background: var(--gold-primary); color: #000; }
 
-    /* Toggle button for withdrawal history */
+    /* NEW: Cancel button style */
+    .db-cancel-btn {
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #ef4444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .db-cancel-btn:hover {
+      background: #ef4444;
+      color: #fff;
+    }
+
     .db-history-toggle {
       background: none;
       border: 1px solid var(--gold-primary);
@@ -416,7 +458,7 @@
     .db-plan-item-icon { width: 40px; height: 40px; border-radius: 8px; background: rgba(212,175,55,.1); color: var(--gold-primary); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
     .db-plan-item-info h4 { font-size: .95rem; font-weight: 700; color: var(--db-text); margin-bottom: 2px; }
     .db-plan-item-info p { font-size: .75rem; color: var(--db-muted); }
-    .db-plan-item-right { display: flex; align-items: center; gap: 12px; }
+    .db-plan-item-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .db-plan-item-return { text-align: right; }
     .db-plan-item-return .return-rate { font-size: .9rem; font-weight: 700; color: var(--gold-primary); }
     .db-plan-item-return .return-investment { font-size: .7rem; color: var(--db-muted); }
@@ -961,7 +1003,6 @@
     🔑 Your unique ID: <span id="userIdDisplay">---</span> &nbsp;|&nbsp; Welcome, <span id="userNameDisplay">User</span>
   </div>
 
-  <!-- ========= DEPOSIT NOTIFICATION BAR ========= -->
   <div class="deposit-notification-bar" id="depositNotificationBar">
     <div class="dnb-icon">
       <svg viewBox="0 0 64 64">
@@ -1002,50 +1043,57 @@
           </button>
         </div>
         <ul class="nav-links">
-          <li><a href="#" onclick="showPageView('homePageView'); closeMenu();">Home</a></li>
-          <li id="navAccountLi" class="hidden"><a href="#" onclick="showPageView('accountPageView'); closeMenu();">Account</a></li>
-          <li id="navInvestmentPlansLi" class="hidden"><a href="#" onclick="showPageView('investmentPlansSection'); closeMenu();">Investment Plans</a></li>
-          <li><a href="#" id="sideAuthBtn">Sign Up / Login</a></li>
-          <li><a href="https://wa.me/237689222354" target="_blank" rel="noopener noreferrer">Contact Us</a></li>
+          <li><a href="#" onclick="showPageView('homePageView'); closeMenu();" data-i18n="nav.home">Home</a></li>
+          <li id="navAccountLi" class="hidden"><a href="#" onclick="showPageView('accountPageView'); closeMenu();" data-i18n="nav.account">Account</a></li>
+          <li id="navInvestmentPlansLi" class="hidden"><a href="#" onclick="showPageView('investmentPlansSection'); closeMenu();" data-i18n="nav.plans">Investment Plans</a></li>
+          <li><a href="#" id="sideAuthBtn" data-i18n="nav.login">Sign Up / Login</a></li>
+          <li><a href="https://wa.me/237689222354" target="_blank" rel="noopener noreferrer" data-i18n="nav.contact">Contact Us</a></li>
+          <li class="nav-lang-row">
+            <i class="fa-solid fa-globe"></i>
+            <select id="navLangSelect" onchange="changeLanguage(this.value)">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+            </select>
+          </li>
         </ul>
       </div>
 
       <div class="drawer-overlay" id="drawerOverlay"></div>
 
       <div class="hero-content">
-        <p class="subtitle">Try bitfly mining and validate your own blocks on the blockchain</p>
+        <p class="subtitle" data-i18n="hero.subtitle">Try bitfly mining and validate your own blocks on the blockchain</p>
         <h1 class="main-title">bitfly <span class="gold-text">mining</span></h1>
-        <p class="description">The world's most innovative, unique and simple way to mine crypto. Start your one-click crypto mining journey today.</p>
-        <button class="glow-button" id="startNowBtn" onclick="showPageView('investmentPlansSection')">Start Now</button>
+        <p class="description" data-i18n="hero.description">The world's most innovative, unique and simple way to mine crypto. Start your one-click crypto mining journey today.</p>
+        <button class="glow-button" id="startNowBtn" onclick="showPageView('investmentPlansSection')" data-i18n="hero.startNow">Start Now</button>
       </div>
     </section>
 
     <div class="intro-wrapper">
       <section class="intro-section">
-        <h3>bitfly mining</h3>
-        <p>bitfly mining represents the traditional approach to cryptocurrency mining, where computing power is used to validate blocks of cryptocurrency transactions and, in return, earn mining rewards.</p>
-        <p>Once earned, your mining rewards are credited to your dedicated mining account, where they can be converted into your preferred account currency.</p>
-        <p>With bitfly mining, your mining rewards remain easy to manage, giving you a seamless experience from earning through to accessing your funds.</p>
+        <h3 data-i18n="intro.h">bitfly mining</h3>
+        <p data-i18n="intro.p1">bitfly mining represents the traditional approach to cryptocurrency mining, where computing power is used to validate blocks of cryptocurrency transactions and, in return, earn mining rewards.</p>
+        <p data-i18n="intro.p2">Once earned, your mining rewards are credited to your dedicated mining account, where they can be converted into your preferred account currency.</p>
+        <p data-i18n="intro.p3">With bitfly mining, your mining rewards remain easy to manage, giving you a seamless experience from earning through to accessing your funds.</p>
       </section>
     </div>
 
     <section class="why-choose-us">
-      <h2 class="why-choose-us-title">Why Choose Us</h2>
+      <h2 class="why-choose-us-title" data-i18n="why.title">Why Choose Us</h2>
       <div class="cards-grid">
         <div class="card-box">
           <img src="https://i.postimg.cc/ZBj19TKb/IMG-4339.png" alt="Profit switching icon" class="card-icon" />
-          <h3 class="card-title">Profit switching</h3>
-          <p class="card-text">The NiceHash system automatically targets the most profitable coin for higher earnings.</p>
+          <h3 class="card-title" data-i18n="why.c1.t">Profit switching</h3>
+          <p class="card-text" data-i18n="why.c1.x">The NiceHash system automatically targets the most profitable coin for higher earnings.</p>
         </div>
         <div class="card-box">
           <img src="https://i.postimg.cc/BLNd8qQq/IMG-4340.png" alt="Easy to Use icon" class="card-icon" />
-          <h3 class="card-title">Easy to Use</h3>
-          <p class="card-text">Our platform offers a convenient range of options for miners, designed to make managing your mining activities simple and efficient.</p>
+          <h3 class="card-title" data-i18n="why.c2.t">Easy to Use</h3>
+          <p class="card-text" data-i18n="why.c2.x">Our platform offers a convenient range of options for miners, designed to make managing your mining activities simple and efficient.</p>
         </div>
         <div class="card-box">
           <img src="https://i.postimg.cc/ygnwJVYB/IMG-4341.png" alt="Competitive fees icon" class="card-icon" />
-          <h3 class="card-title">Competitive fees</h3>
-          <p class="card-text">Big miners enjoy bigger savings and withdrawal from our services.</p>
+          <h3 class="card-title" data-i18n="why.c3.t">Competitive fees</h3>
+          <p class="card-text" data-i18n="why.c3.x">Big miners enjoy bigger savings and withdrawal from our services.</p>
         </div>
       </div>
     </section>
@@ -1053,14 +1101,14 @@
     <section class="financial-calculator">
       <div class="calculator-container">
         <div class="calculator-heading">
-          <span>FINANCIAL CALCULATOR</span>
-          <h2>Estimate Your Daily Earnings</h2>
-          <p>Select a plan and enter a custom duration — the projection updates instantly.</p>
+          <span data-i18n="calc.tag">FINANCIAL CALCULATOR</span>
+          <h2 data-i18n="calc.title">Estimate Your Daily Earnings</h2>
+          <p data-i18n="calc.subtitle">Select a plan and enter a custom duration — the projection updates instantly.</p>
         </div>
         <div class="calculator-card">
           <div class="calculator-form">
             <div class="calculator-field">
-              <label for="calcPlan">Investment Plan</label>
+              <label for="calcPlan" data-i18n="calc.plan">Investment Plan</label>
               <select id="calcPlan" onchange="updateCalcRate()">
                 <option value="2.0" data-amount="3000" selected>Starter — FCFA 3,000 (2.0%/day)</option>
                 <option value="4.2" data-amount="5000">Regular — FCFA 5,000 (4.2%/day)</option>
@@ -1071,16 +1119,16 @@
               </select>
             </div>
             <div class="calculator-field">
-              <label for="calcAmount">Investment Amount</label>
+              <label for="calcAmount" data-i18n="calc.amount">Investment Amount</label>
               <div class="amount-input"><span>FCFA</span><input type="number" id="calcAmount" readonly /></div>
             </div>
 
             <fieldset class="duration-fieldset" id="durationFieldset">
-              <legend>⏳ Duration</legend>
+              <legend data-i18n="calc.duration">⏳ Duration</legend>
               <div class="duration-custom">
-                <label for="customDuration">Enter days</label>
+                <label for="customDuration" data-i18n="calc.days">Enter days</label>
                 <input type="number" id="customDuration" min="1" max="365" value="20" placeholder="20" />
-                <span class="days-label">days</span>
+                <span class="days-label" data-i18n="calc.daysUnit">days</span>
               </div>
               <div class="duration-summary" id="durationSummary">
                 <i class="fa-regular fa-calendar"></i>
@@ -1089,17 +1137,17 @@
             </fieldset>
 
             <div class="selected-rate">
-              <span>Estimated Daily Rate</span>
+              <span data-i18n="calc.rate">Estimated Daily Rate</span>
               <strong id="homeCalcRate">2.0% / day</strong>
             </div>
           </div>
           <div class="calculator-result">
-            <div class="result-heading"><span>ESTIMATED VALUE</span><h3>Your Projection</h3></div>
-            <div class="result-row"><span>Initial Investment</span><strong id="homeCalcPrincipal">FCFA 0</strong></div>
-            <div class="result-row"><span>Estimated Daily Earnings</span><strong id="homeCalcDailyReturn">FCFA 0</strong></div>
-            <div class="result-row"><span>Estimated Earnings (<span id="durationLabel">20</span> Days)</span><strong id="homeCalcTotalReturn">FCFA 0</strong></div>
-            <div class="result-total"><span>Estimated Total Value</span><strong id="homeCalcTotal">FCFA 0</strong></div>
-            <p class="calculator-disclaimer">This calculator provides illustrative estimates based on the selected plan and duration. Actual results may vary and are not guaranteed.</p>
+            <div class="result-heading"><span data-i18n="calc.projTag">ESTIMATED VALUE</span><h3 data-i18n="calc.proj">Your Projection</h3></div>
+            <div class="result-row"><span data-i18n="calc.initial">Initial Investment</span><strong id="homeCalcPrincipal">FCFA 0</strong></div>
+            <div class="result-row"><span data-i18n="calc.daily">Estimated Daily Earnings</span><strong id="homeCalcDailyReturn">FCFA 0</strong></div>
+            <div class="result-row"><span><span data-i18n="calc.earnings">Estimated Earnings</span> (<span id="durationLabel">20</span> <span data-i18n="calc.daysAbbr">Days</span>)</span><strong id="homeCalcTotalReturn">FCFA 0</strong></div>
+            <div class="result-total"><span data-i18n="calc.total">Estimated Total Value</span><strong id="homeCalcTotal">FCFA 0</strong></div>
+            <p class="calculator-disclaimer" data-i18n="calc.disc">This calculator provides illustrative estimates based on the selected plan and duration. Actual results may vary and are not guaranteed.</p>
           </div>
         </div>
       </div>
@@ -1108,13 +1156,13 @@
     <div class="comparison-wrapper">
       <div class="comparison-container">
         <div class="comparison-card comparison-card-top">
-          <h2 class="comparison-card-title">Individuals Mining</h2>
+          <h2 class="comparison-card-title" data-i18n="cmp.indiv">Individuals Mining</h2>
           <div class="comparison-underline"></div>
           <a href="https://postimg.cc/XpC8FRRr" target="_blank"><img src="https://i.postimg.cc/XpC8FRRr/IMG-4351.png" alt="Individuals Mining" class="comparison-card-image"></a>
         </div>
-        <div class="divider-circle">And</div>
+        <div class="divider-circle" data-i18n="cmp.and">And</div>
         <div class="comparison-card comparison-card-bottom">
-          <h2 class="comparison-card-title" style="margin-top:20px;">Mine as a Community</h2>
+          <h2 class="comparison-card-title" style="margin-top:20px;" data-i18n="cmp.comm">Mine as a Community</h2>
           <div class="comparison-underline"></div>
           <a href="https://postimg.cc/QFZqq6DV" target="_blank"><img src="https://i.postimg.cc/QFZqq6DV/IMG-4352.png" alt="Mine as a Community" class="comparison-card-image"></a>
         </div>
@@ -1123,24 +1171,23 @@
 
     <section class="referral-section" id="referralProgramSection">
       <div class="referral-container">
-        <span class="referral-tag">BOOST YOUR EARNINGS</span>
-        <h2 class="referral-title">Invite Friends & Earn Extra Commission</h2>
-        <p class="referral-subtitle">Share your unique link, build your team, and earn instant commissions when your referrals start mining.</p>
+        <span class="referral-tag" data-i18n="ref.tag">BOOST YOUR EARNINGS</span>
+        <h2 class="referral-title" data-i18n="ref.title">Invite Friends & Earn Extra Commission</h2>
+        <p class="referral-subtitle" data-i18n="ref.sub">Share your unique link, build your team, and earn instant commissions when your referrals start mining.</p>
         <div class="referral-cards-grid">
-          <div class="referral-card"><div class="referral-icon-box">1</div><h3 class="referral-card-title">Share Your Link</h3><p class="referral-card-text">Copy your personalized referral link from your dashboard and share it anywhere.</p></div>
-          <div class="referral-card"><div class="referral-icon-box">2</div><h3 class="referral-card-title">Friends Join & Mine</h3><p class="referral-card-text">When they register and invest, they're automatically linked to your network.</p></div>
-          <div class="referral-card"><div class="referral-icon-box">3</div><h3 class="referral-card-title">Collect Instant Rewards</h3><p class="referral-card-text">Get referral bonuses credited instantly — withdraw or reinvest them right away.</p></div>
+          <div class="referral-card"><div class="referral-icon-box">1</div><h3 class="referral-card-title" data-i18n="ref.c1.t">Share Your Link</h3><p class="referral-card-text" data-i18n="ref.c1.x">Copy your personalized referral link from your dashboard and share it anywhere.</p></div>
+          <div class="referral-card"><div class="referral-icon-box">2</div><h3 class="referral-card-title" data-i18n="ref.c2.t">Friends Join & Mine</h3><p class="referral-card-text" data-i18n="ref.c2.x">When they register and invest, they're automatically linked to your network.</p></div>
+          <div class="referral-card"><div class="referral-icon-box">3</div><h3 class="referral-card-title" data-i18n="ref.c3.t">Collect Instant Rewards</h3><p class="referral-card-text" data-i18n="ref.c3.x">Get referral bonuses credited instantly — withdraw or reinvest them right away.</p></div>
         </div>
         <div class="referral-link-box hidden" id="referralLinkBox">
-          <div class="referral-link-label">Your unique referral link</div>
+          <div class="referral-link-label" data-i18n="ref.linkLabel">Your unique referral link</div>
           <div class="referral-link-row">
             <input type="text" id="referralLinkInput" readonly value="https://bitflymining.com/ref/..." />
-            <button class="referral-copy-btn" id="copyReferralBtn">Copy</button>
+            <button class="referral-copy-btn" id="copyReferralBtn" data-i18n="ref.copy">Copy</button>
           </div>
-          <div class="referral-bonus-note"><i class="fa-solid fa-gift" style="color:#16a34a;"></i><span>Each new account that signs up using your link gets <strong>500 CFA</strong> automatically credited.</span></div>
         </div>
         <div class="referral-cta" id="referralCtaBox" style="margin-top:28px;">
-          <button class="referral-btn" id="getReferralLinkBtn" onclick="openAuthModal('signup')">Get Your Referral Link</button>
+          <button class="referral-btn" id="getReferralLinkBtn" onclick="openAuthModal('signup')" data-i18n="ref.cta">Get Your Referral Link</button>
         </div>
       </div>
     </section>
@@ -1151,34 +1198,34 @@
     <button class="back-circle-btn" onclick="showPageView('homePageView')" aria-label="Go Back">&lt;</button>
     <div class="container">
       <div class="title">
-        <h2>Investment Plans</h2>
-        <p>Choose a plan — click "View Plan" to see details and activate</p>
+        <h2 data-i18n="plans.title">Investment Plans</h2>
+        <p data-i18n="plans.sub">Choose a plan — click "View Plan" to see details and activate</p>
       </div>
 
       <div class="plans">
-        <div class="plan" onclick="selectPlan('Starter', '2.0% / day', 'FCFA 3,000', 'Starter investment plan', ['Instant activation', 'Daily account updates', 'Customer support'], event, 3000, 2.0, 0.000069)">
+        <div class="plan" onclick="selectPlan('Starter', '2.0% / day', 'FCFA 3,000', 'plans.desc.starter', ['plans.f1', 'plans.f2', 'plans.f3'], event, 3000, 2.0, 0.000069)">
           <div class="plan-icon"><img src="https://i.postimg.cc/TymLy4wq/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Starter"></div>
-          <h3>Starter</h3><p>Starter investment plan</p><div class="return"><strong>2.0% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Starter</h3><p data-i18n="plans.desc.starter">Starter investment plan</p><div class="return"><strong>2.0% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
-        <div class="plan" onclick="selectPlan('Regular', '4.2% / day', 'FCFA 5,000', 'Standard investment plan', ['Instant activation', 'Daily account updates', 'Customer support'], event, 5000, 4.2, 0.00012)">
+        <div class="plan" onclick="selectPlan('Regular', '4.2% / day', 'FCFA 5,000', 'plans.desc.regular', ['plans.f1', 'plans.f2', 'plans.f3'], event, 5000, 4.2, 0.00012)">
           <div class="plan-icon"><img src="https://i.postimg.cc/Kk2KtDkB/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Regular"></div>
-          <h3>Regular</h3><p>Standard investment plan</p><div class="return"><strong>4.2% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Regular</h3><p data-i18n="plans.desc.regular">Standard investment plan</p><div class="return"><strong>4.2% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
-        <div class="plan" onclick="selectPlan('Pro', '8.82% / day', 'FCFA 10,000', 'Advanced investment plan', ['Priority support', 'Account monitoring', 'Exclusive updates'], event, 10000, 8.82, 0.00023)">
+        <div class="plan" onclick="selectPlan('Pro', '8.82% / day', 'FCFA 10,000', 'plans.desc.pro', ['plans.f4', 'plans.f5', 'plans.f6'], event, 10000, 8.82, 0.00023)">
           <div class="plan-icon"><img src="https://i.postimg.cc/06mM6BQZ/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Pro"></div>
-          <h3>Pro</h3><p>Advanced investment plan</p><div class="return"><strong>8.82% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Pro</h3><p data-i18n="plans.desc.pro">Advanced investment plan</p><div class="return"><strong>8.82% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
-        <div class="plan" onclick="selectPlan('Elite', '12.0% / day', 'FCFA 30,000', 'Premium investment plan', ['Priority support', 'Exclusive updates', 'Advanced account features'], event, 30000, 12.0, 0.00069)">
+        <div class="plan" onclick="selectPlan('Elite', '12.0% / day', 'FCFA 30,000', 'plans.desc.elite', ['plans.f4', 'plans.f6', 'plans.f7'], event, 30000, 12.0, 0.00069)">
           <div class="plan-icon"><img src="https://i.postimg.cc/LYpqj3Yf/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Elite"></div>
-          <h3>Elite</h3><p>Premium investment plan</p><div class="return"><strong>12.0% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Elite</h3><p data-i18n="plans.desc.elite">Premium investment plan</p><div class="return"><strong>12.0% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
-        <div class="plan" onclick="selectPlan('Premium', '18.0% / day', 'FCFA 90,000', 'Highest-tier investment plan', ['VIP support', 'Exclusive updates', 'Premium account features'], event, 90000, 18.0, 0.0021)">
+        <div class="plan" onclick="selectPlan('Premium', '18.0% / day', 'FCFA 90,000', 'plans.desc.premium', ['plans.f8', 'plans.f6', 'plans.f9'], event, 90000, 18.0, 0.0021)">
           <div class="plan-icon"><img src="https://i.postimg.cc/TL6ynJLD/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Premium"></div>
-          <h3>Premium</h3><p>Highest-tier investment plan</p><div class="return"><strong>18.0% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Premium</h3><p data-i18n="plans.desc.premium">Highest-tier investment plan</p><div class="return"><strong>18.0% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
-        <div class="plan" onclick="selectPlan('Ultimate', '20.0% / day', 'FCFA 200,000', 'Ultimate-tier investment plan', ['VIP support', 'Dedicated Manager', 'Premium account features'], event, 200000, 20.0, 0.0046)">
+        <div class="plan" onclick="selectPlan('Ultimate', '20.0% / day', 'FCFA 200,000', 'plans.desc.ultimate', ['plans.f8', 'plans.f10', 'plans.f9'], event, 200000, 20.0, 0.0046)">
           <div class="plan-icon"><img src="https://i.postimg.cc/WFvD0wFG/D897ACCA-37DF-41B9-BC96-C97157230975.jpg" alt="Ultimate"></div>
-          <h3>Ultimate</h3><p>Ultimate-tier investment plan</p><div class="return"><strong>20.0% / day</strong></div><button class="choose-btn">View Plan</button>
+          <h3>Ultimate</h3><p data-i18n="plans.desc.ultimate">Ultimate-tier investment plan</p><div class="return"><strong>20.0% / day</strong></div><button class="choose-btn" data-i18n="plans.view">View Plan</button>
         </div>
       </div>
 
@@ -1186,9 +1233,9 @@
         <h3 id="detailName"></h3>
         <p id="detailDescription"></p>
         <div class="big-return" id="detailReturn"></div>
-        <p style="margin-top: 8px;">Minimum investment: <strong id="detailMinimum"></strong></p>
+        <p style="margin-top: 8px;"><span data-i18n="plans.min">Minimum investment:</span> <strong id="detailMinimum"></strong></p>
         <ul class="features" id="detailFeatures"></ul>
-        <button class="confirm-btn" onclick="continuePlan()">Activate Plan & Start Mining</button>
+        <button class="confirm-btn" onclick="continuePlan()" data-i18n="plans.activate">Activate Plan & Start Mining</button>
       </div>
     </div>
   </div>
@@ -1204,8 +1251,9 @@
         <div class="db-controls">
           <button class="db-home-btn" onclick="showPageView('homePageView')" title="Return Home"><i class="fa-solid fa-house"></i></button>
           <button class="db-home-btn" id="dbRefreshBtn" onclick="refreshAccountBalance()" title="Refresh Balance"><i class="fa-solid fa-rotate"></i></button>
-          <select id="dbLangSelect" class="db-lang-select" onchange="changeDashboardLanguage(this.value)">
-            <option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option>
+          <select id="dbLangSelect" class="db-lang-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="fr">Français</option>
           </select>
           <button class="db-theme-btn" id="dbThemeToggleBtn" onclick="toggleDashboardTheme()" title="Toggle Theme"><i class="fa-solid fa-sun" id="dbThemeIcon"></i></button>
         </div>
@@ -1219,39 +1267,39 @@
             <div class="db-profile-id" id="dbProfileId">ID: ---</div>
           </div>
           <button class="db-profile-toggle" id="dbProfileToggle" onclick="toggleProfileMore()">
-            <span id="dbToggleText">More</span><i class="fa-solid fa-chevron-down" id="dbToggleIcon"></i>
+            <span id="dbToggleText" data-i18n="db.more">More</span><i class="fa-solid fa-chevron-down" id="dbToggleIcon"></i>
           </button>
         </div>
         <div class="db-profile-more" id="dbProfileMore">
           <div class="db-profile-more-inner">
-            <div class="db-profile-detail"><i class="fa-solid fa-envelope"></i><span>Email:</span><span id="dbProfileEmail">---</span></div>
-            <div class="db-profile-detail"><i class="fa-solid fa-phone"></i><span>Phone:</span><span id="dbProfilePhone">---</span></div>
+            <div class="db-profile-detail"><i class="fa-solid fa-envelope"></i><span data-i18n="db.email">Email:</span><span id="dbProfileEmail">---</span></div>
+            <div class="db-profile-detail"><i class="fa-solid fa-phone"></i><span data-i18n="db.phone">Phone:</span><span id="dbProfilePhone">---</span></div>
           </div>
         </div>
       </div>
 
       <section class="db-balance-card">
-        <div class="db-balance-label" id="dbBalanceLabel">Total Account Balance</div>
+        <div class="db-balance-label" id="dbBalanceLabel" data-i18n="db.balance">Total Account Balance</div>
         <div class="db-balance-amount" id="dbAccountBalance">0.00</div>
         <div class="db-action-buttons">
-          <button class="db-btn db-btn-gold" onclick="openPaymentModal('deposit')"><i class="fa-solid fa-wallet"></i><span id="dbDepositText">Deposit</span></button>
-          <button class="db-btn db-btn-outline" onclick="openPaymentModal('withdraw')"><i class="fa-solid fa-arrow-up-right-from-square"></i><span id="dbWithdrawText">Withdraw</span></button>
+          <button class="db-btn db-btn-gold" onclick="openPaymentModal('deposit')"><i class="fa-solid fa-wallet"></i><span id="dbDepositText" data-i18n="db.deposit">Deposit</span></button>
+          <button class="db-btn db-btn-outline" onclick="openPaymentModal('withdraw')"><i class="fa-solid fa-arrow-up-right-from-square"></i><span id="dbWithdrawText" data-i18n="db.withdraw">Withdraw</span></button>
         </div>
       </section>
 
       <section class="db-stats-grid">
         <div class="db-stat-card">
           <div class="db-stat-icon"><i class="fa-solid fa-microchip"></i></div>
-          <div class="db-stat-info"><h4 id="dbActiveMinersText">Active Hashrate</h4><p id="dbHashrateValue">0.00 TH/s</p></div>
+          <div class="db-stat-info"><h4 id="dbActiveMinersText" data-i18n="db.hashrate">Active Hashrate</h4><p id="dbHashrateValue">0.00 TH/s</p></div>
         </div>
         <div class="db-stat-card">
           <div class="db-stat-icon"><i class="fa-solid fa-chart-line"></i></div>
-          <div class="db-stat-info"><h4 id="dbDailyEarningsText">Est. Daily Earnings</h4><p id="dbDailyEarningsValue">0.00</p></div>
+          <div class="db-stat-info"><h4 id="dbDailyEarningsText" data-i18n="db.daily">Est. Daily Earnings</h4><p id="dbDailyEarningsValue">0.00</p></div>
         </div>
         <div class="db-stat-card" id="totalWithdrawnCard">
           <div class="db-stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
           <div class="db-stat-info">
-            <h4 id="dbTotalWithdrawnText">Total Withdrawn</h4>
+            <h4 id="dbTotalWithdrawnText" data-i18n="db.totalW">Total Withdrawn</h4>
             <p id="dbTotalWithdrawnValue">0.00</p>
           </div>
           <button class="db-history-toggle" id="dbHistoryToggleBtn" onclick="toggleWithdrawalHistory()" title="Toggle withdrawal history">
@@ -1265,14 +1313,14 @@
 
       <section class="db-active-plans" id="dbActivePlansSection">
         <div class="db-active-plans-header">
-          <h3><i class="fa-solid fa-layer-group"></i> Active Investment Plans</h3>
+          <h3><i class="fa-solid fa-layer-group"></i> <span data-i18n="db.activePlans">Active Investment Plans</span></h3>
           <span class="db-active-plans-count" id="dbActivePlansCount">0 Plans</span>
         </div>
         <div class="db-plans-list" id="dbPlansList">
           <div class="db-empty-plans">
             <i class="fa-solid fa-cube"></i>
-            <p>No active plans yet. Choose a plan to start mining.</p>
-            <button class="db-btn db-btn-gold" onclick="showPageView('investmentPlansSection')">Browse Plans</button>
+            <p data-i18n="db.noPlans">No active plans yet. Choose a plan to start mining.</p>
+            <button class="db-btn db-btn-gold" onclick="showPageView('investmentPlansSection')" data-i18n="db.browse">Browse Plans</button>
           </div>
         </div>
       </section>
@@ -1411,67 +1459,67 @@
           <div class="brand-row">
             <div class="payment-brand">
               <div class="brand-icon">⇄</div>
-              <div class="payment-brand-text"><h1>Payment Portal</h1><p>Secure deposit & withdrawal</p></div>
+              <div class="payment-brand-text"><h1 data-i18n="pay.portal">Payment Portal</h1><p data-i18n="pay.portalSub">Secure deposit & withdrawal</p></div>
             </div>
-            <div class="status-pill"><span class="status-dot"></span>Secure</div>
+            <div class="status-pill"><span class="status-dot"></span><span data-i18n="pay.secure">Secure</span></div>
           </div>
           <div class="balance-card-payment">
-            <div class="balance-label-payment">Available Balance</div>
+            <div class="balance-label-payment" data-i18n="pay.available">Available Balance</div>
             <div class="balance-value-payment" id="paymentModalBalance">0.00</div>
-            <div class="balance-note-payment">Your available account balance</div>
+            <div class="balance-note-payment" data-i18n="pay.note">Your available account balance</div>
           </div>
         </div>
 
         <div class="tabs">
-          <button class="tab-btn active" id="depositTabBtn" onclick="switchPaymentTab('deposit')">Deposit</button>
-          <button class="tab-btn" id="withdrawTabBtn" onclick="switchPaymentTab('withdraw')">Withdraw</button>
+          <button class="tab-btn active" id="depositTabBtn" onclick="switchPaymentTab('deposit')" data-i18n="pay.tabDep">Deposit</button>
+          <button class="tab-btn" id="withdrawTabBtn" onclick="switchPaymentTab('withdraw')" data-i18n="pay.tabWit">Withdraw</button>
         </div>
 
         <div id="paymentToast" class="toast-payment"></div>
 
         <div id="deposit-tab" class="tab-content active">
-          <div class="section-title"><h2>Make a Deposit</h2><p>Select your payment method and submit your transaction details.</p></div>
+          <div class="section-title"><h2 data-i18n="pay.depTitle">Make a Deposit</h2><p data-i18n="pay.depSub">Select your payment method and submit your transaction details.</p></div>
           <form id="deposit-form" onsubmit="handleDeposit(event)">
             <div class="form-group">
-              <label for="deposit-method">Payment Method</label>
+              <label for="deposit-method" data-i18n="pay.method">Payment Method</label>
               <select id="deposit-method" onchange="updateDepositDetails()">
-                <option value="mtn">MTN Mobile Money</option>
-                <option value="orange">Orange Money</option>
+                <option value="mtn" data-i18n="pay.mtn">MTN Mobile Money</option>
+                <option value="orange" data-i18n="pay.orange">Orange Money</option>
                 <option value="btc">Bitcoin (BTC)</option>
                 <option value="usdt">USDT (TRC20)</option>
-                <option value="bank">Bank Wire Transfer</option>
+                <option value="bank" data-i18n="pay.bankOpt">Bank Wire Transfer</option>
               </select>
             </div>
             <div class="deposit-info-box">
-              <div class="info-title"><span class="info-title-icon">$</span>PAYMENT INSTRUCTIONS</div>
+              <div class="info-title"><span class="info-title-icon">$</span><span data-i18n="pay.instr">PAYMENT INSTRUCTIONS</span></div>
               <div id="payment-details-content"></div>
               <div class="info-row" style="border-top:1px solid rgba(255,255,255,.08); margin-top:10px; padding-top:12px; border-bottom:0;">
-                <span class="info-label" style="color:#f5b942; font-weight:700;">⚠️ IMPORTANT</span>
-                <span class="info-value" style="color:#f5b942; text-align:right; font-size:11px;">Input your <strong>Account ID</strong> as reference during transactions.</span>
+                <span class="info-label" style="color:#f5b942; font-weight:700;" data-i18n="pay.imp">⚠️ IMPORTANT</span>
+                <span class="info-value" style="color:#f5b942; text-align:right; font-size:11px;" data-i18n="pay.impText">Input your Account ID as reference during transactions.</span>
               </div>
             </div>
             <div class="form-group">
-              <label for="deposit-amount">Amount Sent</label>
+              <label for="deposit-amount" data-i18n="pay.amtSent">Amount Sent</label>
               <input type="number" id="deposit-amount" placeholder="0.00" min="10" step="0.01" required>
             </div>
             <div class="form-group">
-              <label for="deposit-ref">Transaction ID / Reference / TxHash</label>
-              <input type="text" id="deposit-ref" placeholder="Enter transaction reference" required>
-              <p class="note">Include your Account ID as reference.</p>
+              <label for="deposit-ref" data-i18n="pay.txRef">Transaction ID / Reference / TxHash</label>
+              <input type="text" id="deposit-ref" data-i18n-placeholder="pay.txRefPh" placeholder="Enter transaction reference" required>
+              <p class="note" data-i18n="pay.include">Include your Account ID as reference.</p>
             </div>
-            <button type="submit" class="submit-btn">Confirm Deposit</button>
+            <button type="submit" class="submit-btn" data-i18n="pay.confDep">Confirm Deposit</button>
           </form>
         </div>
 
         <div id="withdraw-tab" class="tab-content">
-          <div class="section-title"><h2>Withdraw Funds</h2><p>Choose your payout method and provide your receiving details.</p></div>
+          <div class="section-title"><h2 data-i18n="pay.witTitle">Withdraw Funds</h2><p data-i18n="pay.witSub">Choose your payout method and provide your receiving details.</p></div>
           <form id="withdraw-form" onsubmit="handleWithdrawal(event)">
             <div class="form-group">
-              <label for="withdraw-amount">Amount to Withdraw</label>
+              <label for="withdraw-amount" data-i18n="pay.witAmt">Amount to Withdraw</label>
               <input type="number" id="withdraw-amount" placeholder="0.00" min="20" step="0.01" oninput="calculateWithdrawal()" required>
             </div>
             <div class="form-group">
-              <label for="withdraw-method">Payout Method</label>
+              <label for="withdraw-method" data-i18n="pay.payout">Payout Method</label>
               <select id="withdraw-method" onchange="toggleWithdrawFields()">
                 <option value="mtn">MTN Mobile Money</option>
                 <option value="orange">Orange Money</option>
@@ -1481,35 +1529,35 @@
               </select>
             </div>
             <div id="sec-mtn" class="withdraw-section active">
-              <div class="form-group"><label for="mtn-name">Account Name</label><input type="text" id="mtn-name" placeholder="Full name on MTN MoMo"></div>
-              <div class="form-group"><label for="mtn-phone">MTN Mobile Money Number</label><input type="tel" id="mtn-phone" placeholder="+237 670 000 000"></div>
+              <div class="form-group"><label for="mtn-name" data-i18n="pay.accName">Account Name</label><input type="text" id="mtn-name" placeholder="Full name on MTN MoMo"></div>
+              <div class="form-group"><label for="mtn-phone" data-i18n="pay.mtnNum">MTN Mobile Money Number</label><input type="tel" id="mtn-phone" placeholder="+237 670 000 000"></div>
             </div>
             <div id="sec-orange" class="withdraw-section">
-              <div class="form-group"><label for="orange-name">Account Name</label><input type="text" id="orange-name" placeholder="Full name on Orange Money"></div>
-              <div class="form-group"><label for="orange-phone">Orange Money Number</label><input type="tel" id="orange-phone" placeholder="+237 690 000 000"></div>
+              <div class="form-group"><label for="orange-name" data-i18n="pay.accName">Account Name</label><input type="text" id="orange-name" placeholder="Full name on Orange Money"></div>
+              <div class="form-group"><label for="orange-phone" data-i18n="pay.orangeNum">Orange Money Number</label><input type="tel" id="orange-phone" placeholder="+237 690 000 000"></div>
             </div>
             <div id="sec-btc" class="withdraw-section">
-              <div class="form-group"><label for="btc-addr">Bitcoin Address</label><input type="text" id="btc-addr" placeholder="bc1q..."><p class="note">Use a valid Bitcoin network address.</p></div>
+              <div class="form-group"><label for="btc-addr" data-i18n="pay.btcAddr">Bitcoin Address</label><input type="text" id="btc-addr" placeholder="bc1q..."><p class="note" data-i18n="pay.btcNote">Use a valid Bitcoin network address.</p></div>
             </div>
             <div id="sec-usdt" class="withdraw-section">
-              <div class="form-group"><label for="usdt-addr">USDT Wallet Address (TRC20)</label><input type="text" id="usdt-addr" placeholder="T..."></div>
+              <div class="form-group"><label for="usdt-addr" data-i18n="pay.usdtAddr">USDT Wallet Address (TRC20)</label><input type="text" id="usdt-addr" placeholder="T..."></div>
             </div>
             <div id="sec-bank" class="withdraw-section">
-              <div class="form-group"><label for="acc-name">Account Holder Name</label><input type="text" id="acc-name" placeholder="Full name"></div>
-              <div class="form-group"><label for="bank-name">Bank Name</label><input type="text" id="bank-name" placeholder="Bank name"></div>
-              <div class="form-group"><label for="acc-number">Account / IBAN</label><input type="text" id="acc-number" placeholder="Account number"></div>
-              <div class="form-group"><label for="swift">SWIFT / BIC</label><input type="text" id="swift" placeholder="SWIFT code"></div>
+              <div class="form-group"><label for="acc-name" data-i18n="pay.holder">Account Holder Name</label><input type="text" id="acc-name" placeholder="Full name"></div>
+              <div class="form-group"><label for="bank-name" data-i18n="pay.bank">Bank Name</label><input type="text" id="bank-name" placeholder="Bank name"></div>
+              <div class="form-group"><label for="acc-number" data-i18n="pay.iban">Account / IBAN</label><input type="text" id="acc-number" placeholder="Account number"></div>
+              <div class="form-group"><label for="swift" data-i18n="pay.swift">SWIFT / BIC</label><input type="text" id="swift" placeholder="SWIFT code"></div>
             </div>
             <div class="summary-box">
-              <div class="summary-row"><span>Withdrawal Amount</span><span id="sum-amount">0.00</span></div>
-              <div class="summary-row"><span>Processing Fee (2%)</span><span id="sum-fee">0.00</span></div>
-              <div class="summary-row"><span>You Receive</span><span id="sum-total">0.00</span></div>
+              <div class="summary-row"><span data-i18n="pay.wSum">Withdrawal Amount</span><span id="sum-amount">0.00</span></div>
+              <div class="summary-row"><span data-i18n="pay.fee">Processing Fee (2%)</span><span id="sum-fee">0.00</span></div>
+              <div class="summary-row"><span data-i18n="pay.receive">You Receive</span><span id="sum-total">0.00</span></div>
             </div>
-            <button type="submit" class="submit-btn">Request Withdrawal</button>
+            <button type="submit" class="submit-btn" data-i18n="pay.reqWit">Request Withdrawal</button>
           </form>
         </div>
 
-        <div class="portal-footer">Secure Payment Portal · All transactions are subject to verification</div>
+        <div class="portal-footer" data-i18n="pay.footer">Secure Payment Portal · All transactions are subject to verification</div>
       </div>
     </div>
   </div>
@@ -1586,38 +1634,38 @@
   <div class="deposit-confirm-overlay" id="depositConfirmOverlay">
     <div class="deposit-confirm-card">
       <div class="dc-header">
-        <h2>Deposit</h2>
+        <h2 data-i18n="dc.title">Deposit</h2>
       </div>
 
       <div class="dc-details-list">
-        <div class="dc-label">Amount</div>
+        <div class="dc-label" data-i18n="dc.amount">Amount</div>
         <div class="dc-value dc-value-highlight">
           <span class="dc-crypto-icon">XAF</span>
           <span><span id="dcAmount">0.00</span></span>
         </div>
 
-        <div class="dc-label">Method</div>
+        <div class="dc-label" data-i18n="dc.method">Method</div>
         <div class="dc-value" id="dcMethod">MTN Mobile Money</div>
 
-        <div class="dc-label">Merchant</div>
+        <div class="dc-label" data-i18n="dc.merchant">Merchant</div>
         <div class="dc-value" id="dcMerchant">Josue Martial Hako</div>
 
         <div class="dc-label" id="dcPayToLabel">MoMo Number</div>
         <div class="dc-value dc-value-copy">
           <span id="dcPayToValue">654292201</span>
-          <button type="button" class="dc-copy-btn" onclick="dcCopyField('dcPayToValue', this)">Copy</button>
+          <button type="button" class="dc-copy-btn" onclick="dcCopyField('dcPayToValue', this)" data-i18n="ref.copy">Copy</button>
         </div>
 
-        <div class="dc-label">Reference</div>
+        <div class="dc-label" data-i18n="dc.ref">Reference</div>
         <div class="dc-value dc-value-copy">
           <span id="dcReference">REF-123456</span>
-          <button type="button" class="dc-copy-btn" onclick="dcCopyField('dcReference', this)">Copy</button>
+          <button type="button" class="dc-copy-btn" onclick="dcCopyField('dcReference', this)" data-i18n="ref.copy">Copy</button>
         </div>
       </div>
 
       <ul class="dc-warning-list">
-        <li>Ensure you include your Account ID as reference.</li>
-        <li>Deposits are subject to verification before crediting.</li>
+        <li data-i18n="dc.w1">Ensure you include your Account ID as reference.</li>
+        <li data-i18n="dc.w2">Deposits are subject to verification before crediting.</li>
       </ul>
 
       <div class="dc-loading-container">
@@ -1626,12 +1674,12 @@
           <div></div><div></div><div></div><div></div>
           <div></div><div></div><div></div><div></div>
         </div>
-        <p class="dc-loading-text">
+        <p class="dc-loading-text" data-i18n="dc.loading">
           Waiting for admin confirmation. Your balance will update automatically once approved.
         </p>
       </div>
 
-      <button class="dc-btn-continue" onclick="closeDepositConfirm()" disabled>Done</button>
+      <button class="dc-btn-continue" onclick="closeDepositConfirm()" disabled data-i18n="dc.done">Done</button>
     </div>
   </div>
 
@@ -1639,17 +1687,17 @@
   <div class="withdrawal-confirm-overlay" id="withdrawalConfirmOverlay">
     <div class="withdrawal-confirm-card">
       <div class="wc-header">
-        <h2>Withdrawal</h2>
+        <h2 data-i18n="w.title">Withdrawal</h2>
       </div>
 
       <div class="wc-details-list" id="wcDetailsList"></div>
 
       <ul class="wc-warning-list">
-        <li>Ensure that the details provided are correct and on the same network.</li>
-        <li>Transactions cannot be cancelled once submitted.</li>
+        <li data-i18n="w.w1">Ensure that the details provided are correct and on the same network.</li>
+        <li data-i18n="w.w2">Transactions cannot be cancelled once submitted.</li>
       </ul>
 
-      <button class="wc-btn-continue" onclick="proceedToAwaitingApproval()">Continue</button>
+      <button class="wc-btn-continue" onclick="proceedToAwaitingApproval()" data-i18n="w.continue">Continue</button>
     </div>
   </div>
 
@@ -1658,15 +1706,454 @@
     <div class="awaiting-approval-card">
       <button class="aa-close-btn" onclick="closeAwaitingApproval()" aria-label="Close">&times;</button>
       <div class="aa-icon">⏳</div>
-      <h2 class="aa-title">Awaiting Approval</h2>
-      <p class="aa-text">
+      <h2 class="aa-title" data-i18n="aw.title">Awaiting Approval</h2>
+      <p class="aa-text" data-i18n="aw.text">
         Your withdrawal request is being reviewed and will take approximately 12 hours. You can view the status of your withdrawal request in the withdrawal history page.
       </p>
-      <button class="aa-btn-complete" onclick="closeAwaitingApproval()">Complete</button>
+      <button class="aa-btn-complete" onclick="closeAwaitingApproval()" data-i18n="aw.btn">Complete</button>
     </div>
   </div>
 
   <script>
+    /* =========================================================
+       I18N (English / French only)
+    ========================================================= */
+    const I18N = {
+      en: {
+        'nav.home': 'Home',
+        'nav.account': 'Account',
+        'nav.plans': 'Investment Plans',
+        'nav.login': 'Sign Up / Login',
+        'nav.logout': 'Logout',
+        'nav.contact': 'Contact Us',
+
+        'hero.subtitle': 'Try bitfly mining and validate your own blocks on the blockchain',
+        'hero.description': "The world's most innovative, unique and simple way to mine crypto. Start your one-click crypto mining journey today.",
+        'hero.startNow': 'Start Now',
+
+        'intro.h': 'bitfly mining',
+        'intro.p1': 'bitfly mining represents the traditional approach to cryptocurrency mining, where computing power is used to validate blocks of cryptocurrency transactions and, in return, earn mining rewards.',
+        'intro.p2': 'Once earned, your mining rewards are credited to your dedicated mining account, where they can be converted into your preferred account currency.',
+        'intro.p3': 'With bitfly mining, your mining rewards remain easy to manage, giving you a seamless experience from earning through to accessing your funds.',
+
+        'why.title': 'Why Choose Us',
+        'why.c1.t': 'Profit switching',
+        'why.c1.x': 'The NiceHash system automatically targets the most profitable coin for higher earnings.',
+        'why.c2.t': 'Easy to Use',
+        'why.c2.x': 'Our platform offers a convenient range of options for miners, designed to make managing your mining activities simple and efficient.',
+        'why.c3.t': 'Competitive fees',
+        'why.c3.x': 'Big miners enjoy bigger savings and withdrawal from our services.',
+
+        'calc.tag': 'FINANCIAL CALCULATOR',
+        'calc.title': 'Estimate Your Daily Earnings',
+        'calc.subtitle': 'Select a plan and enter a custom duration — the projection updates instantly.',
+        'calc.plan': 'Investment Plan',
+        'calc.amount': 'Investment Amount',
+        'calc.duration': '⏳ Duration',
+        'calc.days': 'Enter days',
+        'calc.daysUnit': 'days',
+        'calc.daysSel': 'days selected',
+        'calc.rate': 'Estimated Daily Rate',
+        'calc.projTag': 'ESTIMATED VALUE',
+        'calc.proj': 'Your Projection',
+        'calc.initial': 'Initial Investment',
+        'calc.daily': 'Estimated Daily Earnings',
+        'calc.earnings': 'Estimated Earnings',
+        'calc.daysAbbr': 'Days',
+        'calc.total': 'Estimated Total Value',
+        'calc.disc': 'This calculator provides illustrative estimates based on the selected plan and duration. Actual results may vary and are not guaranteed.',
+
+        'cmp.indiv': 'Individuals Mining',
+        'cmp.and': 'And',
+        'cmp.comm': 'Mine as a Community',
+
+        'ref.tag': 'BOOST YOUR EARNINGS',
+        'ref.title': 'Invite Friends & Earn Extra Commission',
+        'ref.sub': 'Share your unique link, build your team, and earn instant commissions when your referrals start mining.',
+        'ref.c1.t': 'Share Your Link',
+        'ref.c1.x': 'Copy your personalized referral link from your dashboard and share it anywhere.',
+        'ref.c2.t': 'Friends Join & Mine',
+        'ref.c2.x': "When they register and invest, they're automatically linked to your network.",
+        'ref.c3.t': 'Collect Instant Rewards',
+        'ref.c3.x': 'Get referral bonuses credited instantly — withdraw or reinvest them right away.',
+        'ref.linkLabel': 'Your unique referral link',
+        'ref.cta': 'Get Your Referral Link',
+        'ref.copy': 'Copy',
+        'ref.copied': 'Copied!',
+
+        'plans.title': 'Investment Plans',
+        'plans.sub': 'Choose a plan — click "View Plan" to see details and activate',
+        'plans.view': 'View Plan',
+        'plans.activate': 'Activate Plan & Start Mining',
+        'plans.min': 'Minimum investment:',
+        'plans.desc.starter': 'Starter investment plan',
+        'plans.desc.regular': 'Standard investment plan',
+        'plans.desc.pro': 'Advanced investment plan',
+        'plans.desc.elite': 'Premium investment plan',
+        'plans.desc.premium': 'Highest-tier investment plan',
+        'plans.desc.ultimate': 'Ultimate-tier investment plan',
+        'plans.f1': 'Instant activation',
+        'plans.f2': 'Daily account updates',
+        'plans.f3': 'Customer support',
+        'plans.f4': 'Priority support',
+        'plans.f5': 'Account monitoring',
+        'plans.f6': 'Exclusive updates',
+        'plans.f7': 'Advanced account features',
+        'plans.f8': 'VIP support',
+        'plans.f9': 'Premium account features',
+        'plans.f10': 'Dedicated Manager',
+
+        'db.balance': 'Total Account Balance',
+        'db.deposit': 'Deposit',
+        'db.withdraw': 'Withdraw',
+        'db.hashrate': 'Active Hashrate',
+        'db.daily': 'Est. Daily Earnings',
+        'db.totalW': 'Total Withdrawn',
+        'db.activePlans': 'Active Investment Plans',
+        'db.plansCount': 'Plans',
+        'db.planWord': 'Plan',
+        'db.browse': 'Browse Plans',
+        'db.noPlans': 'No active plans yet. Choose a plan to start mining.',
+        'db.active': 'Active',
+        'db.more': 'More',
+        'db.less': 'Less',
+        'db.email': 'Email:',
+        'db.phone': 'Phone:',
+        'db.activated': 'Activated:',
+        'db.view': 'View',
+        'db.cancel': 'Cancel',
+        'db.cancelConfirmTitle': 'Cancel this plan?',
+        'db.cancelConfirmBody': 'Are you sure you want to cancel the',
+        'db.cancelConfirmInvest': 'Investment:',
+        'db.cancelConfirmWarn': 'This action cannot be undone.',
+        'db.cancelled': 'plan has been cancelled.',
+        'db.cancelLog': 'Plan cancelled:',
+        'db.noHistory': 'No withdrawal history yet.',
+        'db.histLoad': 'Loading...',
+        'db.histFail': 'Failed to load history.',
+
+        'pay.portal': 'Payment Portal',
+        'pay.portalSub': 'Secure deposit & withdrawal',
+        'pay.secure': 'Secure',
+        'pay.available': 'Available Balance',
+        'pay.note': 'Your available account balance',
+        'pay.tabDep': 'Deposit',
+        'pay.tabWit': 'Withdraw',
+        'pay.depTitle': 'Make a Deposit',
+        'pay.depSub': 'Select your payment method and submit your transaction details.',
+        'pay.method': 'Payment Method',
+        'pay.instr': 'PAYMENT INSTRUCTIONS',
+        'pay.imp': '⚠️ IMPORTANT',
+        'pay.impText': 'Input your Account ID as reference during transactions.',
+        'pay.amtSent': 'Amount Sent',
+        'pay.txRef': 'Transaction ID / Reference / TxHash',
+        'pay.txRefPh': 'Enter transaction reference',
+        'pay.include': 'Include your Account ID as reference.',
+        'pay.confDep': 'Confirm Deposit',
+        'pay.witTitle': 'Withdraw Funds',
+        'pay.witSub': 'Choose your payout method and provide your receiving details.',
+        'pay.witAmt': 'Amount to Withdraw',
+        'pay.payout': 'Payout Method',
+        'pay.mtn': 'MTN Mobile Money',
+        'pay.orange': 'Orange Money',
+        'pay.bankOpt': 'Bank Wire Transfer',
+        'pay.accName': 'Account Name',
+        'pay.mtnNum': 'MTN Mobile Money Number',
+        'pay.orangeNum': 'Orange Money Number',
+        'pay.btcAddr': 'Bitcoin Address',
+        'pay.btcNote': 'Use a valid Bitcoin network address.',
+        'pay.usdtAddr': 'USDT Wallet Address (TRC20)',
+        'pay.holder': 'Account Holder Name',
+        'pay.bank': 'Bank Name',
+        'pay.iban': 'Account / IBAN',
+        'pay.swift': 'SWIFT / BIC',
+        'pay.wSum': 'Withdrawal Amount',
+        'pay.fee': 'Processing Fee (2%)',
+        'pay.receive': 'You Receive',
+        'pay.reqWit': 'Request Withdrawal',
+        'pay.footer': 'Secure Payment Portal · All transactions are subject to verification',
+        'pay.copy': 'Copy',
+        'pay.copied': 'Copied!',
+        'pay.failed': 'Failed',
+        'pay.merchantName': 'Merchant Name',
+        'pay.ref': 'Reference',
+        'pay.accId': 'Include your Account ID',
+
+        'dc.title': 'Deposit',
+        'dc.amount': 'Amount',
+        'dc.method': 'Method',
+        'dc.merchant': 'Merchant',
+        'dc.ref': 'Reference',
+        'dc.loading': "Waiting for admin confirmation. Your balance will update automatically once approved.",
+        'dc.done': 'Done',
+        'dc.w1': 'Ensure you include your Account ID as reference.',
+        'dc.w2': 'Deposits are subject to verification before crediting.',
+
+        'w.title': 'Withdrawal',
+        'w.continue': 'Continue',
+        'w.w1': 'Ensure that the details provided are correct and on the same network.',
+        'w.w2': 'Transactions cannot be cancelled once submitted.',
+
+        'aw.title': 'Awaiting Approval',
+        'aw.text': 'Your withdrawal request is being reviewed and will take approximately 12 hours. You can view the status of your withdrawal request in the withdrawal history page.',
+        'aw.btn': 'Complete'
+      },
+      fr: {
+        'nav.home': 'Accueil',
+        'nav.account': 'Compte',
+        'nav.plans': "Plans d'investissement",
+        'nav.login': "S'inscrire / Connexion",
+        'nav.logout': 'Déconnexion',
+        'nav.contact': 'Contactez-nous',
+
+        'hero.subtitle': 'Essayez bitfly mining et validez vos propres blocs sur la blockchain',
+        'hero.description': "La façon la plus innovante, unique et simple au monde de miner de la crypto. Commencez votre parcours de minage en un clic dès aujourd'hui.",
+        'hero.startNow': 'Commencer',
+
+        'intro.h': 'bitfly mining',
+        'intro.p1': "bitfly mining représente l'approche traditionnelle du minage de cryptomonnaie, où la puissance de calcul est utilisée pour valider des blocs de transactions et, en retour, gagner des récompenses de minage.",
+        'intro.p2': "Une fois gagnées, vos récompenses de minage sont créditées sur votre compte de minage dédié, où elles peuvent être converties dans la devise de votre choix.",
+        'intro.p3': "Avec bitfly mining, vos récompenses de minage restent faciles à gérer, vous offrant une expérience fluide, du gain à l'accès à vos fonds.",
+
+        'why.title': 'Pourquoi nous choisir',
+        'why.c1.t': 'Commutation de profit',
+        'why.c1.x': 'Le système NiceHash cible automatiquement la pièce la plus rentable pour des gains plus élevés.',
+        'why.c2.t': 'Facile à utiliser',
+        'why.c2.x': "Notre plateforme offre une gamme pratique d'options pour les mineurs, conçue pour rendre la gestion de vos activités de minage simple et efficace.",
+        'why.c3.t': 'Frais compétitifs',
+        'why.c3.x': 'Les grands mineurs bénéficient de plus grandes économies et de retraits auprès de nos services.',
+
+        'calc.tag': 'CALCULATEUR FINANCIER',
+        'calc.title': 'Estimez vos gains quotidiens',
+        'calc.subtitle': 'Sélectionnez un plan et saisissez une durée personnalisée — la projection se met à jour instantanément.',
+        'calc.plan': "Plan d'investissement",
+        'calc.amount': "Montant d'investissement",
+        'calc.duration': '⏳ Durée',
+        'calc.days': 'Entrez les jours',
+        'calc.daysUnit': 'jours',
+        'calc.daysSel': 'jours sélectionnés',
+        'calc.rate': 'Taux journalier estimé',
+        'calc.projTag': 'VALEUR ESTIMÉE',
+        'calc.proj': 'Votre projection',
+        'calc.initial': 'Investissement initial',
+        'calc.daily': 'Gains journaliers estimés',
+        'calc.earnings': 'Gains estimés',
+        'calc.daysAbbr': 'Jours',
+        'calc.total': 'Valeur totale estimée',
+        'calc.disc': 'Ce calculateur fournit des estimations à titre indicatif basées sur le plan et la durée sélectionnés. Les résultats réels peuvent varier et ne sont pas garantis.',
+
+        'cmp.indiv': 'Minage individuel',
+        'cmp.and': 'Et',
+        'cmp.comm': 'Miner en communauté',
+
+        'ref.tag': 'AUGMENTEZ VOS GAINS',
+        'ref.title': 'Invitez vos amis et gagnez une commission supplémentaire',
+        'ref.sub': 'Partagez votre lien unique, construisez votre équipe et gagnez des commissions instantanées quand vos filleuls commencent à miner.',
+        'ref.c1.t': 'Partagez votre lien',
+        'ref.c1.x': "Copiez votre lien de parrainage personnalisé depuis votre tableau de bord et partagez-le où vous voulez.",
+        'ref.c2.t': 'Vos amis rejoignent et minent',
+        'ref.c2.x': "Lorsqu'ils s'inscrivent et investissent, ils sont automatiquement liés à votre réseau.",
+        'ref.c3.t': 'Recevez des récompenses instantanées',
+        'ref.c3.x': 'Obtenez des bonus de parrainage crédités instantanément — retirez-les ou réinvestissez-les immédiatement.',
+        'ref.linkLabel': 'Votre lien de parrainage unique',
+        'ref.cta': 'Obtenir votre lien de parrainage',
+        'ref.copy': 'Copier',
+        'ref.copied': 'Copié !',
+
+        'plans.title': "Plans d'investissement",
+        'plans.sub': 'Choisissez un plan — cliquez sur "Voir le plan" pour voir les détails et activer',
+        'plans.view': 'Voir le plan',
+        'plans.activate': 'Activer le plan et commencer le minage',
+        'plans.min': 'Investissement minimum :',
+        'plans.desc.starter': "Plan d'investissement Starter",
+        'plans.desc.regular': "Plan d'investissement standard",
+        'plans.desc.pro': "Plan d'investissement avancé",
+        'plans.desc.elite': "Plan d'investissement Premium",
+        'plans.desc.premium': "Plan d'investissement haut de gamme",
+        'plans.desc.ultimate': "Plan d'investissement ultime",
+        'plans.f1': 'Activation instantanée',
+        'plans.f2': 'Mises à jour quotidiennes du compte',
+        'plans.f3': 'Support client',
+        'plans.f4': 'Support prioritaire',
+        'plans.f5': 'Suivi du compte',
+        'plans.f6': 'Mises à jour exclusives',
+        'plans.f7': 'Fonctionnalités avancées du compte',
+        'plans.f8': 'Support VIP',
+        'plans.f9': 'Fonctionnalités Premium',
+        'plans.f10': 'Gestionnaire dédié',
+
+        'db.balance': 'Solde total du compte',
+        'db.deposit': 'Dépôt',
+        'db.withdraw': 'Retrait',
+        'db.hashrate': 'Taux de hachage actif',
+        'db.daily': 'Gains journaliers est.',
+        'db.totalW': 'Total retiré',
+        'db.activePlans': "Plans d'investissement actifs",
+        'db.plansCount': 'Plans',
+        'db.planWord': 'Plan',
+        'db.browse': 'Parcourir les plans',
+        'db.noPlans': "Aucun plan actif pour le moment. Choisissez un plan pour commencer à miner.",
+        'db.active': 'Actif',
+        'db.more': 'Plus',
+        'db.less': 'Moins',
+        'db.email': 'E-mail :',
+        'db.phone': 'Téléphone :',
+        'db.activated': 'Activé :',
+        'db.view': 'Voir',
+        'db.cancel': 'Annuler',
+        'db.cancelConfirmTitle': 'Annuler ce plan ?',
+        'db.cancelConfirmBody': 'Voulez-vous vraiment annuler le plan',
+        'db.cancelConfirmInvest': 'Investissement :',
+        'db.cancelConfirmWarn': 'Cette action est irréversible.',
+        'db.cancelled': 'a été annulé.',
+        'db.cancelLog': 'Plan annulé :',
+        'db.noHistory': 'Aucun historique de retrait pour le moment.',
+        'db.histLoad': 'Chargement...',
+        'db.histFail': "Échec du chargement de l'historique.",
+
+        'pay.portal': 'Portail de paiement',
+        'pay.portalSub': 'Dépôt et retrait sécurisés',
+        'pay.secure': 'Sécurisé',
+        'pay.available': 'Solde disponible',
+        'pay.note': 'Votre solde de compte disponible',
+        'pay.tabDep': 'Dépôt',
+        'pay.tabWit': 'Retrait',
+        'pay.depTitle': 'Effectuer un dépôt',
+        'pay.depSub': 'Sélectionnez votre méthode de paiement et soumettez les détails de votre transaction.',
+        'pay.method': 'Méthode de paiement',
+        'pay.instr': 'INSTRUCTIONS DE PAIEMENT',
+        'pay.imp': '⚠️ IMPORTANT',
+        'pay.impText': 'Indiquez votre identifiant de compte comme référence lors des transactions.',
+        'pay.amtSent': 'Montant envoyé',
+        'pay.txRef': 'ID de transaction / Référence / TxHash',
+        'pay.txRefPh': 'Entrez la référence de la transaction',
+        'pay.include': 'Incluez votre identifiant de compte comme référence.',
+        'pay.confDep': 'Confirmer le dépôt',
+        'pay.witTitle': 'Retirer des fonds',
+        'pay.witSub': 'Choisissez votre méthode de paiement et fournissez vos coordonnées de réception.',
+        'pay.witAmt': 'Montant à retirer',
+        'pay.payout': 'Méthode de paiement',
+        'pay.mtn': 'MTN Mobile Money',
+        'pay.orange': 'Orange Money',
+        'pay.bankOpt': 'Virement bancaire',
+        'pay.accName': 'Nom du compte',
+        'pay.mtnNum': 'Numéro MTN Mobile Money',
+        'pay.orangeNum': 'Numéro Orange Money',
+        'pay.btcAddr': 'Adresse Bitcoin',
+        'pay.btcNote': 'Utilisez une adresse Bitcoin valide.',
+        'pay.usdtAddr': 'Adresse USDT Wallet (TRC20)',
+        'pay.holder': 'Nom du titulaire du compte',
+        'pay.bank': 'Nom de la banque',
+        'pay.iban': 'Compte / IBAN',
+        'pay.swift': 'SWIFT / BIC',
+        'pay.wSum': 'Montant du retrait',
+        'pay.fee': 'Frais de traitement (2%)',
+        'pay.receive': 'Vous recevez',
+        'pay.reqWit': 'Demander un retrait',
+        'pay.footer': 'Portail de paiement sécurisé · Toutes les transactions sont soumises à vérification',
+        'pay.copy': 'Copier',
+        'pay.copied': 'Copié !',
+        'pay.failed': 'Échec',
+        'pay.merchantName': 'Nom du marchand',
+        'pay.ref': 'Référence',
+        'pay.accId': 'Incluez votre identifiant de compte',
+
+        'dc.title': 'Dépôt',
+        'dc.amount': 'Montant',
+        'dc.method': 'Méthode',
+        'dc.merchant': 'Marchand',
+        'dc.ref': 'Référence',
+        'dc.loading': "En attente de la confirmation de l'administrateur. Votre solde sera mis à jour automatiquement une fois approuvé.",
+        'dc.done': 'Terminé',
+        'dc.w1': 'Assurez-vous d\'inclure votre identifiant de compte comme référence.',
+        'dc.w2': 'Les dépôts sont soumis à vérification avant d\'être crédités.',
+
+        'w.title': 'Retrait',
+        'w.continue': 'Continuer',
+        'w.w1': 'Assurez-vous que les informations fournies sont correctes et sur le même réseau.',
+        'w.w2': 'Les transactions ne peuvent pas être annulées une fois soumises.',
+
+        'aw.title': 'En attente d\'approbation',
+        'aw.text': 'Votre demande de retrait est en cours d\'examen et prendra environ 12 heures. Vous pouvez consulter le statut de votre demande de retrait dans la page d\'historique des retraits.',
+        'aw.btn': 'Terminer'
+      }
+    };
+
+    let currentLanguage = 'en';
+    function t(key) {
+      const lang = I18N[currentLanguage] ? currentLanguage : 'en';
+      return (I18N[lang] && I18N[lang][key]) || (I18N.en[key] || key);
+    }
+
+    function applyLanguage(lang) {
+      if (!I18N[lang]) lang = 'en';
+      currentLanguage = lang;
+      document.documentElement.setAttribute('lang', lang);
+      try { localStorage.setItem('bf_lang', lang); } catch (_) {}
+
+      // Sync all language selects
+      document.querySelectorAll('#navLangSelect, #dbLangSelect').forEach(sel => {
+        sel.value = lang;
+      });
+
+      // Swap all data-i18n elements
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (!key || !I18N[lang][key]) return;
+        // Skip the side auth link (handled separately)
+        if (el.id === 'sideAuthBtn') return;
+        el.textContent = I18N[lang][key];
+      });
+
+      // Placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key && I18N[lang][key]) el.setAttribute('placeholder', I18N[lang][key]);
+      });
+
+      // Side auth link (Login / Logout / Sign Up)
+      const sideAuthLink = document.getElementById('sideAuthBtn');
+      if (sideAuthLink) {
+        const mode = sideAuthLink.getAttribute('data-mode') || 'auth';
+        sideAuthLink.textContent = (mode === 'logout') ? t('nav.logout') : t('nav.login');
+      }
+
+      // Duration summary
+      const summaryText = document.getElementById('durationSummaryText');
+      if (summaryText) {
+        summaryText.textContent = `${currentDuration} ${t('calc.daysSel')}`;
+      }
+
+      // Profile toggle
+      const toggleText = document.getElementById('dbToggleText');
+      if (toggleText) toggleText.textContent = profileMoreOpen ? t('db.less') : t('db.more');
+
+      // Re-render dynamic pieces
+      renderActivePlans();
+      updateCalcPlanOptions();
+      updateDepositDetails();
+      if (currentUser) loadWithdrawalHistory();
+
+      // Payment toast — keep whatever is currently visible (skip)
+    }
+
+    function changeLanguage(lang) {
+      applyLanguage(lang);
+    }
+    function changeDashboardLanguage(lang) { changeLanguage(lang); }
+
+    function updateCalcPlanOptions() {
+      const sel = document.getElementById('calcPlan');
+      if (!sel) return;
+      const opts = sel.querySelectorAll('option');
+      const planNames = ['Starter', 'Regular', 'Pro', 'Elite', 'Premium', 'Ultimate'];
+      const amounts = ['FCFA 3,000', 'FCFA 5,000', 'FCFA 10,000', 'FCFA 30,000', 'FCFA 90,000', 'FCFA 200,000'];
+      const rates = ['2.0%/day', '4.2%/day', '8.82%/day', '12.0%/day', '18.0%/day', '20.0%/day'];
+      opts.forEach((opt, i) => {
+        opt.textContent = `${planNames[i]} — ${amounts[i]} (${rates[i]})`;
+      });
+    }
+
     /* =========================================================
        SUPABASE
     ========================================================= */
@@ -1689,6 +2176,7 @@
     let selectedPlanForActivation = null;
     let realtimeChannel = null;
     let depositApprovalChannel = null;
+    let withdrawalChannel = null;
     let profileMoreOpen = false;
     let currentDuration = 20;
     let homeCalcRate = 2.0;
@@ -1702,7 +2190,6 @@
     let miningModalPlanData = null;
     let miningModalActivated = false;
 
-    // De-dupe guard for the deposit approval listener
     const processedDepositIds = new Set();
 
     /* =========================================================
@@ -1714,7 +2201,7 @@
       const customInput = document.getElementById('customDuration');
       if (customInput) customInput.value = clamped;
       const summaryText = document.getElementById('durationSummaryText');
-      if (summaryText) summaryText.textContent = `${clamped} day${clamped !== 1 ? 's' : ''} selected`;
+      if (summaryText) summaryText.textContent = `${clamped} ${t('calc.daysSel')}`;
       const durationLabel = document.getElementById('durationLabel');
       if (durationLabel) durationLabel.textContent = clamped;
       calculateHomeInvestment();
@@ -1728,7 +2215,7 @@
         if (!isNaN(val) && val >= 1 && val <= 365) {
           currentDuration = val;
           const summaryText = document.getElementById('durationSummaryText');
-          if (summaryText) summaryText.textContent = `${val} day${val !== 1 ? 's' : ''} selected`;
+          if (summaryText) summaryText.textContent = `${val} ${t('calc.daysSel')}`;
           const durationLabel = document.getElementById('durationLabel');
           if (durationLabel) durationLabel.textContent = val;
           calculateHomeInvestment();
@@ -1741,7 +2228,7 @@
         this.value = val;
         currentDuration = val;
         const summaryText = document.getElementById('durationSummaryText');
-        if (summaryText) summaryText.textContent = `${val} day${val !== 1 ? 's' : ''} selected`;
+        if (summaryText) summaryText.textContent = `${val} ${t('calc.daysSel')}`;
         const durationLabel = document.getElementById('durationLabel');
         if (durationLabel) durationLabel.textContent = val;
         calculateHomeInvestment();
@@ -1759,7 +2246,7 @@
       const dailyProfit = amount * (homeCalcRate / 100);
       const totalProfit = dailyProfit * currentDuration;
       const estimatedTotal = amount + totalProfit;
-      const f = v => "FCFA " + Math.round(v).toLocaleString("fr-FR");
+      const f = v => "FCFA " + Math.round(v).toLocaleString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US');
       document.getElementById("homeCalcPrincipal").textContent = f(amount);
       document.getElementById("homeCalcDailyReturn").textContent = f(dailyProfit);
       document.getElementById("homeCalcTotalReturn").textContent = f(totalProfit);
@@ -1773,7 +2260,7 @@
       const planAmount = Number(opt.getAttribute("data-amount"));
       document.getElementById("calcAmount").value = planAmount;
       document.getElementById("homeCalcRate").textContent =
-        homeCalcRate.toFixed(2).replace(/\.?0+$/, '') + "% / day";
+        homeCalcRate.toFixed(2).replace(/\.?0+$/, '') + "% / " + (currentLanguage === 'fr' ? 'jour' : 'day');
       calculateHomeInvestment();
     }
 
@@ -1806,11 +2293,11 @@
       const link = referralLinkInput?.value;
       if (link && link !== 'https://bitflymining.com/ref/...') {
         navigator.clipboard.writeText(link).then(() => {
-          copyReferralBtn.textContent = 'Copied!';
-          setTimeout(() => copyReferralBtn.textContent = 'Copy', 2000);
+          copyReferralBtn.textContent = t('ref.copied');
+          setTimeout(() => copyReferralBtn.textContent = t('ref.copy'), 2000);
         });
       } else {
-        alert('Please log in to get your referral link.');
+        alert(currentLanguage === 'fr' ? 'Veuillez vous connecter pour obtenir votre lien de parrainage.' : 'Please log in to get your referral link.');
       }
     });
 
@@ -1831,7 +2318,7 @@
     function toggleProfileMore() {
       profileMoreOpen = !profileMoreOpen;
       document.getElementById('dbProfileMore')?.classList.toggle('open', profileMoreOpen);
-      document.getElementById('dbToggleText').textContent = profileMoreOpen ? 'Less' : 'More';
+      document.getElementById('dbToggleText').textContent = profileMoreOpen ? t('db.less') : t('db.more');
       document.getElementById('dbToggleIcon').className = profileMoreOpen ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
     }
 
@@ -1916,13 +2403,14 @@
       const plansCount = document.getElementById("dbActivePlansCount");
       if (!plansList) return;
       const activeOnly = activePlans.filter(p => p && p.active);
-      if (plansCount) plansCount.textContent = `${activeOnly.length} Plan${activeOnly.length !== 1 ? 's' : ''}`;
+      const word = t('db.plansCount');
+      if (plansCount) plansCount.textContent = `${activeOnly.length} ${word}`;
       if (activeOnly.length === 0) {
         plansList.innerHTML = `
           <div class="db-empty-plans">
             <i class="fa-solid fa-cube"></i>
-            <p>No active plans yet. Choose a plan to start mining.</p>
-            <button class="db-btn db-btn-gold" onclick="showPageView('investmentPlansSection')">Browse Plans</button>
+            <p>${t('db.noPlans')}</p>
+            <button class="db-btn db-btn-gold" onclick="showPageView('investmentPlansSection')">${t('db.browse')}</button>
           </div>`;
         return;
       }
@@ -1931,8 +2419,8 @@
           <div class="db-plan-item-left">
             <div class="db-plan-item-icon"><i class="fa-solid fa-microchip"></i></div>
             <div class="db-plan-item-info">
-              <h4>${plan.name || 'Plan'}</h4>
-              <p>Activated: ${plan.activatedAt ? new Date(plan.activatedAt).toLocaleDateString() : 'N/A'}</p>
+              <h4>${plan.name || t('db.planWord')}</h4>
+              <p>${t('db.activated')} ${plan.activatedAt ? new Date(plan.activatedAt).toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US') : 'N/A'}</p>
             </div>
           </div>
           <div class="db-plan-item-right">
@@ -1940,10 +2428,77 @@
               <div class="return-rate">${plan.rate || '0%'}</div>
               <div class="return-investment">FCFA ${(plan.investment || 0).toLocaleString()}</div>
             </div>
-            <span class="db-plan-status-badge">Active</span>
-            <button class="db-view-btn" onclick="event.stopPropagation(); openPlanMiningModal(${idx})" title="View plan mining dashboard">View</button>
+            <span class="db-plan-status-badge">${t('db.active')}</span>
+            <button class="db-view-btn" onclick="event.stopPropagation(); openPlanMiningModal(${idx})" title="${t('db.view')}">${t('db.view')}</button>
+            <button class="db-cancel-btn" onclick="event.stopPropagation(); cancelPlan(${idx})" title="${t('db.cancel')}">${t('db.cancel')}</button>
           </div>
         </div>`).join('');
+    }
+
+    /* =========================================================
+       CANCEL PLAN
+    ========================================================= */
+    async function cancelPlan(index) {
+      if (!currentUser || !currentAccount) return;
+
+      const activeOnly = (activePlans || []).filter(p => p && p.active);
+      const plan = activeOnly[index];
+      if (!plan) return;
+
+      const title = t('db.cancelConfirmTitle');
+      const body = t('db.cancelConfirmBody');
+      const invest = t('db.cancelConfirmInvest');
+      const warn = t('db.cancelConfirmWarn');
+      const confirmed = confirm(
+        `${title}\n\n${body} ${plan.name} ?\n\n${invest} FCFA ${(plan.investment || 0).toLocaleString()}\n${warn}`
+      );
+      if (!confirmed) return;
+
+      try {
+        const updatedPlans = (Array.isArray(currentAccount.plans) ? currentAccount.plans : []).map(p => {
+          if (
+            p &&
+            p.active &&
+            p.name === plan.name &&
+            Number(p.investment) === Number(plan.investment) &&
+            p.activatedAt === plan.activatedAt
+          ) {
+            return { ...p, active: false, cancelledAt: new Date().toISOString() };
+          }
+          return p;
+        });
+
+        const { error } = await supabaseClient
+          .from("users")
+          .update({ plans: updatedPlans })
+          .eq("id", currentUser.id);
+        if (error) throw error;
+
+        try {
+          await supabaseClient
+            .from("transactions")
+            .insert([{
+              user_id: currentUser.id,
+              user_email: currentUser.email,
+              type: 'plan_cancellation',
+              method: 'account',
+              amount: 0,
+              reference: t('db.cancelLog') + ' ' + plan.name,
+              plan_name: plan.name,
+              status: 'confirmed'
+            }]);
+        } catch (e) { console.warn('Cancellation log failed:', e); }
+
+        currentAccount.plans = updatedPlans;
+        activePlans = updatedPlans;
+        updateAccountUI();
+        renderActivePlans();
+
+        showPaymentToast(`✅ ${plan.name} ${t('db.cancelled')}`);
+      } catch (err) {
+        console.error("Plan cancellation error:", err);
+        alert("Could not cancel plan: " + err.message);
+      }
     }
 
     /* =========================================================
@@ -1954,7 +2509,7 @@
       const listEl = document.getElementById('withdrawalHistoryList');
       const totalEl = document.getElementById('dbTotalWithdrawnValue');
       if (!listEl) return;
-      listEl.innerHTML = '<div class="wh-empty">Loading...</div>';
+      listEl.innerHTML = `<div class="wh-empty">${t('db.histLoad')}</div>`;
       try {
         const { data, error } = await supabaseClient
           .from('transactions')
@@ -1965,14 +2520,15 @@
           .limit(50);
         if (error) throw error;
         if (!data || data.length === 0) {
-          listEl.innerHTML = '<div class="wh-empty">No withdrawal history yet.</div>';
+          listEl.innerHTML = `<div class="wh-empty">${t('db.noHistory')}</div>`;
           if (totalEl) totalEl.textContent = '0.00';
           return;
         }
         const total = data.reduce((sum, tx) => sum + (Number(tx.amount) || 0), 0);
         if (totalEl) totalEl.textContent = `${total.toFixed(2)}`;
+        const locale = currentLanguage === 'fr' ? 'fr-FR' : 'en-US';
         listEl.innerHTML = data.map(tx => {
-          const date = tx.created_at ? new Date(tx.created_at).toLocaleDateString() : 'N/A';
+          const date = tx.created_at ? new Date(tx.created_at).toLocaleDateString(locale) : 'N/A';
           const statusClass = tx.status === 'confirmed' ? 'confirmed' : tx.status === 'pending' ? 'pending' : 'failed';
           const methodLabel = tx.method ? tx.method.replace(/_/g, ' ') : 'Withdrawal';
           return `
@@ -1990,7 +2546,7 @@
         }).join('');
       } catch (err) {
         console.error('Error loading withdrawal history:', err);
-        listEl.innerHTML = '<div class="wh-empty">Failed to load history.</div>';
+        listEl.innerHTML = `<div class="wh-empty">${t('db.histFail')}</div>`;
       }
     }
 
@@ -2001,9 +2557,7 @@
       const isHidden = container.style.display === 'none';
       container.style.display = isHidden ? 'block' : 'none';
       icon.className = isHidden ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
-      if (isHidden) {
-        loadWithdrawalHistory();
-      }
+      if (isHidden) loadWithdrawalHistory();
     }
 
     /* =========================================================
@@ -2026,6 +2580,13 @@
       updateReferralUIVisibility(true);
       document.getElementById("navAccountLi")?.classList.remove("hidden");
       document.getElementById("navInvestmentPlansLi")?.classList.remove("hidden");
+
+      const sideAuthLink = document.getElementById('sideAuthBtn');
+      if (sideAuthLink) {
+        sideAuthLink.setAttribute('data-mode', 'logout');
+        sideAuthLink.textContent = t('nav.logout');
+      }
+
       await loadAccountData();
       await loadWithdrawalHistory();
 
@@ -2052,6 +2613,7 @@
       showPageView("accountPageView");
       subscribeToUserChanges(user.id);
       subscribeToDepositApprovals(user.id);
+      subscribeToWithdrawalUpdates(user.id);
     }
 
     function lockUserExperience() {
@@ -2062,6 +2624,15 @@
           if (el) el.textContent = (id === "dbProfileAvatar" ? "?" : "");
         });
       updateReferralUIVisibility(false);
+
+      const sideAuthLink = document.getElementById('sideAuthBtn');
+      if (sideAuthLink) {
+        sideAuthLink.setAttribute('data-mode', 'auth');
+        sideAuthLink.textContent = t('nav.login');
+      }
+      document.getElementById("navAccountLi")?.classList.add("hidden");
+      document.getElementById("navInvestmentPlansLi")?.classList.add("hidden");
+
       if (referralLinkInput) referralLinkInput.value = 'https://bitflymining.com/ref/...';
       if (realtimeChannel && supabaseClient) {
         supabaseClient.removeChannel(realtimeChannel);
@@ -2071,7 +2642,33 @@
         supabaseClient.removeChannel(depositApprovalChannel);
         depositApprovalChannel = null;
       }
+      if (withdrawalChannel && supabaseClient) {
+        supabaseClient.removeChannel(withdrawalChannel);
+        withdrawalChannel = null;
+      }
       showPageView("homePageView");
+    }
+
+    async function handleLogout(e) {
+      if (e) e.preventDefault();
+      if (!supabaseClient) { lockUserExperience(); return; }
+      try {
+        await supabaseClient.auth.signOut();
+        closeMenu();
+      } catch (err) {
+        console.error('Logout error:', err);
+        alert('Logout failed: ' + err.message);
+      }
+    }
+
+    function handleSideAuthClick(e) {
+      e.preventDefault();
+      const mode = e.currentTarget.getAttribute('data-mode') || 'auth';
+      if (mode === 'logout' || currentUser) {
+        handleLogout(e);
+      } else {
+        openAuthModal('signup');
+      }
     }
 
     function subscribeToUserChanges(userId) {
@@ -2098,9 +2695,33 @@
         .subscribe();
     }
 
-    /* =========================================================
-       DEPOSIT APPROVAL LISTENER
-    ========================================================= */
+    function subscribeToWithdrawalUpdates(userId) {
+      if (withdrawalChannel && supabaseClient) {
+        supabaseClient.removeChannel(withdrawalChannel);
+        withdrawalChannel = null;
+      }
+      if (!userId) return;
+
+      withdrawalChannel = supabaseClient
+        .channel('withdrawal-updates-' + userId)
+        .on('postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` },
+          (payload) => {
+            const row = payload.new;
+            if (!row) return;
+            if (row.type !== 'withdrawal') return;
+            const oldStatus = payload.old?.status;
+            if (oldStatus === row.status) return;
+            loadWithdrawalHistory();
+            if (row.status === 'confirmed') {
+              showPaymentToast(`✅ Withdrawal ${Number(row.amount || 0).toFixed(2)} ${currentLanguage === 'fr' ? 'a été approuvé !' : 'has been approved!'}`);
+            } else if (row.status === 'failed') {
+              showPaymentToast(`❌ Withdrawal ${Number(row.amount || 0).toFixed(2)} ${currentLanguage === 'fr' ? 'a été rejeté.' : 'was rejected.'}`, true);
+            }
+          })
+        .subscribe();
+    }
+
     function subscribeToDepositApprovals(userId) {
       if (depositApprovalChannel && supabaseClient) {
         supabaseClient.removeChannel(depositApprovalChannel);
@@ -2110,14 +2731,8 @@
 
       depositApprovalChannel = supabaseClient
         .channel('deposit-approvals-' + userId)
-        .on(
-          'postgres_changes',
-          {
-            event: 'UPDATE',
-            schema: 'public',
-            table: 'transactions',
-            filter: `user_id=eq.${userId}`
-          },
+        .on('postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` },
           async (payload) => {
             const row = payload.new;
             if (!row) return;
@@ -2149,24 +2764,17 @@
             }
 
             try {
-              await supabaseClient
-                .from("users")
-                .update({ balance: newBalance, plans: updatedPlans })
-                .eq("id", currentUser.id);
+              await supabaseClient.from("users").update({ balance: newBalance, plans: updatedPlans }).eq("id", currentUser.id);
               currentAccount.balance = newBalance;
               currentAccount.plans = updatedPlans;
               activePlans = updatedPlans;
               updateAccountUI();
               renderActivePlans();
-            } catch (err) {
-              console.error("Balance credit failed:", err);
-              return;
-            }
+            } catch (err) { console.error("Balance credit failed:", err); return; }
 
             triggerDepositNotification(amount.toFixed(2));
-            showPaymentToast(`✅ Deposit of ${amount.toFixed(2)} approved and credited!`);
-          }
-        )
+            showPaymentToast(`✅ Deposit ${amount.toFixed(2)} ${currentLanguage === 'fr' ? 'approuvé et crédité !' : 'approved and credited!'}`);
+          })
         .subscribe();
     }
 
@@ -2179,9 +2787,7 @@
         if (session && session.user) setTimeout(() => unlockUserExperience(session.user), 0);
         else lockUserExperience();
       });
-      document.getElementById('sideAuthBtn')?.addEventListener('click', (e) => {
-        e.preventDefault(); openAuthModal('signup');
-      });
+      document.getElementById('sideAuthBtn')?.addEventListener('click', handleSideAuthClick);
       document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('signUpEmail').value;
@@ -2232,37 +2838,21 @@
     /* =========================================================
        PLAN SELECTION
     ========================================================= */
-    function selectPlan(name, returnRate, minimum, description, features, evt, investmentAmount, ratePercent, btcBalance) {
+    function selectPlan(name, returnRate, minimum, descriptionKey, featureKeys, evt, investmentAmount, ratePercent, btcBalance) {
       document.querySelectorAll(".plan").forEach(c => c.classList.remove("active"));
       if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
-      currentPlanDetails = { name, returnRate, minimum, description, features, investmentAmount, ratePercent, btcBalance };
+      currentPlanDetails = { name, returnRate, minimum, descriptionKey, featureKeys, investmentAmount, ratePercent, btcBalance };
       document.getElementById("detailName").textContent = name + " Plan";
-      document.getElementById("detailDescription").textContent = description;
+      document.getElementById("detailDescription").textContent = t(descriptionKey);
       document.getElementById("detailReturn").textContent = returnRate;
       document.getElementById("detailMinimum").textContent = minimum;
       const featureList = document.getElementById("detailFeatures");
       featureList.innerHTML = "";
-      if (Array.isArray(features) && features.length > 0) {
-        features.forEach(f => {
-          const li = document.createElement("li");
-          li.textContent = f;
-          featureList.appendChild(li);
-        });
-      } else {
-        const defaultFeatures = {
-          'Starter': ['Instant activation', 'Daily account updates', 'Customer support'],
-          'Regular': ['Instant activation', 'Daily account updates', 'Customer support'],
-          'Pro': ['Priority support', 'Account monitoring', 'Exclusive updates'],
-          'Elite': ['Priority support', 'Exclusive updates', 'Advanced account features'],
-          'Premium': ['VIP support', 'Exclusive updates', 'Premium account features'],
-          'Ultimate': ['VIP support', 'Dedicated Manager', 'Premium account features']
-        };
-        (defaultFeatures[name] || []).forEach(f => {
-          const li = document.createElement("li");
-          li.textContent = f;
-          featureList.appendChild(li);
-        });
-      }
+      (featureKeys || []).forEach(k => {
+        const li = document.createElement("li");
+        li.textContent = t(k);
+        featureList.appendChild(li);
+      });
       document.getElementById("planDetails").classList.add("show");
       setTimeout(() => {
         document.getElementById("planDetails").scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2350,13 +2940,13 @@
       }
       if (ui.transferHint) {
         if (miningSession.isMining) {
-          ui.transferHint.textContent = 'Stop mining to unlock transfer';
+          ui.transferHint.textContent = currentLanguage === 'fr' ? 'Arrêtez le minage pour débloquer le transfert' : 'Stop mining to unlock transfer';
           ui.transferHint.classList.remove('ready');
         } else if (totalBtc > 0) {
-          ui.transferHint.textContent = 'Ready to transfer';
+          ui.transferHint.textContent = currentLanguage === 'fr' ? 'Prêt à transférer' : 'Ready to transfer';
           ui.transferHint.classList.add('ready');
         } else {
-          ui.transferHint.textContent = 'Start mining to earn BTC';
+          ui.transferHint.textContent = currentLanguage === 'fr' ? 'Commencez à miner pour gagner du BTC' : 'Start mining to earn BTC';
           ui.transferHint.classList.remove('ready');
         }
       }
@@ -2478,23 +3068,18 @@
       this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Transferring...';
       try {
         const newBalance = (Number(currentAccount.balance) || 0) + usdToTransfer;
-        await supabaseClient
-          .from("transactions")
-          .insert([{
-            user_id: currentUser.id,
-            user_email: currentUser.email,
-            type: 'mining_transfer',
-            method: 'btc_to_balance',
-            amount: usdToTransfer,
-            btc_amount: btcToTransfer,
-            reference: 'Mining reward transfer',
-            plan_name: miningModalPlanData?.name || null,
-            status: 'confirmed'
-          }]);
-        const { error: userError } = await supabaseClient
-          .from("users")
-          .update({ balance: newBalance })
-          .eq("id", currentUser.id);
+        await supabaseClient.from("transactions").insert([{
+          user_id: currentUser.id,
+          user_email: currentUser.email,
+          type: 'mining_transfer',
+          method: 'btc_to_balance',
+          amount: usdToTransfer,
+          btc_amount: btcToTransfer,
+          reference: 'Mining reward transfer',
+          plan_name: miningModalPlanData?.name || null,
+          status: 'confirmed'
+        }]);
+        const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance }).eq("id", currentUser.id);
         if (userError) throw userError;
         currentAccount.balance = newBalance;
         miningSession.earnedBTC = 0;
@@ -2535,7 +3120,7 @@
           return;
         }
         if (!currentAccount) await loadAccountData();
-        if (!currentAccount) { alert('Account not found. Please contact support.'); return; }
+        if (!currentAccount) { alert('Account not found.'); return; }
         const investmentFCFA = Number(plan.investment) || 0;
         const costUSD = investmentFCFA / 500;
         const balance = Number(currentAccount.balance) || 0;
@@ -2545,7 +3130,7 @@
           openPaymentModal('deposit');
           const amtInput = document.getElementById('deposit-amount');
           if (amtInput) { amtInput.value = shortfall; amtInput.min = shortfall; }
-          showPaymentToast(`Insufficient balance. You need ${shortfall} more to activate ${plan.name}. Deposit now.`, true);
+          showPaymentToast(`Insufficient balance. You need ${shortfall} more.`, true);
           return;
         }
         const newBalance = balance - costUSD;
@@ -2559,22 +3144,13 @@
         };
         const updatedPlans = [...(Array.isArray(currentAccount.plans) ? currentAccount.plans : []), newPlan];
         try {
-          await supabaseClient
-            .from("transactions")
-            .insert([{
-              user_id: currentUser.id,
-              user_email: currentUser.email,
-              type: 'plan_activation',
-              method: 'account_balance',
-              amount: costUSD,
-              reference: 'Plan activation: ' + plan.name,
-              plan_name: plan.name,
-              status: 'confirmed'
-            }]);
-          const { error: userError } = await supabaseClient
-            .from("users")
-            .update({ balance: newBalance, plans: updatedPlans })
-            .eq("id", currentUser.id);
+          await supabaseClient.from("transactions").insert([{
+            user_id: currentUser.id, user_email: currentUser.email,
+            type: 'plan_activation', method: 'account_balance',
+            amount: costUSD, reference: 'Plan activation: ' + plan.name,
+            plan_name: plan.name, status: 'confirmed'
+          }]);
+          const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance, plans: updatedPlans }).eq("id", currentUser.id);
           if (userError) throw userError;
           currentAccount.balance = newBalance;
           currentAccount.plans = updatedPlans;
@@ -2584,11 +3160,7 @@
           miningModalActivated = true;
           selectedPlanForActivation = null;
           sessionStorage.removeItem('intendedPlan');
-        } catch (err) {
-          console.error("Plan activation error:", err);
-          alert("Activation failed: " + err.message);
-          return;
-        }
+        } catch (err) { alert("Activation failed: " + err.message); return; }
       }
       this.classList.add('mining');
       const ui = miningSession.uiRefs;
@@ -2608,7 +3180,7 @@
     function openPlanMiningDashboard(index) { openPlanMiningModal(index); }
 
     /* =========================================================
-       DEPOSIT CONFIRMATION MODAL (deposits only)
+       DEPOSIT CONFIRMATION MODAL
     ========================================================= */
     function openDepositConfirm(details) {
       if (details) {
@@ -2618,7 +3190,6 @@
         const payToLblEl = document.getElementById('dcPayToLabel');
         const payToValEl = document.getElementById('dcPayToValue');
         const refEl      = document.getElementById('dcReference');
-
         if (amountEl   && details.amount   != null) amountEl.textContent   = details.amount;
         if (methodEl   && details.method)           methodEl.textContent   = details.method;
         if (merchantEl && details.merchant)         merchantEl.textContent = details.merchant;
@@ -2626,36 +3197,23 @@
         if (payToValEl && details.payToValue)       payToValEl.textContent = details.payToValue;
         if (refEl      && details.reference)        refEl.textContent      = details.reference;
       }
-
       depositConfirmOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-
       const loadingContainer = document.querySelector('.dc-loading-container');
       const doneBtn = document.querySelector('.dc-btn-continue');
-      
       if (loadingContainer) loadingContainer.classList.remove('hidden');
-      if (doneBtn) {
-        doneBtn.disabled = true;
-        doneBtn.classList.remove('success');
-      }
+      if (doneBtn) { doneBtn.disabled = true; doneBtn.classList.remove('success'); }
     }
 
    function closeDepositConfirm() {
       depositConfirmOverlay.classList.remove('active');
       document.body.style.overflow = '';
       document.getElementById('depositNotificationBar')?.classList.remove('show');
-      
       const doneBtn = document.querySelector('.dc-btn-continue');
       const loadingContainer = document.querySelector('.dc-loading-container');
-      
       const wasSuccessful = doneBtn?.classList.contains('success');
-      
       if (loadingContainer) loadingContainer.classList.remove('hidden');
-      if (doneBtn) {
-        doneBtn.disabled = true;
-        doneBtn.classList.remove('success');
-      }
-      
+      if (doneBtn) { doneBtn.disabled = true; doneBtn.classList.remove('success'); }
       if (wasSuccessful) {
         showPageView('accountPageView');
         if (typeof loadAccountData === 'function') loadAccountData();
@@ -2663,59 +3221,45 @@
       }
     }
 
-    /* ---------- Copy helpers ---------- */
     function dcCopyField(fieldId, btn) {
       const el = document.getElementById(fieldId);
       if (!el) return;
       const text = el.textContent.trim();
       navigator.clipboard.writeText(text).then(() => {
         const original = btn.textContent;
-        btn.textContent = 'Copied!';
+        btn.textContent = t('pay.copied');
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = original;
-          btn.classList.remove('copied');
-        }, 1800);
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1800);
       }).catch(() => {
-        btn.textContent = 'Failed';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+        btn.textContent = t('pay.failed');
+        setTimeout(() => { btn.textContent = t('pay.copy'); }, 1800);
       });
     }
 
     function getPaymentMetaForMethod(methodKey) {
       const meta = {
-        mtn:    { label: 'MoMo Number',    value: '654292201',                    merchant: 'Josue Martial Hako' },
-        orange: { label: 'Orange Number',  value: '+237 6 89 22 23 54',           merchant: 'PHILIBERT SIDE SIDE' },
-        btc:    { label: 'BTC Address',    value: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', merchant: 'Company Payments' },
-        usdt:   { label: 'USDT Address',   value: 'TYd3xK98sP2x9LpQ2',            merchant: 'Company Payments' },
-        bank:   { label: 'Account Number', value: '9876543210',                   merchant: 'Company Payments' }
+        mtn:    { label: currentLanguage === 'fr' ? 'Numéro MoMo' : 'MoMo Number',    value: '654292201',                    merchant: 'Josue Martial Hako' },
+        orange: { label: currentLanguage === 'fr' ? 'Numéro Orange' : 'Orange Number', value: '+237 6 89 22 23 54',           merchant: 'PHILIBERT SIDE SIDE' },
+        btc:    { label: currentLanguage === 'fr' ? 'Adresse BTC' : 'BTC Address',    value: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', merchant: 'Company Payments' },
+        usdt:   { label: currentLanguage === 'fr' ? 'Adresse USDT' : 'USDT Address',   value: 'TYd3xK98sP2x9LpQ2',            merchant: 'Company Payments' },
+        bank:   { label: currentLanguage === 'fr' ? 'Numéro de compte' : 'Account Number', value: '9876543210',              merchant: 'Company Payments' }
       };
       return meta[methodKey] || meta.mtn;
     }
 
-    /* ---------- Notification bar ---------- */
     function triggerDepositNotification(amount) {
       const bar  = document.getElementById('depositNotificationBar');
       const text = document.getElementById('depositNotificationText');
       const doneBtn = document.querySelector('.dc-btn-continue');
       const loadingContainer = document.querySelector('.dc-loading-container');
-      
       if (!bar) return;
-
-      if (text) text.textContent = `You have deposited (${amount})!`;
-
+      if (text) text.textContent = currentLanguage === 'fr' ? `Vous avez déposé (${amount}) !` : `You have deposited (${amount})!`;
       bar.classList.add('show');
-
       if (loadingContainer) loadingContainer.classList.add('hidden');
-      if (doneBtn) {
-        doneBtn.disabled = false;
-        doneBtn.classList.add('success');
-      }
-
-      setTimeout(() => {
-        bar.classList.remove('show');
-      }, 3000);
+      if (doneBtn) { doneBtn.disabled = false; doneBtn.classList.add('success'); }
+      setTimeout(() => { bar.classList.remove('show'); }, 3000);
     }
+
     /* =========================================================
        WITHDRAWAL REVIEW + AWAITING APPROVAL
     ========================================================= */
@@ -2727,40 +3271,41 @@
       if (list && details) {
         const pd = details.payoutDetails || {};
         const rows = [];
-        rows.push('<div class="wc-label">Amount</div>');
+        const L = currentLanguage === 'fr';
+        rows.push(`<div class="wc-label">${L ? 'Montant' : 'Amount'}</div>`);
         rows.push(`<div class="wc-value wc-value-highlight"><span class="dc-crypto-icon">XAF</span> <span>${Number(details.amount || 0).toFixed(2)}</span></div>`);
-        rows.push('<div class="wc-label">Method</div>');
+        rows.push(`<div class="wc-label">${L ? 'Méthode' : 'Method'}</div>`);
         rows.push(`<div class="wc-value">${details.methodLabel || '—'}</div>`);
 
         if (details.method === 'MTN' || details.method === 'ORANGE') {
-          rows.push('<div class="wc-label">Account Name</div>');
+          rows.push(`<div class="wc-label">${L ? 'Nom du compte' : 'Account Name'}</div>`);
           rows.push(`<div class="wc-value">${pd.name || '—'}</div>`);
-          rows.push(`<div class="wc-label">${details.method === 'MTN' ? 'MoMo Number' : 'Orange Number'}</div>`);
+          rows.push(`<div class="wc-label">${details.method === 'MTN' ? (L ? 'Numéro MoMo' : 'MoMo Number') : (L ? 'Numéro Orange' : 'Orange Number')}</div>`);
           rows.push(`<div class="wc-value">${pd.phone || '—'}</div>`);
         } else if (details.method === 'BTC') {
-          rows.push('<div class="wc-label">Network</div>');
+          rows.push(`<div class="wc-label">${L ? 'Réseau' : 'Network'}</div>`);
           rows.push('<div class="wc-value">Bitcoin (BTC)</div>');
-          rows.push('<div class="wc-label">BTC Address</div>');
+          rows.push(`<div class="wc-label">${L ? 'Adresse BTC' : 'BTC Address'}</div>`);
           rows.push(`<div class="wc-value">${pd.address || '—'}</div>`);
         } else if (details.method === 'USDT') {
-          rows.push('<div class="wc-label">Network</div>');
+          rows.push(`<div class="wc-label">${L ? 'Réseau' : 'Network'}</div>`);
           rows.push('<div class="wc-value">TRON (TRC20)</div>');
-          rows.push('<div class="wc-label">USDT Address</div>');
+          rows.push(`<div class="wc-label">${L ? 'Adresse USDT' : 'USDT Address'}</div>`);
           rows.push(`<div class="wc-value">${pd.address || '—'}</div>`);
         } else if (details.method === 'BANK') {
-          rows.push('<div class="wc-label">Account Name</div>');
+          rows.push(`<div class="wc-label">${L ? 'Nom du compte' : 'Account Name'}</div>`);
           rows.push(`<div class="wc-value">${pd.accountName || '—'}</div>`);
-          rows.push('<div class="wc-label">Bank Name</div>');
+          rows.push(`<div class="wc-label">${L ? 'Nom de la banque' : 'Bank Name'}</div>`);
           rows.push(`<div class="wc-value">${pd.bankName || '—'}</div>`);
-          rows.push('<div class="wc-label">Account / IBAN</div>');
+          rows.push(`<div class="wc-label">${L ? 'Compte / IBAN' : 'Account / IBAN'}</div>`);
           rows.push(`<div class="wc-value">${pd.accountNumber || '—'}</div>`);
-          rows.push('<div class="wc-label">SWIFT / BIC</div>');
+          rows.push(`<div class="wc-label">SWIFT / BIC</div>`);
           rows.push(`<div class="wc-value">${pd.swift || '—'}</div>`);
         }
 
-        rows.push('<div class="wc-label">Processing Fee (2%)</div>');
+        rows.push(`<div class="wc-label">${L ? 'Frais (2%)' : 'Processing Fee (2%)'}</div>`);
         rows.push(`<div class="wc-value">${Number(details.fee || 0).toFixed(2)}</div>`);
-        rows.push('<div class="wc-label">You Receive</div>');
+        rows.push(`<div class="wc-label">${L ? 'Vous recevez' : 'You Receive'}</div>`);
         rows.push(`<div class="wc-value wc-value-total">${Number(details.netAmount || 0).toFixed(2)}</div>`);
 
         list.innerHTML = rows.join('');
@@ -2802,13 +3347,12 @@
     withdrawalConfirmOverlay?.addEventListener('click', function(e) {
       if (e.target === this) closeWithdrawalConfirm();
     });
-
     awaitingApprovalOverlay?.addEventListener('click', function(e) {
       if (e.target === this) closeAwaitingApproval();
     });
 
     /* =========================================================
-       MINING DASHBOARD RENDER (Legacy)
+       MINING DASHBOARD RENDER (Legacy page - not translated)
     ========================================================= */
     function applyMiningDashboardUI() {
       const mineButton = document.getElementById("mineButton");
@@ -2838,8 +3382,7 @@
         planInfo?.classList.remove("show");
         if (mineButton) { mineButton.disabled = false; mineButton.dataset.mode = "login"; }
         if (buttonLabel) buttonLabel.textContent = "🔐 Log in to mine";
-        zeroDisplay();
-        return;
+        zeroDisplay(); return;
       }
       const plan = (activePlans || []).find(p => p && p.active);
       if (!plan) {
@@ -2847,8 +3390,7 @@
         planInfo?.classList.remove("show");
         if (mineButton) { mineButton.disabled = false; mineButton.dataset.mode = "no-plan"; }
         if (buttonLabel) buttonLabel.textContent = "📋 Choose a plan";
-        zeroDisplay();
-        return;
+        zeroDisplay(); return;
       }
       noPlanWarning?.classList.remove("show");
       planInfo?.classList.add("show");
@@ -2899,7 +3441,7 @@
           openPaymentModal('deposit');
           const amtInput = document.getElementById('deposit-amount');
           if (amtInput) { amtInput.value = shortfall; amtInput.min = shortfall; }
-          showPaymentToast(`Add at least ${shortfall} to start mining. Your plan is already active.`);
+          showPaymentToast(`Add at least ${shortfall} to start mining.`);
           return;
         }
         if (this.classList.contains("mining")) {
@@ -2917,30 +3459,13 @@
     }
 
     /* =========================================================
-       THEME + LANGUAGE
+       THEME
     ========================================================= */
     function toggleDashboardTheme() {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       document.getElementById('dbThemeIcon').className = next === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
-    }
-    const dbTranslations = {
-      en: { balanceLabel:"Total Account Balance", deposit:"Deposit", withdraw:"Withdraw", activeMiners:"Active Hashrate", dailyEarnings:"Est. Daily Earnings", totalWithdrawn:"Total Withdrawn", more:"More", less:"Less" },
-      es: { balanceLabel:"Saldo Total de la Cuenta", deposit:"Depositar", withdraw:"Retirar", activeMiners:"Tasa de Hash Activa", dailyEarnings:"Ganancias Diarias Est.", totalWithdrawn:"Total Retirado", more:"Más", less:"Menos" },
-      fr: { balanceLabel:"Solde Total du Compte", deposit:"Dépôt", withdraw:"Retrait", activeMiners:"Hachage Actif", dailyEarnings:"Gains Quotidiens Est.", totalWithdrawn:"Total Retiré", more:"Plus", less:"Moins" },
-      de: { balanceLabel:"Gesamtkontostand", deposit:"Einzahlung", withdraw:"Auszahlung", activeMiners:"Aktive Hashrate", dailyEarnings:"Geschätzter Tagesertrag", totalWithdrawn:"Gesamtauszahlung", more:"Mehr", less:"Weniger" }
-    };
-    function changeDashboardLanguage(lang) {
-      const t = dbTranslations[lang];
-      if (!t) return;
-      document.getElementById('dbBalanceLabel').innerText = t.balanceLabel;
-      document.getElementById('dbDepositText').innerText = t.deposit;
-      document.getElementById('dbWithdrawText').innerText = t.withdraw;
-      document.getElementById('dbActiveMinersText').innerText = t.activeMiners;
-      document.getElementById('dbDailyEarningsText').innerText = t.dailyEarnings;
-      document.getElementById('dbTotalWithdrawnText').innerText = t.totalWithdrawn;
-      document.getElementById('dbToggleText').innerText = profileMoreOpen ? t.less : t.more;
     }
 
     /* =========================================================
@@ -2976,29 +3501,33 @@
       hidePaymentToast();
     }
 
-    const paymentDetailsData = {
-      mtn: `<div class="info-row"><span class="info-label">Merchant Name</span><span class="info-value">Josue Martial Hako</span></div>
-            <div class="info-row"><span class="info-label">MoMo Number</span><span class="info-value">654292201 <button type="button" class="copy-btn" onclick="copyText('654292201')">Copy</button></span></div>
-            <div class="info-row"><span class="info-label">Reference</span><span class="info-value">Include your Account ID</span></div>`,
-      orange: `<div class="info-row"><span class="info-label">Merchant Name</span><span class="info-value">PHILIBERT SIDE SIDE</span></div>
-            <div class="info-row"><span class="info-label">Orange Number</span><span class="info-value">+237 6 89 22 23 54 <button type="button" class="copy-btn" onclick="copyText('+237689222354')">Copy</button></span></div>
-            <div class="info-row"><span class="info-label">Reference</span><span class="info-value">Include your Account ID</span></div>`,
-      btc: `<div class="info-row"><span class="info-label">Network</span><span class="info-value">Bitcoin Mainnet</span></div>
-            <div class="info-row"><span class="info-label">BTC Address</span><span class="info-value">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh <button type="button" class="copy-btn" onclick="copyText('bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh')">Copy</button></span></div>
-            <div class="info-row"><span class="info-label">Reference</span><span class="info-value">Include your Account ID</span></div>`,
-      usdt: `<div class="info-row"><span class="info-label">Network</span><span class="info-value">TRON (TRC20)</span></div>
-            <div class="info-row"><span class="info-label">USDT Address</span><span class="info-value">TYd3xK98sP2x9LpQ2 <button type="button" class="copy-btn" onclick="copyText('TYd3xK98sP2x9LpQ2')">Copy</button></span></div>
-            <div class="info-row"><span class="info-label">Reference</span><span class="info-value">Include your Account ID</span></div>`,
-      bank: `<div class="info-row"><span class="info-label">Bank Name</span><span class="info-value">Global Chase Bank</span></div>
-            <div class="info-row"><span class="info-label">Account Name</span><span class="info-value">Company Treasury Ltd</span></div>
-            <div class="info-row"><span class="info-label">Account Number</span><span class="info-value">9876543210 <button type="button" class="copy-btn" onclick="copyText('9876543210')">Copy</button></span></div>
-            <div class="info-row"><span class="info-label">SWIFT / BIC</span><span class="info-value">CHASUS33XXX</span></div>
-            <div class="info-row"><span class="info-label">Reference</span><span class="info-value">Include your Account ID</span></div>`
-    };
-
     function updateDepositDetails() {
       const m = document.getElementById('deposit-method').value;
-      document.getElementById('payment-details-content').innerHTML = paymentDetailsData[m];
+      const L = currentLanguage === 'fr';
+      const merchantLabel = L ? 'Nom du marchand' : 'Merchant Name';
+      const refLabel = L ? 'Référence' : 'Reference';
+      const accId = L ? 'Incluez votre identifiant de compte' : 'Include your Account ID';
+      const copyLabel = L ? 'Copier' : 'Copy';
+      const data = {
+        mtn: `<div class="info-row"><span class="info-label">${merchantLabel}</span><span class="info-value">Josue Martial Hako</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Numéro MoMo' : 'MoMo Number'}</span><span class="info-value">654292201 <button type="button" class="copy-btn" onclick="copyText('654292201')">${copyLabel}</button></span></div>
+              <div class="info-row"><span class="info-label">${refLabel}</span><span class="info-value">${accId}</span></div>`,
+        orange: `<div class="info-row"><span class="info-label">${merchantLabel}</span><span class="info-value">PHILIBERT SIDE SIDE</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Numéro Orange' : 'Orange Number'}</span><span class="info-value">+237 6 89 22 23 54 <button type="button" class="copy-btn" onclick="copyText('+237689222354')">${copyLabel}</button></span></div>
+              <div class="info-row"><span class="info-label">${refLabel}</span><span class="info-value">${accId}</span></div>`,
+        btc: `<div class="info-row"><span class="info-label">${L ? 'Réseau' : 'Network'}</span><span class="info-value">Bitcoin Mainnet</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Adresse BTC' : 'BTC Address'}</span><span class="info-value">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh <button type="button" class="copy-btn" onclick="copyText('bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh')">${copyLabel}</button></span></div>
+              <div class="info-row"><span class="info-label">${refLabel}</span><span class="info-value">${accId}</span></div>`,
+        usdt: `<div class="info-row"><span class="info-label">${L ? 'Réseau' : 'Network'}</span><span class="info-value">TRON (TRC20)</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Adresse USDT' : 'USDT Address'}</span><span class="info-value">TYd3xK98sP2x9LpQ2 <button type="button" class="copy-btn" onclick="copyText('TYd3xK98sP2x9LpQ2')">${copyLabel}</button></span></div>
+              <div class="info-row"><span class="info-label">${refLabel}</span><span class="info-value">${accId}</span></div>`,
+        bank: `<div class="info-row"><span class="info-label">${L ? 'Nom de la banque' : 'Bank Name'}</span><span class="info-value">Global Chase Bank</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Nom du compte' : 'Account Name'}</span><span class="info-value">Company Treasury Ltd</span></div>
+              <div class="info-row"><span class="info-label">${L ? 'Numéro de compte' : 'Account Number'}</span><span class="info-value">9876543210 <button type="button" class="copy-btn" onclick="copyText('9876543210')">${copyLabel}</button></span></div>
+              <div class="info-row"><span class="info-label">SWIFT / BIC</span><span class="info-value">CHASUS33XXX</span></div>
+              <div class="info-row"><span class="info-label">${refLabel}</span><span class="info-value">${accId}</span></div>`
+      };
+      document.getElementById('payment-details-content').innerHTML = data[m] || data.mtn;
     }
     function toggleWithdrawFields() {
       const m = document.getElementById('withdraw-method').value;
@@ -3014,8 +3543,9 @@
       document.getElementById('sum-total').innerText = `${net.toFixed(2)}`;
     }
     function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => showPaymentToast("Copied to clipboard!"))
-        .catch(() => showPaymentToast("Unable to copy.", true));
+      navigator.clipboard.writeText(text)
+        .then(() => showPaymentToast(currentLanguage === 'fr' ? 'Copié !' : 'Copied to clipboard!'))
+        .catch(() => showPaymentToast(currentLanguage === 'fr' ? 'Impossible de copier.' : 'Unable to copy.', true));
     }
     function showPaymentToast(msg, error = false) {
       paymentToast.className = error ? "toast-payment error" : "toast-payment success";
@@ -3027,77 +3557,44 @@
 
     function getPaymentDetailsForMethod(method, amount) {
       const details = {
-        mtn: {
-          amountBtc: (amount * 0.00000045).toFixed(8),
-          address: document.getElementById('mtn-phone')?.value || '+237 6XX XXX XXX',
-          network: 'MTN Mobile Money',
-          source: 'Spot Wallet'
-        },
-        orange: {
-          amountBtc: (amount * 0.00000045).toFixed(8),
-          address: document.getElementById('orange-phone')?.value || '+237 6XX XXX XXX',
-          network: 'Orange Money',
-          source: 'Spot Wallet'
-        },
-        btc: {
-          amountBtc: (amount * 0.00000045).toFixed(8),
-          address: document.getElementById('btc-addr')?.value || 'bc1q...',
-          network: 'Bitcoin(BTC)',
-          source: 'Spot Wallet'
-        },
-        usdt: {
-          amountBtc: (amount * 0.00000045).toFixed(8),
-          address: document.getElementById('usdt-addr')?.value || 'T...',
-          network: 'USDT (TRC20)',
-          source: 'Spot Wallet'
-        },
-        bank: {
-          amountBtc: (amount * 0.00000045).toFixed(8),
-          address: document.getElementById('acc-number')?.value || 'Account Number',
-          network: 'Bank Transfer',
-          source: 'Spot Wallet'
-        }
+        mtn:    { amountBtc: (amount * 0.00000045).toFixed(8), address: document.getElementById('mtn-phone')?.value || '+237 6XX XXX XXX', network: 'MTN Mobile Money', source: 'Spot Wallet' },
+        orange: { amountBtc: (amount * 0.00000045).toFixed(8), address: document.getElementById('orange-phone')?.value || '+237 6XX XXX XXX', network: 'Orange Money', source: 'Spot Wallet' },
+        btc:    { amountBtc: (amount * 0.00000045).toFixed(8), address: document.getElementById('btc-addr')?.value || 'bc1q...', network: 'Bitcoin(BTC)', source: 'Spot Wallet' },
+        usdt:   { amountBtc: (amount * 0.00000045).toFixed(8), address: document.getElementById('usdt-addr')?.value || 'T...', network: 'USDT (TRC20)', source: 'Spot Wallet' },
+        bank:   { amountBtc: (amount * 0.00000045).toFixed(8), address: document.getElementById('acc-number')?.value || 'Account Number', network: 'Bank Transfer', source: 'Spot Wallet' }
       };
       return details[method] || details.mtn;
     }
 
-    /* ---------- DEPOSIT (pending flow) ---------- */
     async function handleDeposit(e) {
       e.preventDefault();
       const amount = parseFloat(document.getElementById('deposit-amount').value) || 0;
       const ref = document.getElementById('deposit-ref').value;
       const methodKey = document.getElementById('deposit-method').value;
       const method = methodKey.toUpperCase();
+      const L = currentLanguage === 'fr';
 
-      if (!currentUser) { showPaymentToast("Please log in first.", true); openAuthModal('login'); return; }
+      if (!currentUser) { showPaymentToast(L ? 'Veuillez vous connecter d\'abord.' : "Please log in first.", true); openAuthModal('login'); return; }
       if (!currentAccount) await loadAccountData();
-      if (!currentAccount) { showPaymentToast("Account not found. Please contact support.", true); return; }
-      if (amount <= 0) { showPaymentToast("Enter a valid amount.", true); return; }
-      if (!ref || ref.trim().length < 4) { showPaymentToast("Enter a valid transaction reference.", true); return; }
+      if (!currentAccount) { showPaymentToast("Account not found.", true); return; }
+      if (amount <= 0) { showPaymentToast(L ? 'Entrez un montant valide.' : "Enter a valid amount.", true); return; }
+      if (!ref || ref.trim().length < 4) { showPaymentToast(L ? 'Entrez une référence valide.' : "Enter a valid transaction reference.", true); return; }
 
       try {
-        const { error: txError } = await supabaseClient
-          .from("transactions")
-          .insert([{
-            user_id: currentUser.id,
-            user_email: currentUser.email,
-            type: 'deposit',
-            method: method,
-            amount: amount,
-            reference: ref,
-            plan_name: selectedPlanForActivation ? selectedPlanForActivation.name : null,
-            status: 'pending'
-          }]);
+        const { error: txError } = await supabaseClient.from("transactions").insert([{
+          user_id: currentUser.id, user_email: currentUser.email,
+          type: 'deposit', method: method, amount: amount, reference: ref,
+          plan_name: selectedPlanForActivation ? selectedPlanForActivation.name : null,
+          status: 'pending'
+        }]);
         if (txError) throw txError;
 
-        showPaymentToast(`Deposit of ${amount} submitted. Awaiting verification.`);
+        showPaymentToast(L ? `Dépôt de ${amount} soumis. En attente de vérification.` : `Deposit of ${amount} submitted. Awaiting verification.`);
 
         const methodLabels = {
-          mtn: 'MTN Mobile Money',
-          orange: 'Orange Money',
-          btc: 'Bitcoin (BTC)',
-          usdt: 'USDT (TRC20)',
-          bank: 'Bank Wire Transfer'
+          mtn: 'MTN Mobile Money', orange: 'Orange Money',
+          btc: 'Bitcoin (BTC)', usdt: 'USDT (TRC20)',
+          bank: L ? 'Virement bancaire' : 'Bank Wire Transfer'
         };
         const payMeta = getPaymentMetaForMethod(methodKey);
         openDepositConfirm({
@@ -3113,45 +3610,38 @@
         showPaymentToast("Deposit failed: " + err.message, true);
         return;
       }
-
       document.getElementById('deposit-form').reset();
       updateDepositDetails();
     }
 
-    /* ---------- WITHDRAWAL ---------- */
     async function handleWithdrawal(e) {
       e.preventDefault();
       const amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
       const method = document.getElementById('withdraw-method').value.toUpperCase();
+      const L = currentLanguage === 'fr';
 
-      if (!currentUser) { showPaymentToast("Please log in first.", true); openAuthModal('login'); return; }
+      if (!currentUser) { showPaymentToast(L ? 'Veuillez vous connecter.' : "Please log in first.", true); openAuthModal('login'); return; }
       if (!currentAccount) await loadAccountData();
-      if (!currentAccount) { showPaymentToast("Account not found. Please contact support.", true); return; }
-      if (amount <= 0) { showPaymentToast("Enter a valid amount.", true); return; }
-      if (amount < 20) { showPaymentToast("Minimum withdrawal is 20.", true); return; }
+      if (!currentAccount) { showPaymentToast("Account not found.", true); return; }
+      if (amount <= 0) { showPaymentToast(L ? 'Entrez un montant valide.' : "Enter a valid amount.", true); return; }
+      if (amount < 20) { showPaymentToast(L ? 'Retrait minimum : 20.' : "Minimum withdrawal is 20.", true); return; }
 
       const bal = Number(currentAccount.balance) || 0;
       if (amount > bal) {
-        showPaymentToast(`Insufficient balance. Available: ${bal.toFixed(2)}`, true);
+        showPaymentToast((L ? 'Solde insuffisant. Disponible : ' : 'Insufficient balance. Available: ') + bal.toFixed(2), true);
         return;
       }
 
       const payoutDetails = {};
-      if (method === 'MTN') {
-        payoutDetails.name  = document.getElementById('mtn-name')?.value;
-        payoutDetails.phone = document.getElementById('mtn-phone')?.value;
-      } else if (method === 'ORANGE') {
-        payoutDetails.name  = document.getElementById('orange-name')?.value;
-        payoutDetails.phone = document.getElementById('orange-phone')?.value;
-      } else if (method === 'BTC') {
-        payoutDetails.address = document.getElementById('btc-addr')?.value;
-      } else if (method === 'USDT') {
-        payoutDetails.address = document.getElementById('usdt-addr')?.value;
-      } else if (method === 'BANK') {
-        payoutDetails.accountName   = document.getElementById('acc-name')?.value;
-        payoutDetails.bankName      = document.getElementById('bank-name')?.value;
+      if (method === 'MTN') { payoutDetails.name = document.getElementById('mtn-name')?.value; payoutDetails.phone = document.getElementById('mtn-phone')?.value; }
+      else if (method === 'ORANGE') { payoutDetails.name = document.getElementById('orange-name')?.value; payoutDetails.phone = document.getElementById('orange-phone')?.value; }
+      else if (method === 'BTC') { payoutDetails.address = document.getElementById('btc-addr')?.value; }
+      else if (method === 'USDT') { payoutDetails.address = document.getElementById('usdt-addr')?.value; }
+      else if (method === 'BANK') {
+        payoutDetails.accountName = document.getElementById('acc-name')?.value;
+        payoutDetails.bankName = document.getElementById('bank-name')?.value;
         payoutDetails.accountNumber = document.getElementById('acc-number')?.value;
-        payoutDetails.swift         = document.getElementById('swift')?.value;
+        payoutDetails.swift = document.getElementById('swift')?.value;
       }
 
       const fee = amount * 0.02;
@@ -3159,47 +3649,29 @@
       const newBalance = bal - amount;
 
       try {
-        const { error: txError } = await supabaseClient
-          .from("transactions")
-          .insert([{
-            user_id: currentUser.id,
-            user_email: currentUser.email,
-            type: 'withdrawal',
-            method: method,
-            amount: amount,
-            fee: fee,
-            net_amount: netAmount,
-            payout_details: payoutDetails,
-            status: 'pending'
-          }]);
+        const { error: txError } = await supabaseClient.from("transactions").insert([{
+          user_id: currentUser.id, user_email: currentUser.email,
+          type: 'withdrawal', method: method, amount: amount, fee: fee,
+          net_amount: netAmount, payout_details: payoutDetails, status: 'pending'
+        }]);
         if (txError) throw txError;
 
-        const { error: userError } = await supabaseClient
-          .from("users")
-          .update({ balance: newBalance })
-          .eq("id", currentUser.id);
+        const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance }).eq("id", currentUser.id);
         if (userError) throw userError;
 
         currentAccount.balance = newBalance;
         updateAccountUI();
 
-        showPaymentToast(
-          `Withdrawal of ${amount} requested. ${netAmount.toFixed(2)} will be sent after approval.`
-        );
+        showPaymentToast(L ? `Retrait de ${amount} demandé. ${netAmount.toFixed(2)} sera envoyé après approbation.` : `Withdrawal of ${amount} requested. ${netAmount.toFixed(2)} will be sent after approval.`);
 
         const withdrawalMethodLabels = {
-          MTN: 'MTN Mobile Money',
-          ORANGE: 'Orange Money',
-          BTC: 'Bitcoin (BTC)',
-          USDT: 'USDT (TRC20)',
-          BANK: 'Bank Transfer'
+          MTN: 'MTN Mobile Money', ORANGE: 'Orange Money',
+          BTC: 'Bitcoin (BTC)', USDT: 'USDT (TRC20)',
+          BANK: L ? 'Virement bancaire' : 'Bank Transfer'
         };
         openWithdrawalConfirm({
-          amount: amount,
-          fee: fee,
-          netAmount: netAmount,
-          method: method,
-          methodLabel: withdrawalMethodLabels[method] || method,
+          amount: amount, fee: fee, netAmount: netAmount,
+          method: method, methodLabel: withdrawalMethodLabels[method] || method,
           payoutDetails: payoutDetails
         });
       } catch (err) {
@@ -3207,7 +3679,6 @@
         showPaymentToast("Withdrawal request failed: " + err.message, true);
         return;
       }
-
       document.getElementById('withdraw-form').reset();
       toggleWithdrawFields();
       calculateWithdrawal();
@@ -3217,12 +3688,20 @@
        BOOTSTRAP
     ========================================================= */
     document.addEventListener('DOMContentLoaded', function() {
+      // Load saved language BEFORE applying anything
+      let savedLang = 'en';
+      try { savedLang = localStorage.getItem('bf_lang') || 'en'; } catch (_) {}
+      if (savedLang !== 'en' && savedLang !== 'fr') savedLang = 'en';
+
       initDurationFieldset();
       updateCalcRate();
       updateReferralUIVisibility(false);
       updateDepositDetails();
       calculateWithdrawal();
       renderActivePlans();
+
+      // Apply language last so everything renders with correct strings
+      applyLanguage(savedLang);
     });
 
     window.addEventListener('load', function() {
