@@ -314,13 +314,90 @@
     .db-btn-outline:hover { background-color: var(--gold-primary); color: #000; }
 
     .db-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
-    .db-stat-card { background-color: var(--db-card); border: 1px solid var(--db-border); padding: 1.5rem; border-radius: 10px; display: flex; align-items: center; gap: 1rem; }
+    .db-stat-card { background-color: var(--db-card); border: 1px solid var(--db-border); padding: 1.5rem; border-radius: 10px; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; position: relative; }
     .db-stat-icon { width: 46px; height: 46px; border-radius: 10px; background: rgba(212,175,55,.1); color: var(--gold-primary); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-    .db-stat-info { flex: 1; }
+    .db-stat-info { flex: 1; min-width: 120px; }
     .db-stat-info h4 { font-size: .8rem; color: var(--db-muted); margin-bottom: 4px; }
     .db-stat-info p { font-size: 1.15rem; font-weight: 700; color: var(--db-text); }
     .db-view-btn { background: transparent; color: var(--gold-primary); border: 1px solid var(--gold-primary); padding: 4px 10px; border-radius: 6px; font-size: .75rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: .5px; transition: all .2s; white-space: nowrap; }
     .db-view-btn:hover { background: var(--gold-primary); color: #000; }
+
+    /* Toggle button for withdrawal history */
+    .db-history-toggle {
+      background: none;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-primary);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s, color .2s;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .db-history-toggle:hover {
+      background: var(--gold-primary);
+      color: #000;
+    }
+    .withdrawal-history-container {
+      flex-basis: 100%;
+      margin-top: 1rem;
+      background: var(--db-bg);
+      border: 1px solid var(--db-border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+    .withdrawal-history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--db-border);
+      font-size: 0.85rem;
+    }
+    .withdrawal-history-item:last-child {
+      border-bottom: none;
+    }
+    .wh-date {
+      color: var(--db-muted);
+      font-size: 0.75rem;
+    }
+    .wh-amount {
+      font-weight: 700;
+      color: var(--gold-primary);
+    }
+    .wh-status {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .wh-status.pending {
+      background: rgba(234,179,8,0.15);
+      color: #eab308;
+    }
+    .wh-status.confirmed {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+    }
+    .wh-status.failed {
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
+    }
+    .wh-empty {
+      text-align: center;
+      color: var(--db-muted);
+      font-size: 0.85rem;
+      padding: 1rem 0;
+    }
 
     .dashboard-id-banner { background: var(--db-card); border: 1px solid var(--gold-primary); padding: 12px 20px; text-align: center; color: var(--db-text); font-size: 14px; border-radius: 8px; margin-bottom: 1.5rem; display: none; box-shadow: 0 0 20px rgba(212,175,55,.1); }
     .dashboard-id-banner span { color: var(--gold-primary); font-weight: 700; letter-spacing: .5px; }
@@ -387,7 +464,7 @@
     .payment-card input:focus, .payment-card select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); background: #0d1b2d; }
     .deposit-info-box { background: linear-gradient(135deg, rgba(37,99,235,.09), rgba(255,255,255,.02)); border: 1px solid rgba(59,130,246,.25); border-radius: 15px; padding: 17px; margin-bottom: 21px; }
     .info-title { display: flex; align-items: center; gap: 8px; color: #93c5fd; font-size: 11px; font-weight: 800; letter-spacing: .5px; margin-bottom: 15px; }
-    .info-title-icon { width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: rgba(59,130,246,.13); font-size: 12px; }
+    .info-title-icon { width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: rgba(59,130,246,.13); font-size: 9px; color: #93c5fd; font-weight: 800; }
     .info-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 12px; }
     .info-row:last-child { border-bottom: 0; padding-bottom: 0; }
     .info-label { color: #94a3b8; flex-shrink: 0; }
@@ -599,11 +676,11 @@
     .dc-copy-btn:hover { background: rgba(59,130,246,.25); }
     .dc-copy-btn.copied { background: rgba(34,197,94,.15); color: #16a34a; }
     .dc-crypto-icon {
-      width: 22px; height: 22px;
+      min-width: 34px; height: 22px; padding: 0 6px;
       background: linear-gradient(135deg, #10b981, #34d399);
-      color: #fff; border-radius: 50%;
+      color: #fff; border-radius: 12px;
       display: inline-flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
+      font-size: 10px; font-weight: 800; letter-spacing: .3px;
       flex-shrink: 0; margin-top: 1px;
       box-shadow: 0 2px 6px rgba(16, 185, 129, .35);
     }
@@ -1154,7 +1231,7 @@
 
       <section class="db-balance-card">
         <div class="db-balance-label" id="dbBalanceLabel">Total Account Balance</div>
-        <div class="db-balance-amount" id="dbAccountBalance">$0.00</div>
+        <div class="db-balance-amount" id="dbAccountBalance">0.00</div>
         <div class="db-action-buttons">
           <button class="db-btn db-btn-gold" onclick="openPaymentModal('deposit')"><i class="fa-solid fa-wallet"></i><span id="dbDepositText">Deposit</span></button>
           <button class="db-btn db-btn-outline" onclick="openPaymentModal('withdraw')"><i class="fa-solid fa-arrow-up-right-from-square"></i><span id="dbWithdrawText">Withdraw</span></button>
@@ -1168,11 +1245,20 @@
         </div>
         <div class="db-stat-card">
           <div class="db-stat-icon"><i class="fa-solid fa-chart-line"></i></div>
-          <div class="db-stat-info"><h4 id="dbDailyEarningsText">Est. Daily Earnings</h4><p id="dbDailyEarningsValue">$0.00</p></div>
+          <div class="db-stat-info"><h4 id="dbDailyEarningsText">Est. Daily Earnings</h4><p id="dbDailyEarningsValue">XAF 0.00</p></div>
         </div>
-        <div class="db-stat-card">
+        <div class="db-stat-card" id="totalWithdrawnCard">
           <div class="db-stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-          <div class="db-stat-info"><h4 id="dbTotalWithdrawnText">Total Withdrawn</h4><p>$0.00</p></div>
+          <div class="db-stat-info">
+            <h4 id="dbTotalWithdrawnText">Total Withdrawn</h4>
+            <p id="dbTotalWithdrawnValue">XAF 0.00</p>
+          </div>
+          <button class="db-history-toggle" id="dbHistoryToggleBtn" onclick="toggleWithdrawalHistory()" title="Toggle withdrawal history">
+            <i class="fa-solid fa-chevron-down" id="dbHistoryToggleIcon"></i>
+          </button>
+          <div id="withdrawalHistoryContainer" class="withdrawal-history-container" style="display: none;">
+            <div class="withdrawal-history-list" id="withdrawalHistoryList"></div>
+          </div>
         </div>
       </section>
 
@@ -1288,7 +1374,7 @@
         <div class="total-mined-card">
           <div class="total-mined-header">
             <span class="total-mined-label"><i class="fa-solid fa-coins"></i> Total BTC Mined</span>
-            <span class="total-mined-usd" id="modalTotalMinedUsd">≈ $0.00</span>
+            <span class="total-mined-usd" id="modalTotalMinedUsd">≈ XAF 0.00</span>
           </div>
           <div class="total-mined-value">
             <span class="btc-symbol">₿</span><span id="modalTotalMined">0.00000000000</span>
@@ -1330,7 +1416,7 @@
           </div>
           <div class="balance-card-payment">
             <div class="balance-label-payment">Available Balance</div>
-            <div class="balance-value-payment" id="paymentModalBalance">$0.00</div>
+            <div class="balance-value-payment" id="paymentModalBalance">XAF 0.00</div>
             <div class="balance-note-payment">Your available account balance</div>
           </div>
         </div>
@@ -1356,7 +1442,7 @@
               </select>
             </div>
             <div class="deposit-info-box">
-              <div class="info-title"><span class="info-title-icon">$</span>PAYMENT INSTRUCTIONS</div>
+              <div class="info-title"><span class="info-title-icon">XAF</span>PAYMENT INSTRUCTIONS</div>
               <div id="payment-details-content"></div>
               <div class="info-row" style="border-top:1px solid rgba(255,255,255,.08); margin-top:10px; padding-top:12px; border-bottom:0;">
                 <span class="info-label" style="color:#f5b942; font-weight:700;">⚠️ IMPORTANT</span>
@@ -1364,7 +1450,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="deposit-amount">Amount Sent ($)</label>
+              <label for="deposit-amount">Amount Sent (XAF)</label>
               <input type="number" id="deposit-amount" placeholder="0.00" min="10" step="0.01" required>
             </div>
             <div class="form-group">
@@ -1380,7 +1466,7 @@
           <div class="section-title"><h2>Withdraw Funds</h2><p>Choose your payout method and provide your receiving details.</p></div>
           <form id="withdraw-form" onsubmit="handleWithdrawal(event)">
             <div class="form-group">
-              <label for="withdraw-amount">Amount to Withdraw ($)</label>
+              <label for="withdraw-amount">Amount to Withdraw (XAF)</label>
               <input type="number" id="withdraw-amount" placeholder="0.00" min="20" step="0.01" oninput="calculateWithdrawal()" required>
             </div>
             <div class="form-group">
@@ -1414,9 +1500,9 @@
               <div class="form-group"><label for="swift">SWIFT / BIC</label><input type="text" id="swift" placeholder="SWIFT code"></div>
             </div>
             <div class="summary-box">
-              <div class="summary-row"><span>Withdrawal Amount</span><span id="sum-amount">$0.00</span></div>
-              <div class="summary-row"><span>Processing Fee (2%)</span><span id="sum-fee">$0.00</span></div>
-              <div class="summary-row"><span>You Receive</span><span id="sum-total">$0.00</span></div>
+              <div class="summary-row"><span>Withdrawal Amount</span><span id="sum-amount">XAF 0.00</span></div>
+              <div class="summary-row"><span>Processing Fee (2%)</span><span id="sum-fee">XAF 0.00</span></div>
+              <div class="summary-row"><span>You Receive</span><span id="sum-total">XAF 0.00</span></div>
             </div>
             <button type="submit" class="submit-btn">Request Withdrawal</button>
           </form>
@@ -1505,8 +1591,8 @@
       <div class="dc-details-list">
         <div class="dc-label">Amount</div>
         <div class="dc-value dc-value-highlight">
-          <span class="dc-crypto-icon">$</span>
-          <span>$<span id="dcAmount">0.00</span> USD</span>
+          <span class="dc-crypto-icon">XAF</span>
+          <span><span id="dcAmount">0.00</span> XAF</span>
         </div>
 
         <div class="dc-label">Method</div>
@@ -1734,7 +1820,10 @@
       document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active-view'));
       document.getElementById(viewId)?.classList.add('active-view');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      if (viewId === 'accountPageView' && currentUser) loadAccountData();
+      if (viewId === 'accountPageView' && currentUser) {
+        loadAccountData();
+        loadWithdrawalHistory();
+      }
       if (viewId === 'miningDashboardView') loadMiningDashboard();
     }
     function showMiningDashboard() { showPageView('miningDashboardView'); }
@@ -1767,6 +1856,7 @@
         if (document.getElementById('miningDashboardView')?.classList.contains('active-view')) {
           applyMiningDashboardUI();
         }
+        loadWithdrawalHistory();
       }
     }
 
@@ -1790,6 +1880,7 @@
           activePlans = Array.isArray(data.plans) ? data.plans : [];
           updateAccountUI();
           renderActivePlans();
+          loadWithdrawalHistory();
         }
       } finally {
         setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 400);
@@ -1801,7 +1892,7 @@
       const balance = Number(currentAccount.balance) || 0;
       ['dbAccountBalance', 'paymentModalBalance'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.textContent = `$${balance.toFixed(2)}`;
+        if (el) el.textContent = `XAF ${balance.toFixed(2)}`;
       });
       let totalHashrate = 0, totalDailyEarnings = 0;
       activePlans.forEach(p => {
@@ -1813,7 +1904,7 @@
       const h = document.getElementById("dbHashrateValue");
       if (h) h.textContent = `${totalHashrate.toFixed(2)} TH/s`;
       const d = document.getElementById("dbDailyEarningsValue");
-      if (d) d.textContent = `$${totalDailyEarnings.toFixed(2)}`;
+      if (d) d.textContent = `XAF ${totalDailyEarnings.toFixed(2)}`;
       if (document.getElementById('miningDashboardView')?.classList.contains('active-view')) {
         applyMiningDashboardUI();
       }
@@ -1855,6 +1946,66 @@
     }
 
     /* =========================================================
+       WITHDRAWAL HISTORY
+    ========================================================= */
+    async function loadWithdrawalHistory() {
+      if (!supabaseClient || !currentUser) return;
+      const listEl = document.getElementById('withdrawalHistoryList');
+      const totalEl = document.getElementById('dbTotalWithdrawnValue');
+      if (!listEl) return;
+      listEl.innerHTML = '<div class="wh-empty">Loading...</div>';
+      try {
+        const { data, error } = await supabaseClient
+          .from('transactions')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .eq('type', 'withdrawal')
+          .order('created_at', { ascending: false })
+          .limit(50);
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          listEl.innerHTML = '<div class="wh-empty">No withdrawal history yet.</div>';
+          if (totalEl) totalEl.textContent = 'XAF 0.00';
+          return;
+        }
+        const total = data.reduce((sum, tx) => sum + (Number(tx.amount) || 0), 0);
+        if (totalEl) totalEl.textContent = `XAF ${total.toFixed(2)}`;
+        listEl.innerHTML = data.map(tx => {
+          const date = tx.created_at ? new Date(tx.created_at).toLocaleDateString() : 'N/A';
+          const statusClass = tx.status === 'confirmed' ? 'confirmed' : tx.status === 'pending' ? 'pending' : 'failed';
+          const methodLabel = tx.method ? tx.method.replace(/_/g, ' ') : 'Withdrawal';
+          return `
+            <div class="withdrawal-history-item">
+              <div>
+                <div class="wh-date">${date}</div>
+                <div style="font-weight:500;">${methodLabel}</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="wh-amount">XAF ${Number(tx.amount || 0).toFixed(2)}</div>
+                <span class="wh-status ${statusClass}">${tx.status || 'pending'}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error loading withdrawal history:', err);
+        listEl.innerHTML = '<div class="wh-empty">Failed to load history.</div>';
+      }
+    }
+
+    function toggleWithdrawalHistory() {
+      const container = document.getElementById('withdrawalHistoryContainer');
+      const icon = document.getElementById('dbHistoryToggleIcon');
+      if (!container || !icon) return;
+      const isHidden = container.style.display === 'none';
+      container.style.display = isHidden ? 'block' : 'none';
+      icon.className = isHidden ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+      if (isHidden) {
+        loadWithdrawalHistory();
+      }
+    }
+
+    /* =========================================================
        AUTH & SESSION
     ========================================================= */
     async function unlockUserExperience(user) {
@@ -1875,6 +2026,7 @@
       document.getElementById("navAccountLi")?.classList.remove("hidden");
       document.getElementById("navInvestmentPlansLi")?.classList.remove("hidden");
       await loadAccountData();
+      await loadWithdrawalHistory();
 
       const stored = sessionStorage.getItem('intendedPlan');
       if (stored) {
@@ -1898,7 +2050,7 @@
 
       showPageView("accountPageView");
       subscribeToUserChanges(user.id);
-      subscribeToDepositApprovals(user.id); // 👈 NEW
+      subscribeToDepositApprovals(user.id);
     }
 
     function lockUserExperience() {
@@ -1914,7 +2066,7 @@
         supabaseClient.removeChannel(realtimeChannel);
         realtimeChannel = null;
       }
-      if (depositApprovalChannel && supabaseClient) { // 👈 NEW
+      if (depositApprovalChannel && supabaseClient) {
         supabaseClient.removeChannel(depositApprovalChannel);
         depositApprovalChannel = null;
       }
@@ -1946,7 +2098,7 @@
     }
 
     /* =========================================================
-       DEPOSIT APPROVAL LISTENER (Option C)
+       DEPOSIT APPROVAL LISTENER
     ========================================================= */
     function subscribeToDepositApprovals(userId) {
       if (depositApprovalChannel && supabaseClient) {
@@ -1973,14 +2125,12 @@
             if (processedDepositIds.has(row.id)) return;
             processedDepositIds.add(row.id);
 
-            // ── Credit the balance ──
             if (!currentAccount) await loadAccountData();
             if (!currentAccount) return;
 
             const amount = Number(row.amount) || 0;
             const newBalance = (Number(currentAccount.balance) || 0) + amount;
 
-            // If this deposit was for a plan, activate the plan
             let updatedPlans = Array.isArray(currentAccount.plans) ? [...currentAccount.plans] : [];
             if (row.plan_name && selectedPlanForActivation && selectedPlanForActivation.name === row.plan_name) {
               updatedPlans.push({
@@ -2012,11 +2162,8 @@
               return;
             }
 
-            // ── Fire notification + unlock Done ──
-            
-triggerDepositNotification(amount.toFixed(2));
-            // Also show toast if payment portal is still open
-            showPaymentToast(`✅ Deposit of $${amount.toFixed(2)} approved and credited!`);
+            triggerDepositNotification(amount.toFixed(2));
+            showPaymentToast(`✅ Deposit of XAF ${amount.toFixed(2)} approved and credited!`);
           }
         )
         .subscribe();
@@ -2195,7 +2342,7 @@ triggerDepositNotification(amount.toFixed(2));
       const totalBtc = miningSession.earnedBTC;
       const totalUsd = totalBtc * BTC_PRICE_USD;
       if (ui.totalMined)    ui.totalMined.textContent    = totalBtc.toFixed(11);
-      if (ui.totalMinedUsd) ui.totalMinedUsd.textContent = `≈ $${totalUsd.toFixed(2)}`;
+      if (ui.totalMinedUsd) ui.totalMinedUsd.textContent = `≈ XAF ${totalUsd.toFixed(2)}`;
       const canTransfer = !miningSession.isMining && totalBtc > 0;
       if (ui.transferBtn && !ui.transferBtn.classList.contains('transferring')) {
         ui.transferBtn.disabled = !canTransfer;
@@ -2322,7 +2469,7 @@ triggerDepositNotification(amount.toFixed(2));
       const usdToTransfer = btcToTransfer * BTC_PRICE_USD;
       const MIN_TRANSFER_USD = 0.01;
       if (usdToTransfer < MIN_TRANSFER_USD) {
-        alert(`Minimum transfer is $${MIN_TRANSFER_USD.toFixed(2)}. Keep mining a bit longer.`);
+        alert(`Minimum transfer is XAF ${MIN_TRANSFER_USD.toFixed(2)}. Keep mining a bit longer.`);
         return;
       }
       this.disabled = true;
@@ -2353,7 +2500,7 @@ triggerDepositNotification(amount.toFixed(2));
         updateAccountUI();
         renderMiningUI();
         this.classList.remove('transferring');
-        this.innerHTML = `<i class="fa-solid fa-check"></i> Transferred $${usdToTransfer.toFixed(4)}`;
+        this.innerHTML = `<i class="fa-solid fa-check"></i> Transferred XAF ${usdToTransfer.toFixed(4)}`;
         setTimeout(() => {
           this.innerHTML = '<i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer to Main Account';
           this.disabled = true;
@@ -2397,7 +2544,7 @@ triggerDepositNotification(amount.toFixed(2));
           openPaymentModal('deposit');
           const amtInput = document.getElementById('deposit-amount');
           if (amtInput) { amtInput.value = shortfall; amtInput.min = shortfall; }
-          showPaymentToast(`Insufficient balance. You need $${shortfall} more to activate ${plan.name}. Deposit now.`, true);
+          showPaymentToast(`Insufficient balance. You need XAF ${shortfall} more to activate ${plan.name}. Deposit now.`, true);
           return;
         }
         const newBalance = balance - costUSD;
@@ -2482,7 +2629,6 @@ triggerDepositNotification(amount.toFixed(2));
       depositConfirmOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
-      // Reset modal state: Show spinner, lock & grey out Done button
       const loadingContainer = document.querySelector('.dc-loading-container');
       const doneBtn = document.querySelector('.dc-btn-continue');
       
@@ -2501,20 +2647,18 @@ triggerDepositNotification(amount.toFixed(2));
       const doneBtn = document.querySelector('.dc-btn-continue');
       const loadingContainer = document.querySelector('.dc-loading-container');
       
-      // 👇 Capture success state BEFORE we wipe it
       const wasSuccessful = doneBtn?.classList.contains('success');
       
-      // Reset modal state for next use
       if (loadingContainer) loadingContainer.classList.remove('hidden');
       if (doneBtn) {
         doneBtn.disabled = true;
         doneBtn.classList.remove('success');
       }
       
-      // 👇 Redirect to the main account page after a successful confirmation
       if (wasSuccessful) {
         showPageView('accountPageView');
         if (typeof loadAccountData === 'function') loadAccountData();
+        if (typeof loadWithdrawalHistory === 'function') loadWithdrawalHistory();
       }
     }
 
@@ -2548,7 +2692,7 @@ triggerDepositNotification(amount.toFixed(2));
       return meta[methodKey] || meta.mtn;
     }
 
-    /* ---------- Notification bar (manual trigger) ---------- */
+    /* ---------- Notification bar ---------- */
     function triggerDepositNotification(amount) {
       const bar  = document.getElementById('depositNotificationBar');
       const text = document.getElementById('depositNotificationText');
@@ -2557,11 +2701,10 @@ triggerDepositNotification(amount.toFixed(2));
       
       if (!bar) return;
 
-      if (text) text.textContent = `You have deposited ($${amount})!`;
+      if (text) text.textContent = `You have deposited (XAF ${amount})!`;
 
       bar.classList.add('show');
 
-      // 👇 NEW: Hide the spinner and turn the Done button green
       if (loadingContainer) loadingContainer.classList.add('hidden');
       if (doneBtn) {
         doneBtn.disabled = false;
@@ -2573,7 +2716,7 @@ triggerDepositNotification(amount.toFixed(2));
       }, 3000);
     }
     /* =========================================================
-       WITHDRAWAL REVIEW + AWAITING APPROVAL (withdrawals only)
+       WITHDRAWAL REVIEW + AWAITING APPROVAL
     ========================================================= */
     const withdrawalConfirmOverlay = document.getElementById('withdrawalConfirmOverlay');
     const awaitingApprovalOverlay = document.getElementById('awaitingApprovalOverlay');
@@ -2584,7 +2727,7 @@ triggerDepositNotification(amount.toFixed(2));
         const pd = details.payoutDetails || {};
         const rows = [];
         rows.push('<div class="wc-label">Amount</div>');
-        rows.push(`<div class="wc-value">$${Number(details.amount || 0).toFixed(2)}</div>`);
+        rows.push(`<div class="wc-value">XAF ${Number(details.amount || 0).toFixed(2)}</div>`);
         rows.push('<div class="wc-label">Method</div>');
         rows.push(`<div class="wc-value">${details.methodLabel || '—'}</div>`);
 
@@ -2615,9 +2758,9 @@ triggerDepositNotification(amount.toFixed(2));
         }
 
         rows.push('<div class="wc-label">Processing Fee (2%)</div>');
-        rows.push(`<div class="wc-value">$${Number(details.fee || 0).toFixed(2)}</div>`);
+        rows.push(`<div class="wc-value">XAF ${Number(details.fee || 0).toFixed(2)}</div>`);
         rows.push('<div class="wc-label">You Receive</div>');
-        rows.push(`<div class="wc-value wc-value-total">$${Number(details.netAmount || 0).toFixed(2)}</div>`);
+        rows.push(`<div class="wc-value wc-value-total">XAF ${Number(details.netAmount || 0).toFixed(2)}</div>`);
 
         list.innerHTML = rows.join('');
       }
@@ -2635,6 +2778,16 @@ triggerDepositNotification(amount.toFixed(2));
       if (awaitingApprovalOverlay) {
         awaitingApprovalOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+      }
+      if (currentUser) {
+        loadWithdrawalHistory().then(() => {
+          const container = document.getElementById('withdrawalHistoryContainer');
+          const icon = document.getElementById('dbHistoryToggleIcon');
+          if (container && container.style.display === 'none') {
+            container.style.display = 'block';
+            if (icon) icon.className = 'fa-solid fa-chevron-up';
+          }
+        });
       }
     }
 
@@ -2713,7 +2866,7 @@ triggerDepositNotification(amount.toFixed(2));
       const accountBalance = Number(currentAccount?.balance) || 0;
       if (accountBalance < MINING_MIN_BALANCE) {
         if (mineButton) { mineButton.disabled = false; mineButton.dataset.mode = "topup"; mineButton.classList.add("topup-mode"); }
-        if (buttonLabel) buttonLabel.innerHTML = `💳 Top up to mine <small>($${accountBalance.toFixed(2)} / $${MINING_MIN_BALANCE})</small>`;
+        if (buttonLabel) buttonLabel.innerHTML = `💳 Top up to mine <small>(XAF ${accountBalance.toFixed(2)} / XAF ${MINING_MIN_BALANCE})</small>`;
         miningStatus?.classList.add("inactive");
         if (miningStatusText) miningStatusText.textContent = "Mining Locked";
         return;
@@ -2745,7 +2898,7 @@ triggerDepositNotification(amount.toFixed(2));
           openPaymentModal('deposit');
           const amtInput = document.getElementById('deposit-amount');
           if (amtInput) { amtInput.value = shortfall; amtInput.min = shortfall; }
-          showPaymentToast(`Add at least $${shortfall} to start mining. Your plan is already active.`);
+          showPaymentToast(`Add at least XAF ${shortfall} to start mining. Your plan is already active.`);
           return;
         }
         if (this.classList.contains("mining")) {
@@ -2801,7 +2954,7 @@ triggerDepositNotification(amount.toFixed(2));
       document.body.style.overflow = 'hidden';
       if (currentAccount) {
         const el = document.getElementById('paymentModalBalance');
-        if (el) el.textContent = `$${(Number(currentAccount.balance) || 0).toFixed(2)}`;
+        if (el) el.textContent = `XAF ${(Number(currentAccount.balance) || 0).toFixed(2)}`;
       }
     }
     function closePaymentModal() {
@@ -2855,9 +3008,9 @@ triggerDepositNotification(amount.toFixed(2));
       const amount = parseFloat(document.getElementById('withdraw-amount').value) || 0;
       const fee = amount * 0.02;
       const net = amount > fee ? amount - fee : 0;
-      document.getElementById('sum-amount').innerText = `$${amount.toFixed(2)}`;
-      document.getElementById('sum-fee').innerText = `$${fee.toFixed(2)}`;
-      document.getElementById('sum-total').innerText = `$${net.toFixed(2)}`;
+      document.getElementById('sum-amount').innerText = `XAF ${amount.toFixed(2)}`;
+      document.getElementById('sum-fee').innerText = `XAF ${fee.toFixed(2)}`;
+      document.getElementById('sum-total').innerText = `XAF ${net.toFixed(2)}`;
     }
     function copyText(text) {
       navigator.clipboard.writeText(text).then(() => showPaymentToast("Copied to clipboard!"))
@@ -2922,7 +3075,6 @@ triggerDepositNotification(amount.toFixed(2));
       if (!ref || ref.trim().length < 4) { showPaymentToast("Enter a valid transaction reference.", true); return; }
 
       try {
-        // Insert as PENDING — admin will confirm later via Supabase
         const { error: txError } = await supabaseClient
           .from("transactions")
           .insert([{
@@ -2937,9 +3089,7 @@ triggerDepositNotification(amount.toFixed(2));
           }]);
         if (txError) throw txError;
 
-        // DO NOT credit balance here — the approval listener handles it.
-
-        showPaymentToast(`Deposit of $${amount} submitted. Awaiting verification.`);
+        showPaymentToast(`Deposit of XAF ${amount} submitted. Awaiting verification.`);
 
         const methodLabels = {
           mtn: 'MTN Mobile Money',
@@ -2957,7 +3107,6 @@ triggerDepositNotification(amount.toFixed(2));
           payToValue: payMeta.value,
           reference: ref
         });
-        // Done button is locked inside openDepositConfirm.
       } catch (err) {
         console.error("Deposit error:", err);
         showPaymentToast("Deposit failed: " + err.message, true);
@@ -2978,11 +3127,11 @@ triggerDepositNotification(amount.toFixed(2));
       if (!currentAccount) await loadAccountData();
       if (!currentAccount) { showPaymentToast("Account not found. Please contact support.", true); return; }
       if (amount <= 0) { showPaymentToast("Enter a valid amount.", true); return; }
-      if (amount < 20) { showPaymentToast("Minimum withdrawal is $20.", true); return; }
+      if (amount < 20) { showPaymentToast("Minimum withdrawal is XAF 20.", true); return; }
 
       const bal = Number(currentAccount.balance) || 0;
       if (amount > bal) {
-        showPaymentToast(`Insufficient balance. Available: $${bal.toFixed(2)}`, true);
+        showPaymentToast(`Insufficient balance. Available: XAF ${bal.toFixed(2)}`, true);
         return;
       }
 
@@ -3034,7 +3183,7 @@ triggerDepositNotification(amount.toFixed(2));
         updateAccountUI();
 
         showPaymentToast(
-          `Withdrawal of $${amount} requested. $${netAmount.toFixed(2)} will be sent after approval.`
+          `Withdrawal of XAF ${amount} requested. XAF ${netAmount.toFixed(2)} will be sent after approval.`
         );
 
         const withdrawalMethodLabels = {
