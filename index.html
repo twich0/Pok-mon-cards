@@ -974,6 +974,83 @@
       .dnb-icon { width: 42px; height: 42px; margin-right: 10px; }
       .dnb-icon svg { width: 40px; height: 40px; }
     }
+    /* Update Profile Badge / Avatar */
+    .avatar-badge {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 25px rgba(180, 100, 200, 0.3);
+      border: 3px solid #ffffff;
+    }
+    .avatar-badge svg {
+      width: 45px;
+      height: 45px;
+      fill: #fff;
+    }
+
+    /* Update Label Positioning */
+    .auth-card label {
+      display: block;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 8px; /* Adds space between the label and the input */
+    }
+
+    /* New Styles for "or continue with" and Social Buttons */
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 24px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(220, 215, 235, 0.6);
+    }
+    .divider span {
+      padding: 0 12px;
+    }
+    .social-login {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .social-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(220, 215, 235, 0.6);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-input);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(150, 140, 180, 0.15);
+    }
+    .social-btn.google i {
+      color: #DB4437;
+      font-size: 20px;
+    }
+    .social-btn.facebook i {
+      color: #1877F2;
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
@@ -1155,7 +1232,7 @@
         <div class="referral-link-box hidden" id="referralLinkBox">
           <div class="referral-link-label" data-i18n="ref.linkLabel">Your unique referral link</div>
           <div class="referral-link-row">
-            <input type="text" id="referralLinkInput" readonly value="https://bitflymining.com/ref/..." />
+            <input type="text" id="referralLinkInput" readonly value="https://yourdomain.com/?ref=..." />
             <button class="referral-copy-btn" id="copyReferralBtn" data-i18n="ref.copy">Copy</button>
           </div>
         </div>
@@ -1576,6 +1653,20 @@
           </div>
           <button type="submit" class="btn-submit">Sign Up</button>
         </form>
+
+        <!-- NEW: "or continue with" Divider and Social Buttons -->
+        <div class="divider">
+          <span>or continue with</span>
+        </div>
+        <div class="social-login">
+          <button type="button" class="social-btn google">
+            <i class="fa-brands fa-google"></i>
+          </button>
+          <button type="button" class="social-btn facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </button>
+        </div>
+
         <p class="auth-footer">Already have an account? <a href="#" onclick="toggleView('login')">Log In &gt;</a></p>
       </div>
 
@@ -2245,12 +2336,12 @@
     const copyReferralBtn = document.getElementById('copyReferralBtn');
 
     function generateReferralLink(userId) {
-      if (!userId) return 'https://bitflymining.com/ref/...';
-      return 'https://bitflymining.com/ref/' + userId.substring(0, 12);
+      if (!userId) return window.location.origin + '/?ref=...';
+      return window.location.origin + '/?ref=' + userId.substring(0, 12);
     }
     function updateReferralLink(user) {
       if (!referralLinkInput) return;
-      referralLinkInput.value = user && user.id ? generateReferralLink(user.id) : 'https://bitflymining.com/ref/...';
+      referralLinkInput.value = user && user.id ? generateReferralLink(user.id) : window.location.origin + '/?ref=...';
     }
     function updateReferralUIVisibility(isLoggedIn) {
       if (isLoggedIn) {
@@ -2263,7 +2354,7 @@
     }
     copyReferralBtn?.addEventListener('click', () => {
       const link = referralLinkInput?.value;
-      if (link && link !== 'https://bitflymining.com/ref/...') {
+      if (link && !link.includes('ref=...')) {
         navigator.clipboard.writeText(link).then(() => {
           copyReferralBtn.textContent = t('ref.copied');
           setTimeout(() => copyReferralBtn.textContent = t('ref.copy'), 2000);
@@ -2605,7 +2696,7 @@
       document.getElementById("navAccountLi")?.classList.add("hidden");
       document.getElementById("navInvestmentPlansLi")?.classList.add("hidden");
 
-      if (referralLinkInput) referralLinkInput.value = 'https://bitflymining.com/ref/...';
+      if (referralLinkInput) referralLinkInput.value = window.location.origin + '/?ref=...';
       if (realtimeChannel && supabaseClient) {
         supabaseClient.removeChannel(realtimeChannel);
         realtimeChannel = null;
@@ -2766,11 +2857,30 @@
         const password = document.getElementById('signUpPassword').value;
         const name = document.getElementById('signUpName').value;
         const phone = document.getElementById('signUpPhone').value;
+        
+        // Retrieve the stored referral code from localStorage
+        let referredBy = null;
+        try { referredBy = localStorage.getItem('bf_referral_code'); } catch (_) {}
+
         const { error } = await supabaseClient.auth.signUp({
-          email, password, options: { data: { full_name: name, phone } }
+          email, 
+          password, 
+          options: { 
+            data: { 
+              full_name: name, 
+              phone: phone,
+              referred_by: referredBy // Send the referral code to your database!
+            } 
+          }
         });
+        
         if (error) alert('Sign Up Error: ' + error.message);
-        else { alert('Registration successful!'); closeAuthModal(); }
+        else { 
+          alert('Registration successful!'); 
+          // Clear the referral code so they aren't tracked again for the next signup
+          try { localStorage.removeItem('bf_referral_code'); } catch (_) {}
+          closeAuthModal(); 
+        }
       });
       document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -3656,10 +3766,24 @@
       calculateWithdrawal();
     }
 
+   /* =========================================================
+       REFERRAL CAPTURE LOGIC
+    ========================================================= */
+    function captureReferralCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref'); // Looks for ?ref=USER_ID
+      if (refCode) {
+        try { localStorage.setItem('bf_referral_code', refCode); } catch (_) {}
+      }
+    }
+
     /* =========================================================
        BOOTSTRAP
     ========================================================= */
     document.addEventListener('DOMContentLoaded', function() {
+      // Capture the referral code from the URL immediately on page load
+      captureReferralCode();
+
       // Load saved language BEFORE applying anything
       let savedLang = 'en';
       try { savedLang = localStorage.getItem('bf_lang') || 'en'; } catch (_) {}
