@@ -1000,57 +1000,18 @@
       font-size: 14px;
       font-weight: 600;
       color: var(--text-main);
-      margin-bottom: 8px; /* Adds space between the label and the input */
+      margin-bottom: 8px; 
     }
-
-    /* New Styles for "or continue with" and Social Buttons */
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 24px 0;
-      color: var(--text-muted);
-      font-size: 13px;
+/* Reset Timer Button */
+    .reset-timer-btn {
+      background: none; border: 1px solid #f5c842; color: #f5c842;
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; transition: all 0.2s;
     }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid rgba(220, 215, 235, 0.6);
-    }
-    .divider span {
-      padding: 0 12px;
-    }
-    .social-login {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .social-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 1px solid rgba(220, 215, 235, 0.6);
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: var(--shadow-input);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .social-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(150, 140, 180, 0.15);
-    }
-    .social-btn.google i {
-      color: #DB4437;
-      font-size: 20px;
-    }
-    .social-btn.facebook i {
-      color: #1877F2;
-      font-size: 20px;
-    }
+    .reset-timer-btn:hover:not(.cooldown) { background: #f5c842; color: #121a24; }
+    .reset-timer-btn.cooldown { border-color: #ef4444; color: #ef4444; cursor: not-allowed; }
+    .reset-timer-btn.cooldown i { animation: spin 1s linear infinite; }
   </style>
 </head>
 <body>
@@ -1411,10 +1372,18 @@
         </div>
       </div>
       <div class="daily-limit">
-        <div class="limit-row"><span class="limit-label">Daily Mining Limit</span><span class="limit-time" id="limitTime">00:00 / 34:00</span></div>
-        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <div class="limit-footer"><span>min left</span></div>
-      </div>
+          <div class="limit-row">
+            <span class="limit-label">Daily Mining Limit</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="limit-time" id="modalPlanLimitTime">00:00 / 34:00</span>
+              <button class="reset-timer-btn" id="modalResetTimerBtn" title="Reset Timer" style="display: none;">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+            </div>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" id="modalPlanProgressFill"></div></div>
+          <div class="limit-footer"><span>min left</span></div>
+        </div>
       <button class="mine-btn" id="mineButton" disabled>
         <span class="btn-text">
           <span class="spinner"></span>
@@ -1445,6 +1414,13 @@
           <span class="balance-sub-mining"><span>BTC</span></span>
         </div>
 
+        <div style="margin-top: 12px; margin-bottom: 16px;">
+          <button class="transfer-btn" id="modalTransferBtn" disabled>
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer to Main Account
+          </button>
+          <div class="transfer-hint" id="modalTransferHint">Start mining to earn BTC</div>
+        </div>
+
         <hr class="divider-mining">
 
         <div class="mining-header">
@@ -1469,20 +1445,15 @@
           <div class="progress-bar"><div class="progress-fill" id="modalPlanProgressFill"></div></div>
           <div class="limit-footer"><span>min left</span></div>
         </div>
-
-        <div class="total-mined-card">
+      <div class="total-mined-card">
           <div class="total-mined-header">
-            <span class="total-mined-label"><i class="fa-solid fa-coins"></i> Total BTC Mined</span>
-            <span class="total-mined-usd" id="modalTotalMinedUsd">≈ 0.00</span>
+            <span class="total-mined-label"><i class="fa-solid fa-coins"></i> Current Session</span>
+            <span class="total-mined-usd" id="modalTotalMinedUsd">≈ 0.00 XAF</span>
           </div>
           <div class="total-mined-value">
             <span class="btc-symbol">₿</span><span id="modalTotalMined">0.00000000000</span>
-          </div>
-          <button class="transfer-btn" id="modalTransferBtn" disabled>
-            <i class="fa-solid fa-arrow-right-arrow-left"></i>
-            Transfer to Main Account
-          </button>
-          <div class="transfer-hint" id="modalTransferHint">Start mining to earn BTC</div>
+        </div>
+        
         </div>
 
         <button class="mine-btn" id="modalPlanMineButton">
@@ -1566,7 +1537,7 @@
           <form id="withdraw-form" onsubmit="handleWithdrawal(event)">
             <div class="form-group">
               <label for="withdraw-amount" data-i18n="pay.witAmt">Amount to Withdraw</label>
-              <input type="number" id="withdraw-amount" placeholder="0.00" min="20" step="0.01" oninput="calculateWithdrawal()" required>
+              <input type="number" id="withdraw-amount" placeholder="0.00" min="5000" step="0.01" oninput="calculateWithdrawal()" required>
             </div>
             <div class="form-group">
               <label for="withdraw-method" data-i18n="pay.payout">Payout Method</label>
@@ -1653,19 +1624,6 @@
           </div>
           <button type="submit" class="btn-submit">Sign Up</button>
         </form>
-
-        <!-- NEW: "or continue with" Divider and Social Buttons -->
-        <div class="divider">
-          <span>or continue with</span>
-        </div>
-        <div class="social-login">
-          <button type="button" class="social-btn google">
-            <i class="fa-brands fa-google"></i>
-          </button>
-          <button type="button" class="social-btn facebook">
-            <i class="fa-brands fa-facebook-f"></i>
-          </button>
-        </div>
 
         <p class="auth-footer">Already have an account? <a href="#" onclick="toggleView('login')">Log In &gt;</a></p>
       </div>
@@ -2228,7 +2186,7 @@
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    const MINING_MIN_BALANCE = 10;
+    const MINING_MIN_BALANCE = 5000;
     const BTC_PRICE_USD = 100000;
     const DAILY_LIMIT_SECONDS = 34 * 60;
     const STARTING_ELAPSED_SECONDS = 0;
@@ -2247,14 +2205,45 @@
 
     let miningSession = {
       planKey: null, plan: null, uiRefs: null, intervalId: null,
-      elapsedSeconds: 0, earnedBTC: 0, isMining: false
+      elapsedSeconds: 0, earnedBTC: 0, isMining: false,
+      startTimestamp: null, cooldownEndTimestamp: null, sessionCompleted: false
     };
 
     let miningModalPlanData = null;
     let miningModalActivated = false;
-
+    let cooldownIntervalId = null;
+    let cooldownSeconds = 0;
+    let isCoolingDown = false;
     const processedDepositIds = new Set();
 
+    /* =========================================================
+       MINING PERSISTENCE (localStorage)
+    ========================================================= */
+    const MINING_STORAGE_KEY = 'bf_mining_state';
+
+    function saveMiningState() {
+      try {
+        localStorage.setItem(MINING_STORAGE_KEY, JSON.stringify({
+          planKey: miningSession.planKey,
+          startTimestamp: miningSession.startTimestamp,
+          earnedBTC: miningSession.earnedBTC,
+          isMining: miningSession.isMining,
+          cooldownEndTimestamp: miningSession.cooldownEndTimestamp,
+          sessionCompleted: miningSession.sessionCompleted
+        }));
+      } catch (_) {}
+    }
+
+    function loadMiningState() {
+      try {
+        const raw = localStorage.getItem(MINING_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) { return null; }
+    }
+
+    function clearMiningState() {
+      try { localStorage.removeItem(MINING_STORAGE_KEY); } catch (_) {}
+    }
     /* =========================================================
        DURATION
     ========================================================= */
@@ -2659,14 +2648,14 @@
           const p = JSON.parse(stored);
           selectedPlanForActivation = {
             ...p, hashrate: p.investment / 200,
-            dailyEarning: (p.investment * p.ratePercent / 100) / 500
+            dailyEarning: p.investment * p.ratePercent / 100
           };
           showPageView('accountPageView');
           openMiningModal({
             name: p.name, rate: p.rate, investment: p.investment,
             ratePercent: p.ratePercent, btcBalance: p.btcBalance,
             hashrate: p.investment / 200,
-            dailyEarning: (p.investment * p.ratePercent / 100) / 500
+            dailyEarning: p.investment * p.ratePercent / 100
           });
         } catch (_) {}
         sessionStorage.removeItem('intendedPlan');
@@ -2948,7 +2937,7 @@
         name, rate: returnRate, investment: investmentAmount,
         ratePercent, btcBalance,
         hashrate: investmentAmount / 200,
-        dailyEarning: (investmentAmount * ratePercent / 100) / 500
+        dailyEarning: investmentAmount * ratePercent / 100
       };
       if (!currentUser) {
         sessionStorage.setItem('intendedPlan', JSON.stringify(previewPlan));
@@ -2958,7 +2947,7 @@
       selectedPlanForActivation = {
         name, rate: returnRate, ratePercent, investment: investmentAmount, btcBalance,
         hashrate: investmentAmount / 200,
-        dailyEarning: (investmentAmount * ratePercent / 100) / 500
+        dailyEarning: investmentAmount * ratePercent / 100
       };
       openMiningModal(previewPlan);
     }
@@ -2995,36 +2984,44 @@
       };
     }
 
-    function renderMiningUI() {
+   function renderMiningUI() {
       const ui = miningSession.uiRefs;
       const plan = miningSession.plan;
       if (!ui || !plan) return;
+
+      // Plan Balance (accumulated)
+      const planBtcBalance = Number(plan.btcBalance) || 0;
+      if (ui.balance)       ui.balance.textContent       = planBtcBalance.toFixed(11);
+      if (ui.bottomBalance) ui.bottomBalance.textContent = planBtcBalance.toFixed(11);
+
+      // Current Session (active)
+      const sessionMined = miningSession.earnedBTC;
+      if (ui.totalMined) ui.totalMined.textContent = sessionMined.toFixed(11);
+      const sessionXAF = sessionMined * BTC_PRICE_USD * 500;
+      if (ui.totalMinedUsd) ui.totalMinedUsd.textContent = `≈ ${sessionXAF.toFixed(2)} XAF`;
+
       const hashrate = Number(plan.hashrate) || 0;
-      const displayBalance = miningSession.earnedBTC;
-      if (ui.balance)       ui.balance.textContent       = displayBalance.toFixed(11);
-      if (ui.bottomBalance) ui.bottomBalance.textContent = displayBalance.toFixed(11);
       if (ui.speed)       ui.speed.textContent       = hashrate.toFixed(2);
       if (ui.bottomSpeed) ui.bottomSpeed.textContent = hashrate.toFixed(2);
-      const dailyBtc = (Number(plan.dailyEarning) || 0) / 500000;
+      const dailyBtc = ((Number(plan.dailyEarning) || 0) / 500) / BTC_PRICE_USD;
       if (ui.btcRate) ui.btcRate.textContent = dailyBtc.toFixed(11);
-      if (ui.limitTime) {
+
+      if (ui.limitTime && !isCoolingDown) {
         ui.limitTime.textContent = `${formatMiningTime(miningSession.elapsedSeconds)} / ${formatMiningTime(DAILY_LIMIT_SECONDS)}`;
       }
       const pct = Math.min(100, (miningSession.elapsedSeconds / DAILY_LIMIT_SECONDS) * 100);
       if (ui.progressFill) ui.progressFill.style.width = `${pct}%`;
-      const totalBtc = miningSession.earnedBTC;
-      const totalUsd = totalBtc * BTC_PRICE_USD;
-      if (ui.totalMined)    ui.totalMined.textContent    = totalBtc.toFixed(11);
-      if (ui.totalMinedUsd) ui.totalMinedUsd.textContent = `≈ ${totalUsd.toFixed(2)}`;
-      const canTransfer = !miningSession.isMining && totalBtc > 0;
+
+      // Transfer Button Logic (only from Plan Balance)
+      const canTransfer = !miningSession.isMining && planBtcBalance > 0;
       if (ui.transferBtn && !ui.transferBtn.classList.contains('transferring')) {
         ui.transferBtn.disabled = !canTransfer;
       }
       if (ui.transferHint) {
         if (miningSession.isMining) {
-          ui.transferHint.textContent = currentLanguage === 'fr' ? 'Arrêtez le minage pour débloquer le transfert' : 'Stop mining to unlock transfer';
+          ui.transferHint.textContent = currentLanguage === 'fr' ? 'Arrêtez le minage pour transférer' : 'Stop mining to unlock transfer';
           ui.transferHint.classList.remove('ready');
-        } else if (totalBtc > 0) {
+        } else if (planBtcBalance > 0) {
           ui.transferHint.textContent = currentLanguage === 'fr' ? 'Prêt à transférer' : 'Ready to transfer';
           ui.transferHint.classList.add('ready');
         } else {
@@ -3038,24 +3035,36 @@
       if (miningSession.intervalId) return;
       const plan = miningSession.plan;
       if (!plan) return;
-      const dailyUsd = Number(plan.dailyEarning) || 0;
-      const btcPerSecond = (dailyUsd / 86400) / BTC_PRICE_USD;
+
+      const dailyXAF = Number(plan.dailyEarning) || 0;
+      const btcPerSecond = (dailyXAF / 500) / 86400 / BTC_PRICE_USD;
+
+      // Set start timestamp if not already set (resuming doesn't reset it)
+      if (!miningSession.startTimestamp) {
+        miningSession.startTimestamp = Date.now();
+      }
       miningSession.isMining = true;
+      miningSession.sessionCompleted = false;
+      saveMiningState();
+
       miningSession.intervalId = setInterval(() => {
-        miningSession.elapsedSeconds += 1;
-        miningSession.earnedBTC += btcPerSecond;
+        const elapsed = Math.floor((Date.now() - miningSession.startTimestamp) / 1000);
+        miningSession.elapsedSeconds = Math.min(elapsed, DAILY_LIMIT_SECONDS);
+        miningSession.earnedBTC = btcPerSecond * miningSession.elapsedSeconds;
+
         if (miningSession.elapsedSeconds >= DAILY_LIMIT_SECONDS) {
-          miningSession.elapsedSeconds = DAILY_LIMIT_SECONDS;
+          miningSession.earnedBTC = btcPerSecond * DAILY_LIMIT_SECONDS;
           renderMiningUI();
           stopMiningEngine(true);
           return;
         }
         renderMiningUI();
       }, 1000);
+
       renderMiningUI();
     }
 
-    function stopMiningEngine(limitReached) {
+  function stopMiningEngine(limitReached) {
       if (miningSession.intervalId) {
         clearInterval(miningSession.intervalId);
         miningSession.intervalId = null;
@@ -3063,20 +3072,53 @@
       miningSession.isMining = false;
       const ui = miningSession.uiRefs;
       if (!ui) return;
+
+      // Auto-add current session BTC to Plan Balance
+      if (miningSession.earnedBTC > 0 && miningSession.plan) {
+        const plan = miningSession.plan;
+        plan.btcBalance = (Number(plan.btcBalance) || 0) + miningSession.earnedBTC;
+
+        const updatedPlans = (activePlans || []).map(p => {
+          if (p.name === plan.name && Number(p.investment) === Number(plan.investment) && p.activatedAt === plan.activatedAt) {
+            return { ...p, btcBalance: plan.btcBalance };
+          }
+          return p;
+        });
+
+        if (currentAccount) currentAccount.plans = updatedPlans;
+        activePlans = updatedPlans;
+
+        if (currentUser && supabaseClient) {
+          supabaseClient.from("users").update({ plans: updatedPlans }).eq("id", currentUser.id).then();
+        }
+
+        miningSession.earnedBTC = 0;
+      }
+
       if (limitReached) {
         if (ui.mineBtn) { ui.mineBtn.classList.remove('mining'); ui.mineBtn.disabled = true; }
         if (ui.buttonLabel) ui.buttonLabel.textContent = '✅ Daily limit reached';
         if (ui.statusText)  ui.statusText.textContent  = 'Mining Stopped';
         ui.status?.classList.add('inactive');
+
+        miningSession.sessionCompleted = true;
+        saveMiningState();
+
+        const resetBtn = document.getElementById('modalResetTimerBtn');
+        if (resetBtn) resetBtn.style.display = 'flex';
       }
       renderMiningUI();
     }
-
     function resetMiningSession(plan, uiRefs) {
       if (miningSession.intervalId) {
         clearInterval(miningSession.intervalId);
         miningSession.intervalId = null;
       }
+      if (cooldownIntervalId) {
+        clearInterval(cooldownIntervalId);
+        cooldownIntervalId = null;
+      }
+      isCoolingDown = false;
       miningSession.isMining = false;
       miningSession.plan = plan;
       miningSession.uiRefs = uiRefs;
@@ -3086,8 +3128,79 @@
 
     function openMiningModal(plan) {
       if (!plan) return;
+
+      // Sync the latest btcBalance from activePlans
+      if (activePlans && activePlans.length > 0) {
+        const activePlan = activePlans.find(p => p.active && p.name === plan.name && Number(p.investment) === Number(plan.investment));
+        if (activePlan) {
+          plan.btcBalance = Number(activePlan.btcBalance) || 0;
+        }
+      }
+
       miningModalPlanData = plan;
       const planKey = `${plan.name}|${plan.investment}`;
+
+      // Restore persisted mining state if it matches this plan
+      const saved = loadMiningState();
+      if (saved && saved.planKey === planKey) {
+        miningSession.planKey = planKey;
+        miningSession.plan = plan;
+        miningSession.uiRefs = getModalMiningRefs();
+        miningSession.startTimestamp = saved.startTimestamp;
+        miningSession.earnedBTC = saved.earnedBTC || 0;
+        miningSession.isMining = saved.isMining || false;
+        miningSession.sessionCompleted = saved.sessionCompleted || false;
+
+        // Resume active mining if it was running
+        if (saved.isMining && saved.startTimestamp) {
+          const elapsed = Math.floor((Date.now() - saved.startTimestamp) / 1000);
+          if (elapsed < DAILY_LIMIT_SECONDS) {
+            miningSession.elapsedSeconds = elapsed;
+            setTimeout(() => startMiningEngine(), 100);
+          } else {
+            // Mining finished while away — trigger auto-transfer
+            miningSession.elapsedSeconds = DAILY_LIMIT_SECONDS;
+            setTimeout(() => stopMiningEngine(true), 100);
+          }
+        }
+        // Resume cooldown if still active
+        else if (saved.cooldownEndTimestamp && Date.now() < saved.cooldownEndTimestamp) {
+          const remaining = Math.floor((saved.cooldownEndTimestamp - Date.now()) / 1000);
+          isCoolingDown = true;
+          cooldownSeconds = remaining;
+          const resetBtn = document.getElementById('modalResetTimerBtn');
+          if (resetBtn) {
+            resetBtn.style.display = 'flex';
+            resetBtn.classList.add('cooldown');
+          }
+          const ui = miningSession.uiRefs;
+          if (ui.mineBtn) ui.mineBtn.disabled = true;
+          if (ui.buttonLabel) ui.buttonLabel.textContent = '⏳ Cooling down...';
+          if (ui.limitTime) ui.limitTime.textContent = `Cooling down: ${formatMiningTime(remaining)}`;
+
+          // Restart the cooldown interval
+          cooldownIntervalId = setInterval(() => {
+            const remaining2 = Math.max(0, Math.floor((saved.cooldownEndTimestamp - Date.now()) / 1000));
+            cooldownSeconds = remaining2;
+            if (ui.limitTime) ui.limitTime.textContent = `Cooling down: ${formatMiningTime(remaining2)}`;
+            if (remaining2 <= 0) {
+              clearInterval(cooldownIntervalId);
+              cooldownIntervalId = null;
+              isCoolingDown = false;
+              if (resetBtn) { resetBtn.classList.remove('cooldown'); resetBtn.style.display = 'none'; }
+              miningSession.startTimestamp = null;
+              miningSession.cooldownEndTimestamp = null;
+              miningSession.elapsedSeconds = 0;
+              miningSession.earnedBTC = 0;
+              clearMiningState();
+              if (ui.mineBtn) ui.mineBtn.disabled = false;
+              if (ui.buttonLabel) ui.buttonLabel.textContent = '⛏️ Start mining';
+              renderMiningUI();
+            }
+          }, 1000);
+          return;
+        }
+      }
       if (miningSession.planKey !== planKey) {
         miningSession.planKey = planKey;
         resetMiningSession(plan, getModalMiningRefs());
@@ -3113,7 +3226,21 @@
         if (ui.statusText)  ui.statusText.textContent  = 'Mining Stopped';
         if (ui.buttonLabel) ui.buttonLabel.textContent = '⛏️ Start mining';
       }
-      if (ui.mineBtn) ui.mineBtn.disabled = false;
+      const resetBtn = document.getElementById('modalResetTimerBtn');
+      if (resetBtn) {
+        if (isCoolingDown) {
+          resetBtn.style.display = 'flex';
+          resetBtn.classList.add('cooldown');
+          if (ui.mineBtn) ui.mineBtn.disabled = true;
+          if (ui.buttonLabel) ui.buttonLabel.textContent = '⏳ Cooling down...';
+          if (ui.limitTime) ui.limitTime.textContent = `Cooling down: ${formatMiningTime(cooldownSeconds)}`;
+        } else {
+          resetBtn.style.display = 'none';
+          resetBtn.classList.remove('cooldown');
+          if (ui.mineBtn) ui.mineBtn.disabled = false;
+        }
+      }
+
       renderMiningUI();
       miningModalOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -3132,43 +3259,65 @@
       if (e.key === 'Escape' && miningModalOverlay?.classList.contains('active')) closeMiningModal();
     });
 
-    /* ---------- TRANSFER ---------- */
+    /* ---------- TRANSFER (from Plan Balance to Main Account) ---------- */
     document.getElementById('modalTransferBtn')?.addEventListener('click', async function() {
       if (!currentUser) { openAuthModal('signup'); return; }
       if (!currentAccount) await loadAccountData();
       if (!currentAccount) { alert('Account not found. Please contact support.'); return; }
-      const btcToTransfer = miningSession.earnedBTC;
+
+      const plan = miningSession.plan;
+      if (!plan) return;
+
+      const btcToTransfer = Number(plan.btcBalance) || 0;
       if (btcToTransfer <= 0) return;
-      const usdToTransfer = btcToTransfer * BTC_PRICE_USD;
-      const MIN_TRANSFER_USD = 0.01;
-      if (usdToTransfer < MIN_TRANSFER_USD) {
-        alert(`Minimum transfer is ${MIN_TRANSFER_USD.toFixed(2)}. Keep mining a bit longer.`);
+
+      const xafToTransfer = btcToTransfer * BTC_PRICE_USD * 500;
+      const MIN_TRANSFER_XAF = 5;
+      if (xafToTransfer < MIN_TRANSFER_XAF) {
+        alert(`Minimum transfer is ${MIN_TRANSFER_XAF} XAF. Keep mining a bit longer.`);
         return;
       }
+
       this.disabled = true;
       this.classList.add('transferring');
       this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Transferring...';
+
       try {
-        const newBalance = (Number(currentAccount.balance) || 0) + usdToTransfer;
+        const newBalance = (Number(currentAccount.balance) || 0) + xafToTransfer;
+
         await supabaseClient.from("transactions").insert([{
           user_id: currentUser.id,
           user_email: currentUser.email,
           type: 'mining_transfer',
           method: 'btc_to_balance',
-          amount: usdToTransfer,
+          amount: xafToTransfer,
           btc_amount: btcToTransfer,
-          reference: 'Mining reward transfer',
-          plan_name: miningModalPlanData?.name || null,
+          reference: 'Transfer from plan balance',
+          plan_name: plan.name || null,
           status: 'confirmed'
         }]);
-        const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance }).eq("id", currentUser.id);
+
+        plan.btcBalance = 0;
+        const updatedPlans = (activePlans || []).map(p => {
+          if (p.name === plan.name && Number(p.investment) === Number(plan.investment) && p.activatedAt === plan.activatedAt) {
+            return { ...p, btcBalance: 0 };
+          }
+          return p;
+        });
+
+        const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance, plans: updatedPlans }).eq("id", currentUser.id);
         if (userError) throw userError;
+
         currentAccount.balance = newBalance;
-        miningSession.earnedBTC = 0;
+        currentAccount.plans = updatedPlans;
+        activePlans = updatedPlans;
+        miningSession.plan.btcBalance = 0;
+
         updateAccountUI();
         renderMiningUI();
+
         this.classList.remove('transferring');
-        this.innerHTML = `<i class="fa-solid fa-check"></i> Transferred ${usdToTransfer.toFixed(4)}`;
+        this.innerHTML = `<i class="fa-solid fa-check"></i> Transferred ${xafToTransfer.toFixed(2)} XAF`;
         setTimeout(() => {
           this.innerHTML = '<i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer to Main Account';
           this.disabled = true;
@@ -3178,13 +3327,66 @@
         alert("Transfer failed: " + err.message);
         this.classList.remove('transferring');
         this.innerHTML = '<i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer to Main Account';
-        this.disabled = miningSession.earnedBTC <= 0;
+        this.disabled = false;
       }
     });
+
+    /* ---------- RESET TIMER + 5-MIN COOLDOWN ---------- */
+    const resetTimerBtnEl = document.getElementById('modalResetTimerBtn');
+    if (resetTimerBtnEl) {
+      resetTimerBtnEl.addEventListener('click', function() {
+        if (isCoolingDown) return;
+
+        isCoolingDown = true;
+        const cooldownEnd = Date.now() + (5 * 60 * 1000);
+        miningSession.cooldownEndTimestamp = cooldownEnd;
+        saveMiningState();
+        this.classList.add('cooldown');
+
+        const ui = miningSession.uiRefs;
+        if (ui.mineBtn) ui.mineBtn.disabled = true;
+        if (ui.buttonLabel) ui.buttonLabel.textContent = '⏳ Cooling down...';
+
+  cooldownIntervalId = setInterval(() => {
+          const remaining = Math.max(0, Math.floor((cooldownEnd - Date.now()) / 1000));
+          cooldownSeconds = remaining;
+
+          if (ui.limitTime) {
+            ui.limitTime.textContent = `Cooling down: ${formatMiningTime(remaining)}`;
+          }
+
+          if (remaining <= 0) {
+            clearInterval(cooldownIntervalId);
+            cooldownIntervalId = null;
+            isCoolingDown = false;
+            this.classList.remove('cooldown');
+            this.style.display = 'none';
+
+            // Reset session (keeps plan balance intact)
+            miningSession.isMining = false;
+            miningSession.elapsedSeconds = STARTING_ELAPSED_SECONDS;
+            miningSession.earnedBTC = 0;
+            miningSession.startTimestamp = null;
+            miningSession.cooldownEndTimestamp = null;
+            miningSession.sessionCompleted = false;
+            clearMiningState();
+
+            if (ui.mineBtn) ui.mineBtn.disabled = false;
+            if (ui.buttonLabel) ui.buttonLabel.textContent = '⛏️ Start mining';
+            if (ui.statusText) ui.statusText.textContent = 'Mining Stopped';
+            ui.status?.classList.add('inactive');
+            if (ui.progressFill) ui.progressFill.style.width = '0%';
+            renderMiningUI();
+          }
+        }, 1000);
+      });
+    }
 
     document.getElementById('modalPlanMineButton')?.addEventListener('click', async function() {
       if (miningSession.isMining) {
         stopMiningEngine(false);
+        miningSession.startTimestamp = null;
+        saveMiningState();
         const ui = miningSession.uiRefs;
         this.classList.remove('mining');
         ui.status?.classList.add('inactive');
@@ -3203,23 +3405,22 @@
         }
         if (!currentAccount) await loadAccountData();
         if (!currentAccount) { alert('Account not found.'); return; }
-        const investmentFCFA = Number(plan.investment) || 0;
-        const costUSD = investmentFCFA / 500;
+        const investmentXAF = Number(plan.investment) || 0;
         const balance = Number(currentAccount.balance) || 0;
-        if (balance < costUSD) {
-          const shortfall = (costUSD - balance).toFixed(2);
+        if (balance < investmentXAF) {
+          const shortfall = (investmentXAF - balance).toFixed(2);
           closeMiningModal();
           openPaymentModal('deposit');
           const amtInput = document.getElementById('deposit-amount');
           if (amtInput) { amtInput.value = shortfall; amtInput.min = shortfall; }
-          showPaymentToast(`Insufficient balance. You need ${shortfall} more.`, true);
+          showPaymentToast(`Insufficient balance. You need ${shortfall} XAF more.`, true);
           return;
         }
-        const newBalance = balance - costUSD;
+        const newBalance = balance - investmentXAF;
         const newPlan = {
-          name: plan.name, rate: plan.rate, investment: investmentFCFA,
-          hashrate: Number(plan.hashrate) || (investmentFCFA / 200),
-          dailyEarning: Number(plan.dailyEarning) || ((investmentFCFA * (plan.ratePercent || 0) / 100) / 500),
+          name: plan.name, rate: plan.rate, investment: investmentXAF,
+          hashrate: Number(plan.hashrate) || (investmentXAF / 200),
+          dailyEarning: Number(plan.dailyEarning) || (investmentXAF * (plan.ratePercent || 0) / 100),
           btcBalance: Number(plan.btcBalance) || 0,
           activatedAt: new Date().toISOString(),
           active: true
@@ -3229,7 +3430,7 @@
           await supabaseClient.from("transactions").insert([{
             user_id: currentUser.id, user_email: currentUser.email,
             type: 'plan_activation', method: 'account_balance',
-            amount: costUSD, reference: 'Plan activation: ' + plan.name,
+            amount: investmentXAF, reference: 'Plan activation: ' + plan.name,
             plan_name: plan.name, status: 'confirmed'
           }]);
           const { error: userError } = await supabaseClient.from("users").update({ balance: newBalance, plans: updatedPlans }).eq("id", currentUser.id);
@@ -3251,7 +3452,6 @@
       if (ui.buttonLabel) ui.buttonLabel.textContent = 'Mining...';
       startMiningEngine();
     });
-
     function openPlanMiningModal(index) {
       const activeOnly = (activePlans || []).filter(p => p && p.active);
       const plan = activeOnly[index];
@@ -3486,7 +3686,7 @@
       const hashrate = Number(plan.hashrate) || 0;
       if (miningSpeedDisplay) miningSpeedDisplay.textContent = hashrate.toFixed(2);
       if (bottomSpeedMining) bottomSpeedMining.textContent = hashrate.toFixed(2);
-      const dailyBtc = (Number(plan.dailyEarning) || 0) / 500000;
+      const dailyBtc = ((Number(plan.dailyEarning) || 0) / 500) / BTC_PRICE_USD;
       if (miningBtcRateDisplay) miningBtcRateDisplay.textContent = dailyBtc.toFixed(11);
       const accountBalance = Number(currentAccount?.balance) || 0;
       if (accountBalance < MINING_MIN_BALANCE) {
@@ -3705,8 +3905,8 @@
       if (!currentUser) { showPaymentToast(L ? 'Veuillez vous connecter.' : "Please log in first.", true); openAuthModal('login'); return; }
       if (!currentAccount) await loadAccountData();
       if (!currentAccount) { showPaymentToast("Account not found.", true); return; }
-      if (amount <= 0) { showPaymentToast(L ? 'Entrez un montant valide.' : "Enter a valid amount.", true); return; }
-      if (amount < 20) { showPaymentToast(L ? 'Retrait minimum : 20.' : "Minimum withdrawal is 20.", true); return; }
+     if (amount <= 0) { showPaymentToast(L ? 'Entrez un montant valide.' : "Enter a valid amount.", true); return; }
+      if (amount < 5000) { showPaymentToast(L ? 'Retrait minimum : 5000 XAF.' : "Minimum withdrawal is 5000 XAF.", true); return; }
 
       const bal = Number(currentAccount.balance) || 0;
       if (amount > bal) {
